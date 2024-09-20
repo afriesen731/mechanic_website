@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mechanic Dashboard</title>
+</head>
+<body>
+    <!-- Main header for the mechanic dashboard -->
+    <h1>Mechanic Dashboard</h1>
+
+    <!-- Input section for mechanic to enter work order number -->
+    <div id="work-order-input">
+        <input type="text" id="workOrderNumber" placeholder="Enter Work Order Number">
+        <button onclick="loadWorkOrder()">Load Work Order</button>
+    </div>
+
+    <!-- Placeholder to display the list of faults and control buttons (start/stop) for each fault -->
+    <div id="faults-list"></div>
+
+    <!-- External JavaScript file -->
+    <script src="app.js"></script>
+</body>
+</html>
