@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mechanic Shop Work Orders</title>
+
+    <style>
+        /* Style for the body to use Flexbox */
+        body {
+            margin: 0; /* Remove default margin */
+            height: 100vh; /* Full viewport height */
+            display: flex; /* Enable Flexbox */
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            background-image: url('hinh nen bu.jpg'); /* Path to your background image */
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the background image */
+            background-repeat: no-repeat; /* Do not repeat the image */
+        }
+
+        /* Style for the title */
+        h1 {
+            position: absolute; /* Absolute positioning for the title */
+            top: 10%; /* Distance from the top of the viewport */
+            left: 50%; /* Center horizontally */
+            transform: translateX(-50%); /* Center align based on its own width */
+            color: white; /* Text color */
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7); /* Optional: text shadow for better readability */
+        }
+
+        #login {
+            text-align: center; /* Center text inside the login div */
+            background-color: white; /* Optional: background color for the login box */
+            padding: 20px; /* Padding around the login form */
+            border-radius: 10px; /* Optional: rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+        }
+
+        #login button {
+            background-image: url('hinh nut login.jpg'); /* Replace with the correct relative path */
+            background-size: cover; /* Ensure the image covers the button */
+            color: black; /* Text color */
+            border: none; /* Remove default border */
+            padding: 10px 20px; /* Padding for the button */
+            cursor: pointer; /* Pointer cursor on hover */
+            margin-top: 10px; /* Space above the button */
+        }
+
+        #login button:hover {
+            opacity: 0.8; /* Change opacity on hover for effect */
+        }
+    </style>
+</head>
+<body>
+    <h1>Login</h1>
+    <div id="login">
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+        <p id="login-status"></p>
+    </div>
+</body>
+</html>
