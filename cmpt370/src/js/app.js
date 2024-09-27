@@ -1,5 +1,9 @@
+import PocketBase from 'pocketbase';
 // PocketBase SDK initialization
-const pb = new PocketBase('http://127.0.0.1:8090');
+const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+
+const loginButton = document.getElementById('login-button');
+
 
 // Function to handle user login
 async function login() {
@@ -18,6 +22,7 @@ async function login() {
         } else if (authData.record.role === 'Viewer') {
             window.location.href = 'viewer.html';
         }
+        console.log(authData);
     } catch (error) {
         document.getElementById('login-status').innerText = 'Login failed. Please try again.';
     }
@@ -54,3 +59,7 @@ async function stopWork(faultIndex) {
 async function downloadWorkOrders() {
     // Logic to download completed work orders (PDF or CSV)
 }
+
+loginButton.addEventListener('click', function(event) {
+    login();
+});
