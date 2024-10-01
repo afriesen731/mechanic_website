@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Mechanic Shop</title>
+
+    <style>
+        /* Set the full-screen background */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('Left Content.png'); /* Replace with your left background image */
+            background-size: cover; /* Cover the entire viewport */
+            background-position: center; /* Center the image */
+            background-repeat: no-repeat; /* Do not repeat the image */
+            display: flex;
+            justify-content: flex-end; /* Align the login box to the right */
+            align-items: center; /* Vertically center content */
+            font-family: Arial, sans-serif;
+        }
+
+        /* Login box settings */
+        .login-box {
+            position: relative;
+            width: Fixed(520px);
+            height: 529px;
+            top: 50px;
+            bottom: 120px;
+            right: 120px;
+            radius: 300px;
+            padding: 47px 100px;
+            gap: 32px;
+            border-radius: 24px 0px 0px 0px;
+            background-image: url('Right Content.png'); /* Background image for the login box */
+            background-size: cover; /* Make sure the image covers the login box */
+            background-position: center; /* Center the image within the login box */
+            box-shadow: 0px 24px 40px 0px rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Style for the login input fields */
+        .login-box input {
+            width: 139%; /* Width inside the login box */
+            height: 5%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1.1em;
+        }
+
+        /* Style for the login button */
+        .login-box button {
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            font-size: 1.2em;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-box button:hover {
+            background-color: #0056b3;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Login box to the right -->
+    <div class="login-box">
+
+        <input type="text" placeholder="Username">
+        <input type="password" placeholder="Password">
+        
+        <h1></h1>
+    </div>
+
+    <script>
+        function login() {
+            alert('Login button clicked!');
+        }
+    </script>
+</body>
+</html>
