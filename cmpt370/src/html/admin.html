@@ -6,9 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Create Work Order</title>
 
-
-    <!-- External JavaScript file -->
-    <script src="../js/app.js" defer></script>
 </head>
 <body>
     <!-- Main header for the admin dashboard -->
@@ -78,17 +75,15 @@
 
         <!-- Type of Service Section -->
         <h3>Type of Service</h3>
-        <select id="typeOfService">
-            <option value="Truck PMA">Truck PMA</option>
-            <option value="Truck PMB">Truck PMB</option>
-            <option value="5 ton PMA">5 ton PMA</option>
-            <option value="5 ton PMB">5 ton PMB</option>
-            <option value="Trailer PMA">Trailer PMA</option>
-            <option value="Trailer PMB">Trailer PMB</option>
-            <option value="Reefer PMA">Reefer PMA</option>
-            <option value="Reefer PMB">Reefer PMB</option>
-            <option value="Service">Service</option>
-        </select><br>
+        <label><input type="checkbox" name="typeOfService" value="Truck PMA"> Truck PMA</label><br>
+        <label><input type="checkbox" name="typeOfService" value="Truck PMB"> Truck PMB</label><br>
+        <label><input type="checkbox" name="typeOfService" value="5 ton PMA"> 5 ton PMA</label><br>
+        <label><input type="checkbox" name="typeOfService" value="5 ton PMB"> 5 ton PMB</label><br>
+        <label><input type="checkbox" name="typeOfService" value="Trailer PMA"> Trailer PMA</label><br>
+        <label><input type="checkbox" name="typeOfService" value="Trailer PMB"> Trailer PMB</label><br>
+        <label><input type="checkbox" name="typeOfService" value="Reefer PMA"> Reefer PMA</label><br>
+        <label><input type="checkbox" name="typeOfService" value="Reefer PMB"> Reefer PMB</label><br>
+        <label><input type="checkbox" name="typeOfService" value="Service"> Service</label><br>
 
         <!-- Job Table Section -->
         <h3>Job Table</h3>
@@ -204,10 +199,9 @@
             </tbody>
         </table>
         <!-- Submit button for the work order form -->
-<button type="button" onclick="submitWorkOrder()">Submit Work Order</button>
     </div>
+    <button type="button" id="submitWorkOrderButton">Submit Work Order</button>
 
-    <!-- External JavaScript -->
-    <script src="app.js"></script>
+    <script type="module" src="../js/app.js"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+console.log("app.js loaded");
 import PocketBase from 'pocketbase';
 // PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
@@ -37,7 +38,8 @@ async function viewWorkOrders() {
     // Logic for viewing work orders (admin-specific) goes here
 }
 // ** Function to Submit Work Order **
-async function submitWorkOrder() {
+export async function submitWorkOrder() {
+    console.log("submitWorkOrder called");
     // Get the values from the work order form
     const workOrderNumber = document.getElementById('workOrderNumber').value;
     const unitNumber = document.getElementById('unitNumber').value;
@@ -55,8 +57,10 @@ async function submitWorkOrder() {
     const reeferModel = document.getElementById('reeferModel').value;
     const reeferHours = document.getElementById('reeferHours').value;
 
-    // Type of Service
-    const typeOfService = document.getElementById('typeOfService').value;
+    // Type of Service (get checked values)
+    const checkboxes = document.querySelectorAll('input[name="typeOfService"]:checked');
+    const typeOfService = Array.from(checkboxes).map(checkbox => checkbox.value); // Get all checked values
+
 
     // Job Table: Collect job descriptions and hours
     const jobs = [];
@@ -103,6 +107,12 @@ async function submitWorkOrder() {
     }
 }
 
+// Event listener for the submit button
+document.addEventListener('DOMContentLoaded', () => {
+    const submitButton = document.getElementById('submitWorkOrderButton');
+    submitButton.addEventListener('click', submitWorkOrder);
+});
+
 // Mechanic functionality (load work orders, start/stop fault, etc.)
 async function loadWorkOrder() {
     const workOrderNumber = document.getElementById('workOrderNumber').value;
@@ -126,6 +136,8 @@ async function downloadWorkOrders() {
     // Logic to download completed work orders (PDF or CSV)
 }
 
-loginButton.addEventListener('click', function(event) {
-    login();
-});
+if (loginButton) {
+    loginButton.addEventListener('click', function(event) {
+        login();
+    });
+}
