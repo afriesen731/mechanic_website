@@ -213,10 +213,10 @@
         <div id="employee-page" class="content-page">
             <h2>Employee List</h2>
             <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search Employee...">
+                <input type="text" class="search-bar" placeholder="Search Employee..." onkeyup="searchEmployee()">
                 <button class="sort-button">Sort by Name</button>
             </div>
-            <table>
+            <table id="employee-table">
                 <thead>
                     <tr>
                         <th>Name</th>
@@ -312,6 +312,33 @@
         // Redirect to the dashboard (home page)
         function goToDashboard() {
             showPage('employee');
+        }
+
+        // Search employee function
+        function searchEmployee() {
+            const input = document.querySelector('.search-bar').value.toLowerCase();
+            const table = document.getElementById('employee-table').getElementsByTagName('tbody')[0];
+            const rows = table.getElementsByTagName('tr');
+
+            let matchingRows = [];
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                const name = cells[0].textContent || cells[0].innerText;
+
+                if (name.toLowerCase().includes(input)) {
+                    matchingRows.push(rows[i]); // Store matching rows
+                    rows[i].style.display = ""; // Show matching rows
+                } else {
+                    rows[i].style.display = "none"; // Hide non-matching rows
+                }
+            }
+
+            // Reorder matching rows to the top
+            matchingRows.forEach(row => {
+                table.insertBefore(row, table.firstChild);
+            });
         }
     </script>
 
