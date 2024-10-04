@@ -180,6 +180,53 @@
         .action-btn:hover {
             background-color: #218838;
         }
+
+        /* Modal Styling */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4); /* Black background with opacity */
+            z-index: 2000;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 400px;
+            text-align: center;
+            border-radius: 10px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .modal-buttons .yes-button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .modal-buttons .no-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -227,26 +274,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>John Doe</td>
-                        <td>EMP001</td>
-                        <td>2023-09-01</td>
-                        <td>Active</td>
-                        <td>
-                            <button class="action-btn">Edit</button>
-                            <button class="action-btn">Delete</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>EMP002</td>
-                        <td>2022-07-15</td>
-                        <td>Inactive</td>
-                        <td>
-                            <button class="action-btn">Edit</button>
-                            <button class="action-btn">Delete</button>
-                        </td>
-                    </tr>
+                    <!-- Employee rows will be generated here -->
                 </tbody>
             </table>
         </div>
@@ -298,49 +326,89 @@
         </div>
     </div>
 
-    <script>
-        // JavaScript to handle page switching
-        function showPage(page) {
-            // Hide all content pages
-            const pages = document.querySelectorAll('.content-page');
-            pages.forEach(page => page.style.display = 'none');
+    <!-- Modal for confirmation -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <p>Do you really want to remove this Employee?</p>
+            <div class="modal-buttons">
+                <button class="yes-button" onclick="confirmRemove()">Yes</button>
+                <button class="no-button" onclick="closeModal()">No</button>
+            </div>
+        </div>
+    </div>
 
-            // Show the selected page
+    <script>
+        // Sample employee data
+        let employees = [
+            {name: 'Alice', id: 'E001', date: '2023-09-01', status: 'Active'},
+            {name: 'Bob', id: 'E002', date: '2023-09-10', status: 'Inactive'},
+            {name: 'Charlie', id: 'E003', date: '2023-09-15', status: 'Active'},
+        ];
+
+        let employeeToRemove = null;
+
+        // Render employee table
+        function renderEmployeeTable() {
+            const tableBody = document.querySelector('#employee-table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            employees.forEach((employee, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${employee.name}</td>
+                    <td>${employee.id}</td>
+                    <td>${employee.date}</td>
+                    <td>${employee.status}</td>
+                    <td>
+                        <button class="action-btn" onclick="showModal(${index})">Remove</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Show confirmation modal
+        function showModal(index) {
+            employeeToRemove = index;
+            document.getElementById('confirmation-modal').style.display = 'block';
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('confirmation-modal').style.display = 'none';
+            employeeToRemove = null;
+        }
+
+        // Confirm removal and remove employee
+        function confirmRemove() {
+            if (employeeToRemove !== null) {
+                employees.splice(employeeToRemove, 1); // Remove the employee from the array
+                renderEmployeeTable(); // Re-render the table
+                closeModal(); // Close the modal
+            }
+        }
+
+        // Initialize the employee table on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            renderEmployeeTable();
+        });
+
+        // Placeholder function for dashboard navigation
+        function goToDashboard() {
+            console.log('Redirect to dashboard');
+        }
+
+        // Placeholder for switching pages
+        function showPage(page) {
+            const pages = document.querySelectorAll('.content-page');
+            pages.forEach(p => p.style.display = 'none');
             document.getElementById(`${page}-page`).style.display = 'block';
         }
 
-        // Redirect to the dashboard (home page)
-        function goToDashboard() {
-            showPage('employee');
-        }
-
-        // Search employee function
+        // Placeholder search function
         function searchEmployee() {
-            const input = document.querySelector('.search-bar').value.toLowerCase();
-            const table = document.getElementById('employee-table').getElementsByTagName('tbody')[0];
-            const rows = table.getElementsByTagName('tr');
-
-            let matchingRows = [];
-
-            // Loop through all table rows, and hide those who don't match the search query
-            for (let i = 0; i < rows.length; i++) {
-                const cells = rows[i].getElementsByTagName('td');
-                const name = cells[0].textContent || cells[0].innerText;
-
-                if (name.toLowerCase().includes(input)) {
-                    matchingRows.push(rows[i]); // Store matching rows
-                    rows[i].style.display = ""; // Show matching rows
-                } else {
-                    rows[i].style.display = "none"; // Hide non-matching rows
-                }
-            }
-
-            // Reorder matching rows to the top
-            matchingRows.forEach(row => {
-                table.insertBefore(row, table.firstChild);
-            });
+            console.log('Search function triggered');
         }
     </script>
-
 </body>
 </html>
