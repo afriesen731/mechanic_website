@@ -9,27 +9,68 @@ const DEFAULT_PAGE_LEN = 50;
 
 
 
-class SetFilter {
-    constructor(column, isFiltered=false, set=[]) {
+class Filter {
+    constructor(column, isFiltered=false) {
         this.column = column;
         this.isFiltered = isFiltered;
-        this.set = set;
-        
+        this._set = [];
+        this._start = null;
+        this._end = null;
+    }
+
+    push(item) {
+        this.set.push(item);
+        this.set = this.set;    // update set
+    }
+
+    remove(item) {
+        this.set.splice(this.set.findIndex(item), 1);
+        this.set = this.set;    // update set
+    }
+
+    isSetFilter() {
+        return this.set != [];
+    }
+
+    isRangeFilter() {
+        return this._start != null || this._end != null;
     }
 
 
-    this
-
-}
-
-class RangeFilter {
-    constructor(column, isFiltered=false, start=null, end=null) {
-        this.column = column;
-        this.isFiltered = isFiltered;
-        this.start = start;
-        this.end = end;
+    set set(list) {
+        this._set = list;
+        this._start = null;
+        this._end = null;
+        this.isFiltered = true;
     }
+
+    set start(value) {
+        this._start = value;
+        this._set = null;
+        this.isFiltered = true;
+    }
+
+    set end(value) {
+        this._end = value;
+        this._set = null;
+        this.isFiltered = true;
+    }
+
+    get set() {
+        return this._set;
+    }
+
+    get start() {
+        return this._start;
+    }
+
+    get end() {
+        return this._end;
+    }
+
 }
+
+
 
 
 
@@ -44,7 +85,7 @@ class FilteredDataset {
     }
 
     addSetFilter(column, isSet=false, set=[]) {
-        let newfilter = new SetFilter(column, isSet, set);
+        let newfilter = new Filter(column, isSet, set);
         this.filters.push(newfilter);
 
     }
@@ -57,15 +98,24 @@ class FilteredDataset {
 
 
     getfilter(column) {
-        this.filters.forEach(filter => {
-            if (filter.column == column) {
-                return filter;
-            }
+        let filter = null;
 
+        // check if filter exists
+        this.filters.forEach(f => {
+            if (f.column == column) {
+                filter = f;
+                return;
+            }
 
         });
 
-        return null
+        // create a new filter if none exist
+        if (filter == null) {
+            filter = new Filter(column)
+            this.filters.push(filter);
+        }
+
+        return filter;
     }
 
 
@@ -77,9 +127,10 @@ class FilteredDataset {
         try {
 
             // fetch dataset
-            const response = await pb.collection('work_orders').getList(this._page, this.pageLen, {
+            const response = await pb.collection(this.dataset).getList(this._page, this.pageLen, {
                 filter: filter
             });
+
             this.items = response.items;
 
             // update the total page number
@@ -97,20 +148,24 @@ class FilteredDataset {
 
         // combine each of the filters into a string
         this.filters.forEach(filter => {
+
+            // TODO: make work with int/float columns
             if (filter.isFiltered) {
 
                 // create filter for set filter
-                if (filter instanceof SetFilter) {
+                if (filter.isSetFilter()) {
                     
                     let setValues = Object.values(filter.set)
-                                    .map(value => `"${value}"`).join(',');
-                    result.push(`${filter.column} IN [${setValues}]`);
+                                    .map(value => `${filter.column} = "${value}"`).join(' || ');
+                    result.push(setValues);
                 }
 
+
+                // TODO: test range filter
                 // create filter for range filter
-                else if (filter instanceof RangeFilter) {
+                else if (filter.isRangeFilter()) {
                     if (filter.start !== null && filter.end !== null) {
-                        result.push(`${filter.column} >= ${filter.start} AND ${filter.name} <= ${filter.end}`);
+                        result.push(`${filter.column} >= ${filter.start} && ${filter.name} <= ${filter.end}`);
                     } 
                     else if (filter.start !== null) {
                         result.push(`${filter.column} >= ${filter.start}`);
@@ -126,7 +181,7 @@ class FilteredDataset {
         });
 
         // return the filter as a string
-        if ( result.length > 0 ) {
+        if ( result.length == 0 ) {
             result = '';
         }
         else {
@@ -196,8 +251,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     console.log("first page:");
     console.log(tableData.items);
 
-    tableData.getfilter("unit_number").set.append("11111");
-    tableData.update();
+    tableData.getfilter("unit_number").push("11111");
+    tableData.getfilter("unit_number").push("22222");
+    await tableData.update();
     console.log("unit number: 11111");
     console.log(tableData.items);
 
