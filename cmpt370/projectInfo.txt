@@ -1,0 +1,20 @@
+Project infomation:
+
+Rules:
+
+Mechanic:
+
+
+ignore this:
+1. They should be able to work on 1 job at a time, meaning only 1 clock should be running
+ at a time, but they should be able to switch if they want if a clock on a job isnt running. 
+2. A mechanic can skip jobs, as long. as all are done, thats all that matters,
+doesnt have to be in sequence.
+3. Once they have inputted a work order number, they sshould see a list of all the pending
+or in progress work orders.
+4. A comment for each job must be added,  but a part shouldnt be required,
+as some jobs dont require new parts, but each job must have a comment, and some have both.
+5. If a type of service is selected, that means the mechanic will be looking for faults 
+in a truck, meaning; when a type of service is selected eg: Truck PMA, they should be able 
+to ADD a jobs, and once the PMA inspection has been done, and all new jobs are inserted BY
+ THE MECHANIC, he should then be able to work on that same work order, with the jobs HE created.

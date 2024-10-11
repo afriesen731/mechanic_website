@@ -3,22 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Mechanic Shop Work Orders</title>
+    <title>Login - Mechanic Shop</title>
 
-    <!-- this adds the css to the file -->
-    <link rel="stylesheet" href="../css/indexLynn.css">
-    
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            background-image: url('backgr log in.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Logo styling */
+        .logo {
+            width: 300px;
+            margin-bottom: -50px;
+            margin-left: 5px;
+        }
+
+   
+        .login-box {
+            width: 300px;
+            height: 400px; 
+            padding: 20px;
+            border-radius: 24px 0px 0px 0px;
+            background-image: url('log in box red.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0px 24px 40px 0px rgba(0, 0, 0, 0.08);
+        }
 
 
+        .login-box input {
+            width: 200px;
+            height: 20px;
+            padding: 10px;
+            margin: 8px 0px;
+            margin-top: 115px;
+            margin-bottom: -89px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1.0em;
+        }
 
+ 
+        .login-box button {
+            width: 78%;
+            padding: 10px;
+            margin-top: 43%;
+            border: none;
+            background-color: transparent;
+            color: black;
+            font-size: 1.1em;
+            font-family:Arial, sans-serif;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .login-box button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Login</h1>
-    <div id="login">
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button onclick="login()">Login</button>
-        <p id="login-status"></p>
+
+
+    <div class="login-container">
+        <img src="praire logo no backgr.png" alt="Logo" class="logo">
+        <div class="login-box">
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <button onclick="login()">Sign in</button> 
+        </div>
     </div>
+
+    <script>
+        function login() {
+            alert('Button clicked!');
+        }
+    </script>
 </body>
 </html>
