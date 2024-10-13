@@ -21,6 +21,20 @@
             height: 100vh;
         }
 
+        .search-container {
+            display: flex;
+            justify-content: flex-start; 
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            margin-left: 18px;
+            margin-right: 2px;
+            font-size: 1px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
 
         .sidebar {
             position: fixed;
@@ -61,62 +75,73 @@
             color: #333;
         }
 
-        /* Search Bar and Sort Button */
+
         .search-sort-container {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
+            align-items: center;
             margin-bottom: 20px;
         }
 
         .search-bar {
-            padding: 10px;
-            font-size: 16px;
-            width: 60%;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        background-color: transparent; 
+        border: none; 
+        font-size: 18px;
+        color: #666262;
+        outline: none; 
+ 
         }
 
         .sort-button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
+            padding: 10px 50px;
+            font-size: 17px;
+            background-color: transparent;
+            color: #666262;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            margin-left: 15.5cm;
+            white-space: nowrap;
         }
 
         /* Table Styling */
         table {
-            width: 100%;
+            width: 800px;
             border-collapse: collapse;
             background-color: white;
+            margin: 65px 10px 75px 10px;
         }
 
         table, th, td {
             border: 1px solid #ddd;
+            font-family: 'Nunito', bold;
         }
 
         th, td {
-            padding: 10px;
+            padding: 30px;
+            padding-inline: 35px;
             text-align: left;
+            font-size: 20px
         }
 
         th {
             background-color: #f4f4f4;
+            color: black
         }
+
 
         /* Button Styling */
         .action-btn {
-            background-color: #28a745;
+            background-color: #296846;
             color: white;
-            padding: 5px 10px;
+            padding: 8px 16px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
         }
 
         .action-btn:hover {
-            background-color: #218838;
+            background-color: #296846;
         }
 
 
@@ -178,8 +203,8 @@
             <div id="employee-page" class="content-page">
                
                 <div class="search-sort-container">
-                    <input type="text" class="search-bar" placeholder="Search Employee..." onkeyup="searchEmployee()">
-                    <button class="sort-button">Sort by Name</button>
+                    <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
+                    <button class="sort-button"> By Name </button>
                 </div>
                 <table id="employee-table">
                     <thead>
@@ -187,6 +212,7 @@
                             <th>Name</th>
                             <th>Employee ID</th>
                             <th>Date Created</th>
+                            <th>Empty</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -199,10 +225,9 @@
     
             <!-- Order Page -->
             <div id="order-page" class="content-page" style="display: none;">
-                <h2>Order List</h2>
                 <div class="search-sort-container">
-                    <input type="text" class="search-bar" placeholder="Search Orders...">
-                    <button class="sort-button">Sort by Order Number</button>
+                    <input type="text" class="search-bar" placeholder="Search here...">
+                    <button class="sort-button">7 days ago</button>
                 </div>
                 <table>
                     <thead>
@@ -240,7 +265,6 @@
             <!-- History Page -->
             <div id="history-page" class="content-page" style="display: none;">
                 <h2>History Page</h2>
-                <p>History content goes here...</p>
             </div>
         </div>
 
@@ -325,6 +349,7 @@
         function searchEmployee() {
             console.log('Search function triggered');
         }
+        function searchEmployee() {}
 
     </script>
 
