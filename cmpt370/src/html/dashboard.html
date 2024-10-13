@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Employee Management</title>
+
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
     <style>
         /* General Styling */
@@ -100,8 +100,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin-left: 15.5cm;
+            margin-left: 15.2cm;
             white-space: nowrap;
+            appearance: none;
+        }
+
+        sort-button:focus{
+            outline: none;
         }
 
         /* Table Styling */
@@ -109,7 +114,8 @@
             width: 800px;
             border-collapse: collapse;
             background-color: white;
-            margin: 65px 10px 75px 10px;
+            margin: 95px 10px 75px 10px;
+            border-radius: 50px;
         }
 
         table, th, td {
@@ -118,15 +124,20 @@
         }
 
         th, td {
-            padding: 30px;
+            padding: 20px;
             padding-inline: 35px;
             text-align: left;
             font-size: 20px
         }
+        td {
+            color: black;
+            font-family: 'Nunito', bold
+        }
 
         th {
             background-color: #f4f4f4;
-            color: black
+            color: black;
+            font-family: 'Nunito', bold
         }
 
 
@@ -178,7 +189,7 @@
         }
 
         .menu a:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
     
 
@@ -204,7 +215,11 @@
                
                 <div class="search-sort-container">
                     <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
-                    <button class="sort-button"> By Name </button>
+                    <select class="sort-button" onchange="sortEmployees(this.value)">
+                        <option value="">Sort By</option>
+                        <option value="asc">From A - Z</option>
+                        <option value="desc">From Z - A</option>
+                    </select>
                 </div>
                 <table id="employee-table">
                     <thead>
@@ -223,7 +238,6 @@
                 </table>
             </div>
     
-            <!-- Order Page -->
             <div id="order-page" class="content-page" style="display: none;">
                 <div class="search-sort-container">
                     <input type="text" class="search-bar" placeholder="Search here...">
@@ -239,39 +253,18 @@
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>ORD001</td>
-                            <td>John Doe</td>
-                            <td>2023-09-10</td>
-                            <td>Shipped</td>
-                            <td>
-                                <button class="action-btn">View</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>ORD002</td>
-                            <td>Jane Smith</td>
-                            <td>2023-09-15</td>
-                            <td>Processing</td>
-                            <td>
-                                <button class="action-btn">View</button>
-                            </td>
-                        </tr>
-                    </tbody>
+                   
                 </table>
             </div>
     
-            <!-- History Page -->
             <div id="history-page" class="content-page" style="display: none;">
-                <h2>History Page</h2>
             </div>
         </div>
 
         <div class="menu">
             <a onclick="showPage('employee')">Employee</a>
             <a onclick="showPage('order')">Order</a>
-            <a onclick="showPage('history')">History</a>
+            <a onclick="workorders.html">Add Order</a>
         </div>
     </div>
     <script>
@@ -279,18 +272,31 @@
             console.log('Redirect to dashboard');
         }
 
-        let employees = [
-            {name: 'Alice', id: 'E001', date: '2023-09-01', status: 'Active'},
-            {name: 'Bob', id: 'E002', date: '2023-09-10', status: 'Inactive'},
-            {name: 'Charlie', id: 'E003', date: '2023-09-15', status: 'Active'},
-        ];
+        let employees = [];
 
         let employeeToRemove = null;
+
+        const realNames = [
+            'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Hannah', 
+            'Isaac', 'Jack', 'Katherine', 'Liam', 'Mia', 'Noah', 'Olivia', 'Paul', 
+            'Quinn', 'Rachel', 'Sam', 'Tina', 'Uma', 'Victor', 'Wendy', 'Xander', 
+            'Yara', 'Zoe'
+        ];
+
+        function generateRandomEmployees() {
+            for (let i = 0; i < realNames.length; i++) {
+            const randomId = 'E' + String(i + 1).padStart(3, '0');
+            const randomDate = `2023-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`;
+            const randomStatus = Math.random() > 0.5 ? 'Active' : 'Inactive';
+
+            employees.push({ name: realNames[i], id: randomId, date: randomDate, status: randomStatus });
+        }
+    }
 
         // Render employee table
         function renderEmployeeTable() {
             const tableBody = document.querySelector('#employee-table tbody');
-            tableBody.innerHTML = ''; // Clear existing rows
+            tableBody.innerHTML = ''; 
 
             employees.forEach((employee, index) => {
                 const row = document.createElement('tr');
@@ -324,19 +330,11 @@
             if (employeeToRemove !== null) {
                 employees.splice(employeeToRemove, 1); // Remove the employee from the array
                 renderEmployeeTable(); // Re-render the table
+                employeeToRemove = null;
                 closeModal(); // Close the modal
             }
         }
 
-        // Initialize the employee table on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            renderEmployeeTable();
-        });
-
-        // Placeholder function for dashboard navigation
-        function goToDashboard() {
-            console.log('Redirect to dashboard');
-        }
 
         // Placeholder for switching pages
         function showPage(page) {
@@ -345,11 +343,51 @@
             document.getElementById(`${page}-page`).style.display = 'block';
         }
 
-        // Placeholder search function
         function searchEmployee() {
-            console.log('Search function triggered');
+            const input = document.querySelector('.search-bar').value.toLowerCase();
+            const filteredEmployees = employees.filter(employee => 
+                employee.name.toLowerCase().includes(input) || 
+                employee.id.toLowerCase().includes(input)
+            );
+
+            // Render the filtered employees in the table
+            renderFilteredEmployeeTable(filteredEmployees);
         }
-        function searchEmployee() {}
+
+        function renderFilteredEmployeeTable(filteredEmployees) {
+            const tableBody = document.querySelector('#employee-table tbody');
+            tableBody.innerHTML = ''; // Clear existing rows
+
+            filteredEmployees.forEach((employee, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${employee.name}</td>
+                    <td>${employee.id}</td>
+                    <td>${employee.date}</td>
+                    <td>${employee.status}</td>
+                    <td>
+                        <button class="action-btn" onclick="showModal(${index})">Remove</button>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function sortEmployees(order) {
+            if (order === "asc") {
+                employees.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (order === "desc") {
+                employees.sort((a, b) => b.name.localeCompare(a.name));
+            }
+            renderEmployeeTable(); // Re-render the table after sorting
+        }
+
+
+        // Initialize the employee table on page load and generate random employees
+        document.addEventListener('DOMContentLoaded', () => {
+            generateRandomEmployees();
+            renderEmployeeTable();
+        });
 
     </script>
 
