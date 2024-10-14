@@ -51,6 +51,11 @@ export async function submitWorkOrder() {
     const retorqueNumber = document.getElementById('retorqueNumber').value;
     const kms = document.getElementById('kms').value;
 
+    if (!workOrderNumber.trim()) {
+        alert("Work Order # is required!");
+        return;
+    }
+
     // Reefer Information
     const reeferVinNumber = document.getElementById('reeferVinNumber').value;
     const reeferMake = document.getElementById('reeferMake').value;
