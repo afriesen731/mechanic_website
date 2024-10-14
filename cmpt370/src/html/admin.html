@@ -8,27 +8,27 @@
 </head>
 <body>
 
-    <!-- Logo Section - Positioned in the top-left -->
+    <!-- Top-bar with logo and menu -->
     <div class="top-bar">
-        <div class="logo">
+        <div class="logo" onclick="goToDashboard()">
             <a href="admin.html">
                 <img src="../images/FINAL logo.png" alt="Logo">
             </a>
         </div>
-        <!-- Top-Bar Menu -->
         <div class="menu">
             <a onclick="showPage('employee')">Employee</a>
             <a onclick="showPage('order')">Order</a>
-            <a href="create_workorder.html">Create Work Order</a>
+            <a id="create-workorder-btn">Create Work Order</a>
         </div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Main content for employee, order, and work order iframe -->
     <div class="main-content" id="main-content">
-        <!-- Employee Page -->
-        <div id="employee-page" class="content-page">
+        
+        <!-- Employee Section (Initially hidden) -->
+        <div id="employee-page" class="content-page" style="display: none;">
             <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
+                <input type="text" class="search-bar" placeholder="Search employees..." onkeyup="searchEmployee()">
                 <select class="sort-button" onchange="sortEmployees(this.value)">
                     <option value="">Sort By</option>
                     <option value="asc">From A - Z</option>
@@ -51,10 +51,10 @@
             </div>
         </div>
 
-        <!-- Order Page -->
+        <!-- Order Section (Initially hidden) -->
         <div id="order-page" class="content-page" style="display: none;">
             <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search orders here...">
+                <input type="text" class="search-bar" placeholder="Search orders...">
                 <button class="sort-button">7 days ago</button>
             </div>
             <div class="table-container">
@@ -72,10 +72,15 @@
                 </table>
             </div>
         </div>
+
+        <!-- Iframe for Create Work Order (Initially hidden) -->
+        <div id="workorder-iframe-container">
+            <iframe id="workorder-iframe" src=""></iframe>
+        </div>
+
     </div>
 
-    <!-- JavaScript File -->
-    <script src="../js/dashboard.js"></script>
+    <script src="../js/admin.js"></script>
 
 </body>
 </html>
