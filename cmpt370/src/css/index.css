@@ -1,46 +1,39 @@
-
+/* Ensure HTML and Body take the full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
 /* Set the full-screen background */
 body {
-    margin: 0;
-    padding: 0;
     height: 100vh;
-    background-image: url('Left Content.png'); /* Replace with your left background image */
-    background-size: cover; /* Cover the entire viewport */
-    background-position: center; /* Center the image */
-    background-repeat: no-repeat; /* Do not repeat the image */
+    width: 100vw;
+    background-image: url('../images/Left_Content.png');
+    background-size: cover;
+    background-position: left; /* Fix the background to the left */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
     display: flex;
-    justify-content: flex-end; /* Align the login box to the right */
-    align-items: center; /* Vertically center content */
-    font-family: Arial, sans-serif;
+    justify-content: center;
+    align-items: center;
 }
 
 /* Login box settings */
 .login-box {
-    position: relative;
-    width: Fixed(520px);
-    height: 529px;
-    top: 50px;
-    bottom: 120px;
-    right: 120px;
-    radius: 300px;
-    padding: 47px 100px;
-    gap: 32px;
-    border-radius: 24px 0px 0px 0px;
-    background-image: url('Right Content.png'); /* Background image for the login box */
-    background-size: cover; /* Make sure the image covers the login box */
-    background-position: center; /* Center the image within the login box */
-    box-shadow: 0px 24px 40px 0px rgba(0, 0, 0, 0.08);
+    width: 400px; /* Fixed width */
+    padding: 40px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8); /* Add background color with transparency */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
 }
 
 /* Style for the login input fields */
 .login-box input {
-    width: 139%; /* Width inside the login box */
-    height: 5%;
+    width: 100%; /* Full width inside the login box */
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
@@ -49,7 +42,7 @@ body {
 }
 
 /* Style for the login button */
-.login-box button {
+.login-box input[type="submit"] {
     padding: 10px 20px;
     border: none;
     background-color: #007bff;
@@ -57,12 +50,17 @@ body {
     font-size: 1.2em;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%; /* Full width for the button */
+    margin-top: 20px;
 }
 
-.login-box button:hover {
+.login-box input[type="submit"]:hover {
     background-color: #0056b3;
 }
 
-</style>
-</head>
-<body>
+/* Placeholder for login status */
+#login-status {
+    color: red;
+    margin-top: 10px;
+    font-size: 0.9em;
+}
