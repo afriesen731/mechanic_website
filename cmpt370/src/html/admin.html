@@ -1,26 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Dashboard</title>
-
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
 
-    <h1>Prairie Fleet Services</h1>
-    
+    <!-- Logo Section - Positioned in the top-left -->
+    <div class="top-bar">
+        <div class="logo">
+            <a href="admin.html">
+                <img src="../images/FINAL logo.png" alt="Logo">
+            </a>
+        </div>
+        <!-- Top-Bar Menu -->
+        <div class="menu">
+            <a onclick="showPage('employee')">Employee</a>
+            <a onclick="showPage('order')">Order</a>
+            <a href="create_workorder.html">Create Work Order</a>
+        </div>
+    </div>
 
-    <h2>Dashboard</h2>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Employee Page -->
+        <div id="employee-page" class="content-page">
+            <div class="search-sort-container">
+                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
+                <select class="sort-button" onchange="sortEmployees(this.value)">
+                    <option value="">Sort By</option>
+                    <option value="asc">From A - Z</option>
+                    <option value="desc">From Z - A</option>
+                </select>
+            </div>
+            <div class="table-container">
+                <table id="employee-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Date Created</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
 
-    <!-- Admin action buttons -->
-    <button onclick="window.location.href='create_workorder.html'">Create Work Order</button>
-    <button onclick="viewWorkOrders()">View Active Work Orders</button>
-    <button onclick="viewPastWorkOrders()">View Past Work Orders</button>
-    <button onclick="manageEmployees()">Manage Employees</button>
+        <!-- Order Page -->
+        <div id="order-page" class="content-page" style="display: none;">
+            <div class="search-sort-container">
+                <input type="text" class="search-bar" placeholder="Search orders here...">
+                <button class="sort-button">7 days ago</button>
+            </div>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order Number</th>
+                            <th>Customer Name</th>
+                            <th>Date Created</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-    <script type="module" src="../js/app.js"></script>
+    <!-- JavaScript File -->
+    <script src="../js/dashboard.js"></script>
 
 </body>
 </html>
