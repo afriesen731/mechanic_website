@@ -7,10 +7,17 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node.js specific
 node_modules
 dist
 dist-ssr
 *.local
+
+# Ignore .DS_Store files
+.DS_Store
+
+# Ignore the pocketbase directory
+pocketbase_0.22.21_*
 
 # Editor directories and files
 .vscode/*
