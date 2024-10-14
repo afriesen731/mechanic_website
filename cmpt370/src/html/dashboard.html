@@ -3,224 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@200&display=swap" rel="stylesheet">
-    <style>
-        /* General Styling */
-        body {
-            font-family: Arial, sans-serif;
-            background-image: url('employee list.png');
-            background-repeat: no-repeat;
-            background-size: cover;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            height: 100vh;
-        }
-
-        .search-container {
-            display: flex;
-            justify-content: flex-start; 
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-            margin-left: 18px;
-            margin-right: 2px;
-            font-size: 1px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 250px;
-            height: 100vh;
-            background-color: transparent; 
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 20px;
-        }
-
-        .sidebar a {
-            padding: 15px 20px;
-            text-decoration: none;
-            font-size: 18px;
-            color: white;
-            display: block;
-            text-align: left;
-        }
-
-        .sidebar a:hover {
-            background-color: transparent;
-            cursor: pointer;
-        }
-
-        .main-content {
-            margin-left: 260px;
-            padding: 20px;
-            width: calc(100% - 260px);
-            margin-top: 60px; 
-        }
-
-        .main-content h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-
-        .search-sort-container {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .search-bar {
-        background-color: transparent; 
-        border: none; 
-        font-size: 18px;
-        color: #666262;
-        outline: none; 
- 
-        }
-
-        .sort-button {
-            padding: 10px 50px;
-            font-size: 17px;
-            background-color: transparent;
-            color: #666262;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-left: 15.2cm;
-            white-space: nowrap;
-            appearance: none;
-        }
-
-        sort-button:focus{
-            outline: none;
-        }
-
-        /* Table Styling */
-        table {
-            width: 800px;
-            border-collapse: collapse;
-            background-color: white;
-            margin: 95px 10px 75px 10px;
-            border-radius: 50px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-            font-family: 'Nunito', bold;
-        }
-
-        th, td {
-            padding: 20px;
-            padding-inline: 35px;
-            text-align: left;
-            font-size: 20px
-        }
-        td {
-            color: black;
-            font-family: 'Nunito', bold
-        }
-
-        th {
-            background-color: #f4f4f4;
-            color: black;
-            font-family: 'Nunito', bold
-        }
-
-
-        /* Button Styling */
-        .action-btn {
-            background-color: #296846;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .action-btn:hover {
-            background-color: #296846;
-        }
-
-
-        .logo {
-            position: absolute;
-            top: 8px;
-            left: 19.9px;
-            cursor: pointer;
-        }
-
-        .logo img {
-            width: 180px;
-            height: auto;
-        }
-
-        .menu {
-            position: absolute;
-            top: 127px;
-            left: 20px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .menu a {
-            color: white;
-            font-size: 5px;
-            font-family: 'Nunito', sans-serif;
-            text-decoration: none;
-            padding: 15px 0;
-            font-size: 23px;
-            margin-bottom: -5px;
-            cursor: pointer;
-            padding-left: 1.3cm;
-        }
-
-        .menu a:hover {
-            text-decoration: none;
-        }
-    
-
-    </style>
+    <link rel="stylesheet" href="../css/dashboard.css">
 </head>
 <body>
 
-    <div class="logo" onclick="goToDashbooard()">
-        <a href="dashboard.html">
-            <img src="FINAL logo.png" alt="Logo" class="logo"> 
-        </a>
-    </div>
+    <!-- Sidebar -->
     <div class="sidebar">
-        <div class="logo" onclick="goToDashboard()">
+        <div class="logo">
             <a href="dashboard.html">
-                <img src="FINAL logo.png" alt="Logo" class="logo"> 
+                <img src="../images/FINAL logo.png" alt="Logo" class="logo"> 
             </a>
         </div>
 
-        <div class="main-content" id="main-content">
-            
-            <div id="employee-page" class="content-page">
-               
-                <div class="search-sort-container">
-                    <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
-                    <select class="sort-button" onchange="sortEmployees(this.value)">
-                        <option value="">Sort By</option>
-                        <option value="asc">From A - Z</option>
-                        <option value="desc">From Z - A</option>
-                    </select>
-                </div>
+        <div class="menu">
+            <a onclick="showPage('employee')">Employee</a>
+            <a onclick="showPage('order')">Order</a>
+            <a href="workorders.html">Add Order</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        
+        <!-- Employee Page -->
+        <div id="employee-page" class="content-page">
+            <div class="search-sort-container">
+                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
+                <select class="sort-button" onchange="sortEmployees(this.value)">
+                    <option value="">Sort By</option>
+                    <option value="asc">From A - Z</option>
+                    <option value="desc">From Z - A</option>
+                </select>
+            </div>
+
+            <!-- Table container with its own scroll -->
+            <div class="table-container">
                 <table id="employee-table">
                     <thead>
                         <tr>
@@ -233,163 +53,18 @@
                         </tr>
                     </thead>
                     <tbody>
-               
+                        <!-- Data rows will be inserted here -->
                     </tbody>
                 </table>
             </div>
-    
-            <div id="order-page" class="content-page" style="display: none;">
-                <div class="search-sort-container">
-                    <input type="text" class="search-bar" placeholder="Search here...">
-                    <button class="sort-button">7 days ago</button>
-                </div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Order Number</th>
-                            <th>Customer Name</th>
-                            <th>Date Created</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                   
-                </table>
-            </div>
-    
-            <div id="history-page" class="content-page" style="display: none;">
-            </div>
         </div>
 
-        <div class="menu">
-            <a onclick="showPage('employee')">Employee</a>
-            <a onclick="showPage('order')">Order</a>
-            <a onclick="workorders.html">Add Order</a>
-        </div>
+        <!-- Placeholder for other pages (Order, History, etc.) -->
+        <div id="order-page" class="content-page" style="display: none;"></div>
+        <div id="history-page" class="content-page" style="display: none;"></div>
+
     </div>
-    <script>
-        function goToDashboard() {
-            console.log('Redirect to dashboard');
-        }
 
-        let employees = [];
-
-        let employeeToRemove = null;
-
-        const realNames = [
-            'Alice', 'Bob', 'Charlie', 'David', 'Eve', 'Frank', 'Grace', 'Hannah', 
-            'Isaac', 'Jack', 'Katherine', 'Liam', 'Mia', 'Noah', 'Olivia', 'Paul', 
-            'Quinn', 'Rachel', 'Sam', 'Tina', 'Uma', 'Victor', 'Wendy', 'Xander', 
-            'Yara', 'Zoe'
-        ];
-
-        function generateRandomEmployees() {
-            for (let i = 0; i < realNames.length; i++) {
-            const randomId = 'E' + String(i + 1).padStart(3, '0');
-            const randomDate = `2023-${String(Math.floor(Math.random() * 12) + 1).padStart(2, '0')}-${String(Math.floor(Math.random() * 28) + 1).padStart(2, '0')}`;
-            const randomStatus = Math.random() > 0.5 ? 'Active' : 'Inactive';
-
-            employees.push({ name: realNames[i], id: randomId, date: randomDate, status: randomStatus });
-        }
-    }
-
-        // Render employee table
-        function renderEmployeeTable() {
-            const tableBody = document.querySelector('#employee-table tbody');
-            tableBody.innerHTML = ''; 
-
-            employees.forEach((employee, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${employee.name}</td>
-                    <td>${employee.id}</td>
-                    <td>${employee.date}</td>
-                    <td>${employee.status}</td>
-                    <td>
-                        <button class="action-btn" onclick="showModal(${index})">Remove</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        // Show confirmation modal
-        function showModal(index) {
-            employeeToRemove = index;
-            document.getElementById('confirmation-modal').style.display = 'block';
-        }
-
-        // Close modal
-        function closeModal() {
-            document.getElementById('confirmation-modal').style.display = 'none';
-            employeeToRemove = null;
-        }
-
-        // Confirm removal and remove employee
-        function confirmRemove() {
-            if (employeeToRemove !== null) {
-                employees.splice(employeeToRemove, 1); // Remove the employee from the array
-                renderEmployeeTable(); // Re-render the table
-                employeeToRemove = null;
-                closeModal(); // Close the modal
-            }
-        }
-
-
-        // Placeholder for switching pages
-        function showPage(page) {
-            const pages = document.querySelectorAll('.content-page');
-            pages.forEach(p => p.style.display = 'none');
-            document.getElementById(`${page}-page`).style.display = 'block';
-        }
-
-        function searchEmployee() {
-            const input = document.querySelector('.search-bar').value.toLowerCase();
-            const filteredEmployees = employees.filter(employee => 
-                employee.name.toLowerCase().includes(input) || 
-                employee.id.toLowerCase().includes(input)
-            );
-
-            // Render the filtered employees in the table
-            renderFilteredEmployeeTable(filteredEmployees);
-        }
-
-        function renderFilteredEmployeeTable(filteredEmployees) {
-            const tableBody = document.querySelector('#employee-table tbody');
-            tableBody.innerHTML = ''; // Clear existing rows
-
-            filteredEmployees.forEach((employee, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${employee.name}</td>
-                    <td>${employee.id}</td>
-                    <td>${employee.date}</td>
-                    <td>${employee.status}</td>
-                    <td>
-                        <button class="action-btn" onclick="showModal(${index})">Remove</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        }
-
-        function sortEmployees(order) {
-            if (order === "asc") {
-                employees.sort((a, b) => a.name.localeCompare(b.name));
-            } else if (order === "desc") {
-                employees.sort((a, b) => b.name.localeCompare(a.name));
-            }
-            renderEmployeeTable(); // Re-render the table after sorting
-        }
-
-
-        // Initialize the employee table on page load and generate random employees
-        document.addEventListener('DOMContentLoaded', () => {
-            generateRandomEmployees();
-            renderEmployeeTable();
-        });
-
-    </script>
-
+    <script src="../js/dashboard.js"></script>
 </body>
 </html>
