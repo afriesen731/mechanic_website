@@ -11,7 +11,7 @@ body {
     width: 100vw;
     background-image: url('../images/Left_Content.png');
     background-size: cover;
-    background-position: left; /* Fix the background to the left */
+    background-position: center left; /* Ensure that content loss happens from the right side */
     background-repeat: no-repeat;
     background-attachment: fixed;
     display: flex;
@@ -26,6 +26,14 @@ body {
     border-radius: 10px;
     background-color: rgba(255, 255, 255, 0.8); /* Add background color with transparency */
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the form inside the login box */
+form {
+    width: 100%; /* Make the form take the full width of the login box */
     display: flex;
     flex-direction: column;
     align-items: center;
