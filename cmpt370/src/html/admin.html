@@ -8,27 +8,24 @@
 </head>
 <body>
 
-    <!-- Top-bar with logo and menu -->
     <div class="top-bar">
-        <div class="logo" onclick="goToDashboard()">
+        <div class="logo">
             <a href="admin.html">
-                <img src="../images/FINAL logo.png" alt="Logo">
+                <img src="../images/logo.png" alt="Logo" class="logo">
             </a>
         </div>
         <div class="menu">
             <a onclick="showPage('employee')">Employee</a>
             <a onclick="showPage('order')">Order</a>
-            <a id="create-workorder-btn">Create Work Order</a>
+            <a onclick="showIframe()">Create Work Order</a>
         </div>
     </div>
 
-    <!-- Main content for employee, order, and work order iframe -->
     <div class="main-content" id="main-content">
-        
-        <!-- Employee Section (Initially hidden) -->
-        <div id="employee-page" class="content-page" style="display: none;">
+        <div id="employee-page" class="content-page">
+            <!-- Employee Table with Search and Sort -->
             <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search employees..." onkeyup="searchEmployee()">
+                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
                 <select class="sort-button" onchange="sortEmployees(this.value)">
                     <option value="">Sort By</option>
                     <option value="asc">From A - Z</option>
@@ -51,10 +48,9 @@
             </div>
         </div>
 
-        <!-- Order Section (Initially hidden) -->
         <div id="order-page" class="content-page" style="display: none;">
             <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search orders...">
+                <input type="text" class="search-bar" placeholder="Search orders here...">
                 <button class="sort-button">7 days ago</button>
             </div>
             <div class="table-container">
@@ -73,11 +69,10 @@
             </div>
         </div>
 
-        <!-- Iframe for Create Work Order (Initially hidden) -->
-        <div id="workorder-iframe-container">
-            <iframe id="workorder-iframe" src=""></iframe>
+        <!-- Iframe container for Create Work Order -->
+        <div id="iframe-container" class="content-page" style="display: none;">
+            <iframe id="workorder-iframe" style="width:100%; height:800px; border:none;"></iframe>
         </div>
-
     </div>
 
     <script src="../js/admin.js"></script>
