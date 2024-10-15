@@ -28,8 +28,9 @@ export class Table {
         
         // build the table row by row
         for (i=0; i < dataset.items.length; i++) {
-            tbody.appendChild(
-                await this.buildRow(dataset.items[i], this.columns)
+            tbody.insertBefore(
+                await this.buildRow(dataset.items[i], this.columns),
+                tbody.firstChild
             );
         }
 

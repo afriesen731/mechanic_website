@@ -27,7 +27,10 @@ class Filter {
      * @returns {string} The formatted value.
     */
     formatValue(item) {
-        if (this.isNumber) {
+        if (item == null) {
+            return null
+        }
+        else if (this.isNumber) {
             return `${item}`;
         }
         else {
@@ -146,25 +149,30 @@ class RangeFilter extends Filter {
         if (this.start !== null && this.end !== null) {
             result = `${this.column} >= ${this.start} && ${this.column} <= ${this.end}`;
         } 
-        else if (filter.start !== null) {
+        else if (this.start !== null) {
             result = `${this.column} >= ${this.start}`;
         } 
-        else if (filter.end !== null) {
-            result = `${result.column} <= ${this.end}`;
+        else if (this.end !== null) {
+            result = `${this.column} <= ${this.end}`;
         }
         return result;
     }
 
 
     set start(value) {
+
         this._start = this.formatValue(value);
         this.isFiltered = true;
+
+        
     }
 
     set end(value) {
+        
         this._end = this.formatValue(value);
 
         this.isFiltered = true;
+        
     }
 
     get start() {
@@ -633,8 +641,21 @@ export class FilterElements {
         
     }
 
+    async initDateSelector(startElement, endElement, dateField) {
+        let filterElements = this;
+        startElement.addEventListener('change', e => {
+            const startDate = e.target.value;
+            filterElements.filteredDataset.getRangeFilter(dateField).start = startDate;
+            filterElements.filteredDataset.update();
+        });
 
-    initDateSelector() {
+        endElement.addEventListener('change', e => {
+            let endDate = new Date(e.target.value);
+            endDate.setDate(endDate.getDate() + 1);
+            endDate = endDate.toISOString().split('T')[0];
+            filterElements.filteredDataset.getRangeFilter(dateField).end = endDate;
+            filterElements.filteredDataset.update();
+        });
 
     }
 

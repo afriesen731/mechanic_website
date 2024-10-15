@@ -68,8 +68,9 @@ export class OrderTable extends Table {
 
 document.addEventListener("DOMContentLoaded", async function() {
     const tableElement = document.getElementById('table');
-    const employeeSelect = document.getElementById("employee-select");
-    const employeeSelectForm = document.getElementById("employee-select-form");
+    const employeeSelect = document.getElementById('employee-select');
+    const startDate = document.getElementById('start-date');
+    const endDate = document.getElementById('end-date');
     // TODO: set up table
     const authData = await pb.collection('users')
                                 .authWithPassword('password', 'password');
@@ -77,10 +78,11 @@ document.addEventListener("DOMContentLoaded", async function() {
     const columns = ['created', 'mechanics', 'license_plate', 'type_of_service', 'model', 'status'];
     const table = new OrderTable(tableElement, columns);
     
-    const filteredDataset = new FilteredDataset("work_orders", [table]);
+    const filteredDataset = new FilteredDataset('work_orders', [table]);
     
     const filterElements = new FilterElements(filteredDataset);
-    filterElements.initMechanicSelector(employeeSelect, "mechanics");
+    filterElements.initMechanicSelector(employeeSelect, 'mechanics');
+    filterElements.initDateSelector(startDate, endDate, 'created');
     filteredDataset.update();
 
 
