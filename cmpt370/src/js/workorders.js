@@ -71,7 +71,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const employeeSelect = document.getElementById('employee-select');
     const startDate = document.getElementById('start-date');
     const endDate = document.getElementById('end-date');
-    // TODO: set up table
+    const statusSelect = document.getElementById('status-select');
     const authData = await pb.collection('users')
                                 .authWithPassword('password', 'password');
     
@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const filterElements = new FilterElements(filteredDataset);
     filterElements.initMechanicSelector(employeeSelect, 'mechanics');
     filterElements.initDateSelector(startDate, endDate, 'created');
+    // filterElements.initStatusSelector(statusSelect, 'status');
     filteredDataset.update();
 
 
