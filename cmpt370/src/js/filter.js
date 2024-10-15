@@ -1,3 +1,12 @@
+import PocketBase from 'pocketbase';
+import $ from 'jquery';
+import 'select2/dist/css/select2.min.css';
+import select2 from 'select2';
+select2();
+
+// PocketBase SDK initialization
+const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+
 const DEFAULT_PAGE_LEN = 50;
 
 
@@ -74,7 +83,9 @@ class SetFilter extends Filter {
      * @returns {string} The constructed filter string.
     */
     getFilter() {
-
+        if (!this.isFiltered || this.set.length == 0) {
+            return "";
+        }
         
         let result = Object.values(this.set)
                         .map(value => `${this.column} = ${this.formatValue(value)}`)
@@ -85,7 +96,7 @@ class SetFilter extends Filter {
 
     set set(list) {
         this._set = list;
-        this.isFiltered = isFiltered;
+        this.isFiltered = true;
     }
 
 
@@ -128,6 +139,9 @@ class RangeFilter extends Filter {
      * @returns {string} The constructed filter string.
     */
     getFilter() {
+        if (!this.isFiltered) {
+            return "";
+        }
         let result;
         if (this.start !== null && this.end !== null) {
             result = `${this.column} >= ${this.start} && ${this.column} <= ${this.end}`;
@@ -188,6 +202,9 @@ class HasAnyFilter extends SetFilter {
      * @returns {string} The constructed filter string.
     */
     getFilter() {
+        if (!this.isFiltered || this.set.length == 0) {
+            return "";
+        }
         const result = this._set
             .map(item => `${this.column} ~ ${this.formatValue(item)}`)
             .join(' || ');
@@ -218,6 +235,9 @@ class ContainsAllFilter extends SetFilter {
      * @returns {string} The constructed filter string.
     */
     getFilter() {
+        if (!this.isFiltered || this.set.length == 0) {
+            return "";
+        }
         const result = this._set
             .map(item => `${this.column} ~ ${this.formatValue(item)}`)
             .join(' && ');
@@ -247,6 +267,9 @@ class EqualSetsFilter extends SetFilter {
      * @returns {string} The constructed filter string.
     */
     getFilter() {
+        if (!this.isFiltered || this.set.length == 0) {
+            return "";
+        }
         // Return a filter string for exact match condition
         const conditions = this._set
             .map(item => `${this.column} ~ ${this.formatValue(item)}`)
@@ -262,7 +285,7 @@ class EqualSetsFilter extends SetFilter {
 /**
  * Represents a filtered dataset that manages data and its filters.
 */
-class FilteredDataset {
+export class FilteredDataset {
     /**
      * Creates an instance of FilteredDataset.
      * @param {string} dataset - The name of the dataset.
@@ -401,7 +424,7 @@ class FilteredDataset {
      * @returns {SetFilter} The SetFilter for the specified column.
     */
     getSetFilter(column) {
-        return getFilter(column, SetFilter);
+        return this.getFilter(column, SetFilter);
     }
 
     /**
@@ -411,7 +434,7 @@ class FilteredDataset {
      * @returns {RangeFilter} The RangeFilter for the specified column.
     */
     getRangeFilter(column) {
-        return getFilter(column, SetFilter);
+        return this.getFilter(column, RangeFilter);
         
     }
 
@@ -422,7 +445,7 @@ class FilteredDataset {
      * @returns {HasAnyFilter} The HasAnyFilter for the specified column.
     */
     getHasAnyFilter(column) {
-        return getFilter(column, SetFilter);
+        return this.getFilter(column, HasAnyFilter);
     }
 
     /**
@@ -432,7 +455,7 @@ class FilteredDataset {
      * @returns {ContainsAllFilter} The ContainsAllFilter for the specified column.
     */
     getContainsAllFilter(column) {
-        return getFilter(column, SetFilter);
+        return this.getFilter(column, ContainsAllFilter);
     }
 
     /**
@@ -442,7 +465,7 @@ class FilteredDataset {
      * @returns {EqualSetsFilter} The EqualSetsFilter for the specified column.
     */
     getEqualSetsFilter(column) {
-        return getFilter(column, SetFilter);
+        return this.getFilter(column, EqualSetsFilter);
     }
 
 
@@ -496,7 +519,11 @@ class FilteredDataset {
 
         // combine each of the filters into a string
         this.filters.forEach(filter => {
-            result.push(`( ${filter.getFilter()} )`);
+            const filterStr = filter.getFilter();
+            if (filterStr != "") {
+                result.push(filterStr);
+            }
+            
 
 
 
@@ -543,6 +570,74 @@ class FilteredDataset {
         this._page = pageNumber;
         this.update();
     }
+
+}
+
+
+
+
+export class FilterElements {
+    constructor(filteredDataset) {
+        this.filteredDataset = filteredDataset;
+
+    }
+
+
+    async initMechanicSelector(select, mechanicField) {
+        let filterElements = this;
+        let users = await pb.collection('users').getFullList({
+            fields: 'id, name'
+        });
+        
+        
+        users.forEach(user => {
+            let option = document.createElement('option');
+            option.text = user['name'];
+            option.value = user['id'];
+            select.appendChild(option);
+        });
+        
+        
+        $(`#${select.id}`).select2({
+            placeholder: "Select Employees"
+        });
+        $(`#${select.id}`).on('select2:select', function (e) {
+            // Submit the form when an option is selected
+            // e.preventDefault();
+   
+            let selected = $(`#${select.id}`).val();
+
+            let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
+            filter.set = selected;
+            filterElements.filteredDataset.update();
+        });
+
+        $(`#${select.id}`).on('select2:unselect', function (e) {
+            let selected = $(`#${select.id}`).val();
+
+            let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
+            if (selected.length == 0) {
+                filter.set = [];
+                filter.isFiltered = false;
+            }            
+            else {
+                filter.set = selected;
+            }
+            filterElements.filteredDataset.update();
+
+        });
+
+
+
+
+        
+    }
+
+
+    initDateSelector() {
+
+    }
+
 
 }
 

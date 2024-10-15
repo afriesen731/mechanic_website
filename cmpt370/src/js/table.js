@@ -5,7 +5,7 @@
 /**
  * Creates a table that can observe a FilteredDataset.
  */
-class Table {
+export class Table {
     /**
      * Createst an instance of Table.
      * @param {HTMLElement} table html element with tag "table".
@@ -22,14 +22,14 @@ class Table {
      * Updates the contents of the table.
      * @param {FilteredDataset} dataset A dataset containing all of the information for the table.
      */
-    update(dataset) {
+    async update(dataset) {
         let i;
         let tbody = document.createElement('tbody');
         
         // build the table row by row
-        for (i=0; i < dataset.pageLen; i++) {
+        for (i=0; i < dataset.items.length; i++) {
             tbody.appendChild(
-                this.buildRow(dataset.dataset[i], this.columns)
+                await this.buildRow(dataset.items[i], this.columns)
             );
         }
 
@@ -50,7 +50,7 @@ class Table {
      * @param {Dictionary} row A row of a filtered dataset from the database.
      * @returns {HTMLElement} The 'td' element for a new row.
      */
-    buildRow(row={}) {
+    async buildRow(row={}) {
         return new HTMLElement();
     }
 
