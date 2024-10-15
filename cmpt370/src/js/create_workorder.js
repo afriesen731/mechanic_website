@@ -2,18 +2,36 @@ import PocketBase from 'pocketbase';
 // PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
 
+// Function to safely get the element by ID and avoid null reference errors
+function getElementValue(id) {
+    const element = document.getElementById(id);
+    if (!element) {
+        console.error(`Element with ID '${id}' not found.`);
+        return '';
+    }
+    return element.value;
+}
+
 export async function submitWorkOrder() {
     console.log("submitWorkOrder called");
-    // Get the values from the work order form
-    const workOrderNumber = document.getElementById('workOrderNumber').value;
-    const unitNumber = document.getElementById('unitNumber').value;
-    const make = document.getElementById('make').value;
-    const model = document.getElementById('model').value;
-    const year = document.getElementById('year').value;
-    const licensePlate = document.getElementById('licensePlate').value;
-    const vinNumber = document.getElementById('vinNumber').value;
-    const retorqueNumber = document.getElementById('retorqueNumber').value;
-    const kms = document.getElementById('kms').value;
+
+    // Debugging logs to identify missing elements
+    console.log(getElementValue('workOrderNumber'));
+    console.log(getElementValue('unitNumber'));
+    console.log(getElementValue('make'));
+    console.log(getElementValue('model'));
+    console.log(getElementValue('year'));
+
+    // Get the values from the work order form using the safer function
+    const workOrderNumber = getElementValue('workOrderNumber');
+    const unitNumber = getElementValue('unitNumber');
+    const make = getElementValue('make');
+    const model = getElementValue('model');
+    const year = getElementValue('year');
+    const licensePlate = getElementValue('licensePlate');
+    const vinNumber = getElementValue('vinNumber');
+    const retorqueNumber = getElementValue('retorqueNumber');
+    const kms = getElementValue('kms');
 
     if (!workOrderNumber.trim()) {
         alert("Work Order # is required!");
@@ -21,10 +39,10 @@ export async function submitWorkOrder() {
     }
 
     // Reefer Information
-    const reeferVinNumber = document.getElementById('reeferVinNumber').value;
-    const reeferMake = document.getElementById('reeferMake').value;
-    const reeferModel = document.getElementById('reeferModel').value;
-    const reeferHours = document.getElementById('reeferHours').value;
+    const reeferVinNumber = getElementValue('reeferVinNumber');
+    const reeferMake = getElementValue('reeferMake');
+    const reeferModel = getElementValue('reeferModel');
+    const reeferHours = getElementValue('reeferHours');
 
     // Type of Service (get checked values)
     const checkboxes = document.querySelectorAll('input[name="typeOfService"]:checked');
@@ -32,18 +50,20 @@ export async function submitWorkOrder() {
 
     // Job Table: Collect job descriptions and hours
     const jobs = [];
-    for (let i = 1; i <= 20; i++) {
-        const description = document.getElementById(`jobDescription${i}`).value;
-        const hours = document.getElementById(`jobHours${i}`).value;
+    const jobRows = document.querySelectorAll('[id^="jobDescription"]'); // Selects all job descriptions
+    jobRows.forEach((jobRow, index) => {
+        const jobNumber = index + 1;
+        const description = getElementValue(`jobDescription${jobNumber}`);
+        const hours = getElementValue(`jobHours${jobNumber}`);
         if (description || hours) {
             jobs.push({ 
-                jobNumber: i,
+                jobNumber: jobNumber,
                 description: description,
                 hours: hours,
                 status: "Pending"  // Initialize all job statuses as Pending
             });
         }
-    }
+    });
 
     // Construct the work order object
     const workOrderData = {
@@ -75,8 +95,25 @@ export async function submitWorkOrder() {
     }
 }
 
-// Attach event listener
+// Function to dynamically add job descriptions
+document.getElementById('addJobButton').addEventListener('click', () => {
+    const jobTableBody = document.getElementById('jobTableBody');
+    const newRowNumber = jobTableBody.getElementsByTagName('tr').length + 1;
+
+    const newRow = document.createElement('tr');
+    newRow.innerHTML = `
+        <td>${newRowNumber}</td>
+        <td><input type="text" id="jobDescription${newRowNumber}"></td>
+        <td><input type="number" id="jobHours${newRowNumber}" style="width: 60px;"></td>
+    `;
+
+    jobTableBody.appendChild(newRow);
+});
+
+// Attach event listener for submitting the form
 document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.getElementById('submitWorkOrderButton');
-    submitButton.addEventListener('click', submitWorkOrder);
+    if (submitButton) {
+        submitButton.addEventListener('click', submitWorkOrder);
+    }
 });
