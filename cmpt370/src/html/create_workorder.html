@@ -110,22 +110,5 @@
 
     <script type="module" src="../js/create_workorder.js"></script>
 
-    <script>
-        // Function to add more job descriptions dynamically
-        const addJobButton = document.getElementById('addJobButton');
-        let jobCount = 10;
-
-        addJobButton.addEventListener('click', () => {
-            jobCount++;
-            const jobTableBody = document.getElementById('jobTableBody');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${jobCount}</td>
-                <td><input type="text" id="jobDescription${jobCount}"></td>
-                <td><input type="number" id="jobHours${jobCount}" style="width: 60px;"></td>
-            `;
-            jobTableBody.appendChild(row);
-        });
-    </script>
 </body>
 </html>
