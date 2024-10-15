@@ -595,8 +595,7 @@ export class FilterElements {
         let filterElements = this;
         let users = await pb.collection('users').getFullList({
             fields: 'id, name'
-        });
-        
+        });        
         
         users.forEach(user => {
             let option = document.createElement('option');
@@ -657,6 +656,52 @@ export class FilterElements {
             filterElements.filteredDataset.update();
         });
 
+    }
+
+    async initStatusSelector(select, statusField) {
+        let filterElements = this;
+        let collection = await pb.collection('users');
+        console.log(collection);
+
+
+        
+        
+        // users.forEach(user => {
+        //     let option = document.createElement('option');
+        //     option.text = user['name'];
+        //     option.value = user['id'];
+        //     select.appendChild(option);
+        // });
+        
+        
+        // $(`#${select.id}`).select2({
+        //     placeholder: "Select Employees"
+        // });
+        // $(`#${select.id}`).on('select2:select', function (e) {
+        //     // Submit the form when an option is selected
+        //     // e.preventDefault();
+   
+        //     let selected = $(`#${select.id}`).val();
+
+        //     let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
+        //     filter.set = selected;
+        //     filterElements.filteredDataset.update();
+        // });
+
+        // $(`#${select.id}`).on('select2:unselect', function (e) {
+        //     let selected = $(`#${select.id}`).val();
+
+        //     let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
+        //     if (selected.length == 0) {
+        //         filter.set = [];
+        //         filter.isFiltered = false;
+        //     }            
+        //     else {
+        //         filter.set = selected;
+        //     }
+        //     filterElements.filteredDataset.update();
+
+        // });
     }
 
 
