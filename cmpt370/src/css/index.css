@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* Style for the body to use Flexbox */
 body {
     margin: 0; /* Remove default margin */
@@ -41,4 +42,79 @@ h1 {
 
 #login button:hover {
     opacity: 0.8; /* Change opacity on hover for effect */
+=======
+/* Ensure HTML and Body take the full height */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Set the full-screen background */
+body {
+    height: 100vh;
+    width: 100vw;
+    background-image: url('../images/Left_Content.png');
+    background-size: cover;
+    background-position: center left; /* Ensure that content loss happens from the right side */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Login box settings */
+.login-box {
+    width: 400px; /* Fixed width */
+    padding: 40px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.8); /* Add background color with transparency */
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3); /* Add a shadow effect */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the form inside the login box */
+form {
+    width: 100%; /* Make the form take the full width of the login box */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Style for the login input fields */
+.login-box input {
+    width: 100%; /* Full width inside the login box */
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 1.1em;
+}
+
+/* Style for the login button */
+.login-box input[type="submit"] {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    font-size: 1.2em;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%; /* Full width for the button */
+    margin-top: 20px;
+}
+
+.login-box input[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+/* Placeholder for login status */
+#login-status {
+    color: red;
+    margin-top: 10px;
+    font-size: 0.9em;
+>>>>>>> 40f7fbcf9233d20de161eef8d794a51df02d6136
 }
