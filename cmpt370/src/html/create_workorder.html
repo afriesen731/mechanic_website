@@ -4,76 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Work Order</title>
+    <link rel="stylesheet" href="../css/create_workorder.css">
 </head>
 <body>
-    <h1>Create a Work Order</h1>
+    <h1>Prairie Fleet Services</h1>
     
     <div id="work-order-section">
-        <h2>Create Work Order</h2>
-
         <!-- Work Order Information Section -->
-        <h3>Work Order Information</h3>
+        <h2>Work Order Information</h2>
 
-        <label for="workOrderNumber">Work Order #:</label>
-        <input type="text" id="workOrderNumber"><br>
-
-        <label for="unitNumber">Unit #:</label>
-        <input type="text" id="unitNumber"><br>
-
-        <!-- Company field now accepts input -->
-        <label for="company">Company:</label>
-        <input type="text" id="company"><br>
-
-        <label for="make">Make:</label>
-        <input type="text" id="make"><br>
-
-        <label for="model">Model:</label>
-        <input type="text" id="model"><br>
-
-        <label for="year">Year:</label>
-        <input type="number" id="year"><br>
-
-        <label for="licensePlate">License Plate:</label>
-        <input type="text" id="licensePlate"><br>
-
-        <label for="vinNumber">VIN #:</label>
-        <input type="text" id="vinNumber"><br>
-
-        <label for="retorqueNumber">Retorque #:</label>
-        <input type="text" id="retorqueNumber"><br>
-
-        <label for="kms">KMs:</label>
-        <input type="number" id="kms"><br>
-
+        <!-- Horizontal alignment of Unit #, Company, Make, and Model -->
+        <div class="inline-grid">
+            <label for="workOrderNumber">Work Order #:</label>
+            <input type="text" id="workOrderNumber">
+            
+            <label for="unitNumber">Unit #:</label>
+            <input type="text" id="unitNumber">
+            
+            <label for="company">Company:</label>
+            <input type="text" id="company">
+            
+            <label for="make">Make:</label>
+            <input type="text" id="make">
+            
+            <label for="model">Model:</label>
+            <input type="text" id="model">
+        </div>
+        
+        <!-- Horizontal alignment of License, VIN, Retorque #, and KMs -->
+        <div class="inline-grid">
+            <label for="licensePlate">License Plate:</label>
+            <input type="text" id="licensePlate">
+            
+            <label for="vinNumber">VIN #:</label>
+            <input type="text" id="vinNumber">
+            
+            <label for="retorqueNumber">Retorque #:</label>
+            <input type="text" id="retorqueNumber">
+            
+            <label for="kms">KMs:</label>
+            <input type="number" id="kms">
+        </div>
+        
         <!-- Reefer Information Section -->
         <h3>Reefer Information</h3>
 
-        <label for="reeferVinNumber">Reefer VIN #:</label>
-        <input type="text" id="reeferVinNumber"><br>
-
-        <label for="reeferMake">Reefer Make:</label>
-        <input type="text" id="reeferMake"><br>
-
-        <label for="reeferModel">Reefer Model:</label>
-        <input type="text" id="reeferModel"><br>
-
-        <label for="reeferHours">Reefer Hours:</label>
-        <input type="number" id="reeferHours"><br>
-
+        <div class="inline-grid">
+            <label for="reeferVinNumber">Reefer VIN #:</label>
+            <input type="text" id="reeferVinNumber">
+            
+            <label for="reeferMake">Reefer Make:</label>
+            <input type="text" id="reeferMake">
+            
+            <label for="reeferModel">Reefer Model:</label>
+            <input type="text" id="reeferModel">
+            
+            <label for="reeferHours">Reefer Hours:</label>
+            <input type="number" id="reeferHours">
+        </div>
+        
         <!-- Type of Service Section -->
         <h3>Type of Service</h3>
-        <label><input type="checkbox" name="typeOfService" value="Truck PMA"> Truck PMA</label><br>
-        <label><input type="checkbox" name="typeOfService" value="Truck PMB"> Truck PMB</label><br>
-        <label><input type="checkbox" name="typeOfService" value="5 ton PMA"> 5 ton PMA</label><br>
-        <label><input type="checkbox" name="typeOfService" value="5 ton PMB"> 5 ton PMB</label><br>
-        <label><input type="checkbox" name="typeOfService" value="Trailer PMA"> Trailer PMA</label><br>
-        <label><input type="checkbox" name="typeOfService" value="Trailer PMB"> Trailer PMB</label><br>
-        <label><input type="checkbox" name="typeOfService" value="Reefer PMA"> Reefer PMA</label><br>
-        <label><input type="checkbox" name="typeOfService" value="Reefer PMB"> Reefer PMB</label><br>
-        <label><input type="checkbox" name="typeOfService" value="Service"> Service</label><br>
+        <div class="inline-grid type-of-service">
+            <label><input type="checkbox" name="typeOfService" value="Truck PMA"> Truck PMA</label>
+            <label><input type="checkbox" name="typeOfService" value="Truck PMB"> Truck PMB</label>
+            <label><input type="checkbox" name="typeOfService" value="5 ton PMA"> 5 ton PMA</label>
+            <label><input type="checkbox" name="typeOfService" value="5 ton PMB"> 5 ton PMB</label>
+            <label><input type="checkbox" name="typeOfService" value="Trailer PMA"> Trailer PMA</label>
+            <label><input type="checkbox" name="typeOfService" value="Trailer PMB"> Trailer PMB</label>
+            <label><input type="checkbox" name="typeOfService" value="Reefer PMA"> Reefer PMA</label>
+            <label><input type="checkbox" name="typeOfService" value="Reefer PMB"> Reefer PMB</label>
+            <label><input type="checkbox" name="typeOfService" value="Service"> Service</label>
+        </div>
 
         <!-- Job Table Section -->
-        <h3>Job Table</h3>
+        <h3>Job Descriptions</h3>
         <table id="jobTable">
             <thead>
                 <tr>
@@ -82,113 +87,42 @@
                     <th>Hours</th>
                 </tr>
             </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td><input type="text" id="jobDescription1"></td>
-                    <td><input type="number" id="jobHours1"></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><input type="text" id="jobDescription2"></td>
-                    <td><input type="number" id="jobHours2"></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td><input type="text" id="jobDescription3"></td>
-                    <td><input type="number" id="jobHours3"></td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td><input type="text" id="jobDescription4"></td>
-                    <td><input type="number" id="jobHours4"></td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td><input type="text" id="jobDescription5"></td>
-                    <td><input type="number" id="jobHours5"></td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td><input type="text" id="jobDescription6"></td>
-                    <td><input type="number" id="jobHours6"></td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td><input type="text" id="jobDescription7"></td>
-                    <td><input type="number" id="jobHours7"></td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td><input type="text" id="jobDescription8"></td>
-                    <td><input type="number" id="jobHours8"></td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td><input type="text" id="jobDescription9"></td>
-                    <td><input type="number" id="jobHours9"></td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td><input type="text" id="jobDescription10"></td>
-                    <td><input type="number" id="jobHours10"></td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td><input type="text" id="jobDescription11"></td>
-                    <td><input type="number" id="jobHours11"></td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td><input type="text" id="jobDescription12"></td>
-                    <td><input type="number" id="jobHours12"></td>
-                </tr>
-                <tr>
-                    <td>13</td>
-                    <td><input type="text" id="jobDescription13"></td>
-                    <td><input type="number" id="jobHours13"></td>
-                </tr>
-                <tr>
-                    <td>14</td>
-                    <td><input type="text" id="jobDescription14"></td>
-                    <td><input type="number" id="jobHours14"></td>
-                </tr>
-                <tr>
-                    <td>15</td>
-                    <td><input type="text" id="jobDescription15"></td>
-                    <td><input type="number" id="jobHours15"></td>
-                </tr>
-                <tr>
-                    <td>16</td>
-                    <td><input type="text" id="jobDescription16"></td>
-                    <td><input type="number" id="jobHours16"></td>
-                </tr>
-                <tr>
-                    <td>17</td>
-                    <td><input type="text" id="jobDescription17"></td>
-                    <td><input type="number" id="jobHours17"></td>
-                </tr>
-                <tr>
-                    <td>18</td>
-                    <td><input type="text" id="jobDescription18"></td>
-                    <td><input type="number" id="jobHours18"></td>
-                </tr>
-                <tr>
-                    <td>19</td>
-                    <td><input type="text" id="jobDescription19"></td>
-                    <td><input type="number" id="jobHours19"></td>
-                </tr>
-                <tr>
-                    <td>20</td>
-                    <td><input type="text" id="jobDescription20"></td>
-                    <td><input type="number" id="jobHours20"></td>
-                </tr>
+            <tbody id="jobTableBody">
+                <!-- Initial 10 job descriptions -->
+                <script>
+                    for (let i = 1; i <= 10; i++) {
+                        document.write(`<tr>
+                            <td>${i}</td>
+                            <td><input type="text" id="jobDescription${i}"></td>
+                            <td><input type="number" id="jobHours${i}" style="width: 60px;"></td>
+                        </tr>`);
+                    }
+                </script>
             </tbody>
         </table>
-
+        <button type="button" id="addJobButton">Add Job Description</button>
     </div>
 
     <button type="button" id="submitWorkOrderButton">Submit Work Order</button>
+
     <script type="module" src="../js/create_workorder.js"></script>
+
+    <script>
+        // Function to add more job descriptions dynamically
+        const addJobButton = document.getElementById('addJobButton');
+        let jobCount = 10;
+
+        addJobButton.addEventListener('click', () => {
+            jobCount++;
+            const jobTableBody = document.getElementById('jobTableBody');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${jobCount}</td>
+                <td><input type="text" id="jobDescription${jobCount}"></td>
+                <td><input type="number" id="jobHours${jobCount}" style="width: 60px;"></td>
+            `;
+            jobTableBody.appendChild(row);
+        });
+    </script>
 </body>
 </html>
