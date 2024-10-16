@@ -5,7 +5,7 @@ Rules:
 Mechanic:
 
 
-ignore this:
+
 1. They should be able to work on 1 job at a time, meaning only 1 clock should be running
  at a time, but they should be able to switch if they want if a clock on a job isnt running. 
 2. A mechanic can skip jobs, as long. as all are done, thats all that matters,
@@ -18,3 +18,6 @@ as some jobs dont require new parts, but each job must have a comment, and some 
 in a truck, meaning; when a type of service is selected eg: Truck PMA, they should be able 
 to ADD a jobs, and once the PMA inspection has been done, and all new jobs are inserted BY
  THE MECHANIC, he should then be able to work on that same work order, with the jobs HE created.
+
+``````````
+
