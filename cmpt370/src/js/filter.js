@@ -2,12 +2,14 @@ import PocketBase from 'pocketbase';
 import $ from 'jquery';
 import 'select2/dist/css/select2.min.css';
 import select2 from 'select2';
+import '../js/pb_select_options'
+import { UserRole } from '../js/pb_select_options';
 select2();
 
 // PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
 
-const DEFAULT_PAGE_LEN = 50;
+const DefaultPageLen = 50;
 
 
 
@@ -302,7 +304,7 @@ export class FilteredDataset {
     */
     constructor(dataset, observers=[]) {        
         this.dataset = dataset;
-        this.pageLen = DEFAULT_PAGE_LEN;
+        this.pageLen = DefaultPageLen;
         this._page = 1;
         this.totalPages = 0;
         this.items = null;
@@ -661,7 +663,7 @@ export class FilterElements {
 
     async initStatusSelector(select, statusField) {
         let filterElements = this;
-        let collection = await pb.collection('users');
+        let collection = UserRoles;
         console.log(collection);
 
 
