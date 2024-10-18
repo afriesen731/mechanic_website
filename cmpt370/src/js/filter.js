@@ -307,6 +307,7 @@ export class FilteredDataset {
         this.pageLen = DefaultPageLen;
         this._page = 1;
         this.totalPages = 0;
+        this.totalItems = 0;
         this.items = null;
         this.filters = [];
         this.observers = observers;
@@ -510,7 +511,8 @@ export class FilteredDataset {
             this.items = response.items;
 
             // update the total page number
-            this.totalPages = Math.ceil(response.totalItems / this.pageLen);
+            this.totalItems = response.totalItems;
+            this.totalPages = Math.ceil(this.totalItems / this.pageLen);
             
             this.notifyObservers();
         } 
@@ -580,6 +582,20 @@ export class FilteredDataset {
         }
         this._page = pageNumber;
         this.update();
+    }
+
+
+    async updatePageCount() {
+
+
+        const response = await pb.collection(this.dataset)
+                        .getList(1, 0, {
+                            filter: this.getFilter() 
+                        });
+        this.totalItems = response.totalItems;
+        this.totalPages = Math.ceil(this.totalItems / this.pageLen);
+
+
     }
 
 }

@@ -2,7 +2,7 @@ import { FilteredDataset, FilterElements, HasAnyFilter, SetFilter } from '../js/
 import { Table } from '../js/table.js';
 import PocketBase from 'pocketbase';
 import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options';
-
+import Pagination from 'pagination-js';
 
 // PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
@@ -63,6 +63,11 @@ export class OrderTable extends Table {
 
 }
 
+function loadDataForPage(pageNumber, pageSize, dataset) {
+    dataset.pageLen = pageSize;
+    dataset.setPage(pageNumber);
+}
+
 
 
 
@@ -113,9 +118,23 @@ document.addEventListener("DOMContentLoaded", async function() {
                                         WorkOrderServiceTypes, 'Select Service Types', 
                                         HasAnyFilter
                                     );
+
+    await filteredDataset.updatePageCount()
+    const pagination = new Pagination({
+        totalNumber: filteredDataset.totalItems,        
+        pageSize: filteredDataset.pageLen,
+        showSizeChanger: true,
+        container: "#page-select",
+        callback: function(data, pagination) {
+        
+            loadDataForPage(pagination.pageNumber, pagination.pageSize, filteredDataset);
+        }
+    });
+
+    
     filteredDataset.update();
 
-
+    
     
 
 });

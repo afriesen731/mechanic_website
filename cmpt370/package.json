@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "jquery": "^3.7.1",
+    "pagination-js": "^2.0.2",
     "pocketbase": "^0.21.5"
   }
 }
