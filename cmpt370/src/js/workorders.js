@@ -1,6 +1,7 @@
-import { FilteredDataset, FilterElements } from '../js/filter.js';
+import { FilteredDataset, FilterElements, HasAnyFilter, SetFilter } from '../js/filter.js';
 import { Table } from '../js/table.js';
 import PocketBase from 'pocketbase';
+import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options';
 
 
 // PocketBase SDK initialization
@@ -72,18 +73,46 @@ document.addEventListener("DOMContentLoaded", async function() {
     const startDate = document.getElementById('start-date');
     const endDate = document.getElementById('end-date');
     const statusSelect = document.getElementById('status-select');
+    const serviceSelect = document.getElementById('service-select')
     const authData = await pb.collection('users')
                                 .authWithPassword('password', 'password');
+
+    
     
     const columns = ['created', 'mechanics', 'license_plate', 'type_of_service', 'model', 'status'];
+    const users = await pb.collection('users').getFullList({
+        fields: 'id, name'
+    });
+
+    const userOptions = users.map(user => ({
+        text: user.name,
+        value: user.id
+    }));
+
     const table = new OrderTable(tableElement, columns);
     
     const filteredDataset = new FilteredDataset('work_orders', [table]);
     
     const filterElements = new FilterElements(filteredDataset);
-    filterElements.initMechanicSelector(employeeSelect, 'mechanics');
     filterElements.initDateSelector(startDate, endDate, 'created');
     // filterElements.initStatusSelector(statusSelect, 'status');
+    
+    filterElements.initSelect2Filter(
+                                        employeeSelect, 'mechanics', 
+                                        userOptions, 'Select Mechanics', 
+                                        HasAnyFilter
+                                    );
+    filterElements.initSelect2Filter(
+                                    statusSelect, 'status', 
+                                    WorkOrderStatus, 'Select Order Status', 
+                                    SetFilter
+                                );
+
+    filterElements.initSelect2Filter(
+                                        serviceSelect, 'type_of_service', 
+                                        WorkOrderServiceTypes, 'Select Service Types', 
+                                        HasAnyFilter
+                                    );
     filteredDataset.update();
 
 

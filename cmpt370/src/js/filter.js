@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'select2/dist/css/select2.min.css';
 import select2 from 'select2';
 import '../js/pb_select_options'
-import { UserRole } from '../js/pb_select_options';
+
 select2();
 
 // PocketBase SDK initialization
@@ -19,7 +19,7 @@ const DefaultPageLen = 50;
 /**
  * Base class for filters.
 */
-class Filter {
+export class Filter {
     constructor() {
         
     }
@@ -48,7 +48,7 @@ class Filter {
  * A filter that includes all values that are in this filter's set.
  * @extends Filter
 */
-class SetFilter extends Filter {
+export class SetFilter extends Filter {
     /**
      * Creates an instance of SetFilter.
      * @param {string} column - The column to filter on.
@@ -120,7 +120,7 @@ class SetFilter extends Filter {
  * A filter that includes values within a specific range.
  * @extends Filter
 */
-class RangeFilter extends Filter {
+export class RangeFilter extends Filter {
 
 
     /**
@@ -196,7 +196,7 @@ class RangeFilter extends Filter {
  * the values in this filter's set are present.
  * @extends SetFilter
 */
-class HasAnyFilter extends SetFilter {
+export class HasAnyFilter extends SetFilter {
     /**
      * Creates an instance of HasAnyFilter.
      * @param {string} column - The column to filter on.
@@ -229,7 +229,7 @@ class HasAnyFilter extends SetFilter {
  * The set can include more values than in the set.
  * @extends SetFilter
 */
-class ContainsAllFilter extends SetFilter {
+export class ContainsAllFilter extends SetFilter {
     /**
      * Creates an instance of ContainsAllFilter.
      * @param {string} column - The column to filter on.
@@ -261,7 +261,7 @@ class ContainsAllFilter extends SetFilter {
  * is identical to the set in the filter.
  * @extends SetFilter
 */
-class EqualSetsFilter extends SetFilter {
+export class EqualSetsFilter extends SetFilter {
     /**
      * Creates an instance of EqualSetsFilter.
      * @param {string} column - The column to filter on.
@@ -397,7 +397,7 @@ export class FilteredDataset {
      * If no filter exists for the column, it creates a new one.
      *
      * @param {string} column - The name of the column to filter.
-     * @param {Function} FilterType - The class of the filter type to create or retrieve.
+     * @param {typeof Filter} FilterType - The class of the filter type to create or retrieve.
      * @returns {Filter} The filter for the specified column.
     */
     getFilter(column, FilterType) {
@@ -532,7 +532,7 @@ export class FilteredDataset {
         this.filters.forEach(filter => {
             const filterStr = filter.getFilter();
             if (filterStr != "") {
-                result.push(filterStr);
+                result.push(`( ${filterStr} )`);
             }
             
 
@@ -594,54 +594,7 @@ export class FilterElements {
     }
 
 
-    async initMechanicSelector(select, mechanicField) {
-        let filterElements = this;
-        let users = await pb.collection('users').getFullList({
-            fields: 'id, name'
-        });        
-        
-        users.forEach(user => {
-            let option = document.createElement('option');
-            option.text = user['name'];
-            option.value = user['id'];
-            select.appendChild(option);
-        });
-        
-        
-        $(`#${select.id}`).select2({
-            placeholder: "Select Employees"
-        });
-        $(`#${select.id}`).on('select2:select', function (e) {
-            // Submit the form when an option is selected
-            // e.preventDefault();
-   
-            let selected = $(`#${select.id}`).val();
 
-            let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
-            filter.set = selected;
-            filterElements.filteredDataset.update();
-        });
-
-        $(`#${select.id}`).on('select2:unselect', function (e) {
-            let selected = $(`#${select.id}`).val();
-
-            let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
-            if (selected.length == 0) {
-                filter.set = [];
-                filter.isFiltered = false;
-            }            
-            else {
-                filter.set = selected;
-            }
-            filterElements.filteredDataset.update();
-
-        });
-
-
-
-
-        
-    }
 
     async initDateSelector(startElement, endElement, dateField) {
         let filterElements = this;
@@ -653,59 +606,74 @@ export class FilterElements {
 
         endElement.addEventListener('change', e => {
             let endDate = new Date(e.target.value);
-            endDate.setDate(endDate.getDate() + 1);
-            endDate = endDate.toISOString().split('T')[0];
+            if (isNaN(endDate.getTime())) {
+                endDate = null;
+            }
+            else {
+                endDate.setDate(endDate.getDate() + 1);
+                endDate = endDate.toISOString().split('T')[0];
+            }
+
             filterElements.filteredDataset.getRangeFilter(dateField).end = endDate;
             filterElements.filteredDataset.update();
         });
 
     }
 
-    async initStatusSelector(select, statusField) {
+
+
+
+    /**
+     * Initializes a `select2` dropdown with options and applies a filter to the dataset when an option is selected or unselected.
+     *
+     * @param {HTMLElement} select - The `select` DOM element to initialize.
+     * @param {string} field - The dataset field to filter based on selected options.
+     * @param {Array<Object|string>} options - Options for the dropdown, as strings or objects with `text` and `value` keys.
+     * @param {string} placeholder - The placeholder text for the dropdown.
+     * @param {typeof Filter} FilterType - The type of filter to create.
+     * @example
+     * initSelect2Filter(document.getElementById('statusSelect'), 'status', statusOptions, 'Select Status');
+    */
+    async initSelect2Filter(select, field, options, placeholder, FilterType) {
         let filterElements = this;
-        let collection = UserRoles;
-        console.log(collection);
-
-
-        
-        
-        // users.forEach(user => {
-        //     let option = document.createElement('option');
-        //     option.text = user['name'];
-        //     option.value = user['id'];
-        //     select.appendChild(option);
-        // });
-        
-        
-        // $(`#${select.id}`).select2({
-        //     placeholder: "Select Employees"
-        // });
-        // $(`#${select.id}`).on('select2:select', function (e) {
-        //     // Submit the form when an option is selected
-        //     // e.preventDefault();
-   
-        //     let selected = $(`#${select.id}`).val();
-
-        //     let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
-        //     filter.set = selected;
-        //     filterElements.filteredDataset.update();
-        // });
-
-        // $(`#${select.id}`).on('select2:unselect', function (e) {
-        //     let selected = $(`#${select.id}`).val();
-
-        //     let filter = filterElements.filteredDataset.getHasAnyFilter(mechanicField);
-        //     if (selected.length == 0) {
-        //         filter.set = [];
-        //         filter.isFiltered = false;
-        //     }            
-        //     else {
-        //         filter.set = selected;
-        //     }
-        //     filterElements.filteredDataset.update();
-
-        // });
+    
+        // Add options to the select element
+        options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.text = option.text || option;
+            opt.value = option.value || option;
+            select.appendChild(opt);
+        });
+    
+        // Initialize select2 with the provided placeholder
+        $(`#${select.id}`).select2({
+            placeholder: placeholder
+        });
+    
+        // Handle option selection
+        $(`#${select.id}`).on('select2:select', function () {
+            let selected = $(`#${select.id}`).val();
+    
+            let filter = filterElements.filteredDataset.getFilter(field, FilterType);
+            filter.set = selected;
+            filterElements.filteredDataset.update();
+        });
+    
+        // Handle option unselect
+        $(`#${select.id}`).on('select2:unselect', function () {
+            let selected = $(`#${select.id}`).val();
+    
+            let filter = filterElements.filteredDataset.getFilter(field, FilterType);
+            if (selected.length === 0) {
+                filter.set = [];
+                filter.isFiltered = false;
+            } else {
+                filter.set = selected;
+            }
+            filterElements.filteredDataset.update();
+        });
     }
+    
 
 
 }
