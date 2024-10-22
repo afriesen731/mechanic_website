@@ -6,13 +6,12 @@ function showPage(page) {
 }
 
 // Function to show the Create Work Order iframe
-function showIframe() {
+function showIframe(frameId) {
     const pages = document.querySelectorAll('.content-page'); // Select all content pages
     pages.forEach(p => p.style.display = 'none'); // Hide all pages
     
-    const iframe = document.getElementById('workorder-iframe'); // Select the iframe
-    iframe.src = '../html/create_workorder.html'; // Set the src to load the work order page
-    document.getElementById('iframe-container').style.display = 'block'; // Show the iframe container
+    const iframe = document.getElementById(frameId); // Select the iframe
+    document.getElementById(frameId).style.display = 'block'; // Show the iframe container
 }
 
 // Employees Data

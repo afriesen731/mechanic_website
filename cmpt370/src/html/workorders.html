@@ -7,43 +7,52 @@
     <script type="module" src="../js/workorders.js"></script>
 </head>
 <body>
-    <div id="filters">
 
+    <div id="order-page" class="content-page">
+
+        <div id="filters">
+
+                
+            <select id="employee-select" name="employee-select" multiple></select>
             
-        <select id="employee-select" name="employee-select" multiple></select>
-        
-        <div>
-            <input type="date" id="start-date">
-            -
-            <input type="date" id="end-date">
+            <div>
+                <input type="date" id="start-date">
+                -
+                <input type="date" id="end-date">
+            </div>
+            <select id="status-select" name="status-select" multiple></select>
+            <select id="service-select" name="service-select" multiple></select>
+            
         </div>
-        <select id="status-select" name="status-select" multiple></select>
-        <select id="service-select" name="service-select" multiple></select>
-        
+        <div class="table-container">
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Mechanics</th>
+                        <th>License</th>
+                        <th>Service Type</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Date</td>
+                        <td>Mechanics</td>
+                        <td>License</td>
+                        <td>Service Type</td>
+                        <td>Status</td>
+                        <td>Actions</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <form id="page-select" action="javascript:void(0);"></form>
+        <label>page size:</label>
+        <select id="page-len-selector"></select>
     </div>
 
-    <table id="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Mechanics</th>
-                <th>License</th>
-                <th>Service Type</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Date</td>
-                <td>Mechanics</td>
-                <td>License</td>
-                <td>Service Type</td>
-                <td>Status</td>
-            </tr>
-        </tbody>
-    </table>
-    <form id="page-select" action="javascript:void(0);"></form>
-    <label>page size:</label>
-    <select id="page-len-selector"></select>
 </body>
 </html>

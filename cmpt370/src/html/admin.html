@@ -16,8 +16,8 @@
         </div>
         <div class="menu">
             <a onclick="showPage('employee')">Employee</a>
-            <a onclick="showPage('order')">Order</a>
-            <a onclick="showIframe()">Create Work Order</a>
+            <a onclick="showIframe('iframe-container-order-table')">Order</a>
+            <a onclick="showIframe('iframe-container')">Create Work Order</a>
         </div>
     </div>
 
@@ -48,30 +48,17 @@
             </div>
         </div>
 
-        <div id="order-page" class="content-page" style="display: none;">
-            <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search orders here...">
-                <button class="sort-button">7 days ago</button>
-            </div>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Order Number</th>
-                            <th>Customer Name</th>
-                            <th>Date Created</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
+
+        <!-- Iframe container for Work Order Table -->
+        <div id="iframe-container-order-table" class="content-page" style="display: none;">
+            <iframe id="workorder-table-iframe" src="../html/workorders.html"></iframe>
         </div>
+
+
 
         <!-- Iframe container for Create Work Order -->
         <div id="iframe-container" class="content-page" style="display: none;">
-            <iframe id="workorder-iframe"></iframe>
+            <iframe id="workorder-iframe" src="../html/create_workorder.html"></iframe>
         </div>
     </div>
 
