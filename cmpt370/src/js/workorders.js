@@ -2,7 +2,7 @@ import { FilteredDataset, FilterElements, HasAnyFilter, SetFilter } from '../js/
 import { Table } from '../js/table.js';
 import PocketBase from 'pocketbase';
 import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options';
-import Pagination from 'pagination-js';
+import $ from 'jquery';
 
 // PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
@@ -78,7 +78,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     const startDate = document.getElementById('start-date');
     const endDate = document.getElementById('end-date');
     const statusSelect = document.getElementById('status-select');
-    const serviceSelect = document.getElementById('service-select')
+    const serviceSelect = document.getElementById('service-select');
+    const pageSelect = document.getElementById('page-select');
     const authData = await pb.collection('users')
                                 .authWithPassword('password', 'password');
 
@@ -119,20 +120,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                                         HasAnyFilter
                                     );
 
-    await filteredDataset.updatePageCount()
-    const pagination = new Pagination({
-        totalNumber: filteredDataset.totalItems,        
-        pageSize: filteredDataset.pageLen,
-        showSizeChanger: true,
-        container: "#page-select",
-        callback: function(data, pagination) {
-        
-            loadDataForPage(pagination.pageNumber, pagination.pageSize, filteredDataset);
-        }
-    });
+
+
 
     
     filteredDataset.update();
+
+    // impliment pagination
+    filterElements.initPagination(pageSelect);
 
     
     
