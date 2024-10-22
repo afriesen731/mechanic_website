@@ -48,6 +48,12 @@ export class OrderTable extends Table {
                 }
                 
             }
+            else if (column == "actions") {
+                const removeButton = document.createElement('button');
+                removeButton.textContent = "Remove";
+                removeButton.classList = "action-btn";
+                cell.appendChild(removeButton);
+            }
             else {
                 cell.textContent = row[column];
                 
@@ -86,7 +92,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     
     
-    const columns = ['created', 'mechanics', 'license_plate', 'type_of_service', 'model', 'status'];
+    const columns = ['created', 'mechanics', 'license_plate', 'type_of_service', 'model', 'status', 'actions'];
     const users = await pb.collection('users').getFullList({
         fields: 'id, name'
     });
