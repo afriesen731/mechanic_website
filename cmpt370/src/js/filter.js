@@ -784,10 +784,10 @@ export class FilterElements {
 
         let i;
         let pageStart = Math.min(
-                                    filteredDataset.totalPages - Math.ceil(MaxPagesSelectable / 2), 
+                                    filteredDataset.totalPages - Math.ceil(MaxPagesSelectable / 2) + 1, 
                                     filteredDataset.page
                                 );
-        pageStart = Math.max(1, pageStart - Math.floor(MaxPagesSelectable / 2) + 1);
+        pageStart = Math.max(1, pageStart - Math.floor(MaxPagesSelectable / 2));
     
         // create jump to start page button
         if (pageStart > 1) {
