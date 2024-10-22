@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const statusSelect = document.getElementById('status-select');
     const serviceSelect = document.getElementById('service-select');
     const pageSelect = document.getElementById('page-select');
+    const pageLenSelector = document.getElementById('page-len-selector');
     const authData = await pb.collection('users')
                                 .authWithPassword('password', 'password');
 
@@ -121,14 +122,14 @@ document.addEventListener("DOMContentLoaded", async function() {
                                     );
 
 
-
+    filterElements.initPageLenSelect(pageLenSelector)
 
     
     filteredDataset.update();
 
     // impliment pagination
     filterElements.initPagination(pageSelect);
-
+    
     
     
 

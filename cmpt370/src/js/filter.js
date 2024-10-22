@@ -9,11 +9,11 @@ select2();
 // PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
 
-// const DefaultPageLen = 50;
-const DefaultPageLen = 5;
+const DefaultPageLen = 10;
+
 
 // the maximum number of pages to select from at one time in the pagenation
-const MaxPagesSelectable = 2;
+const MaxPagesSelectable = 5;
 
 
 
@@ -312,12 +312,15 @@ export class FilteredDataset {
     constructor(dataset, observers=[]) {        
         this.dataset = dataset;
         this.pageLen = DefaultPageLen;
+        this.prevPageLen = DefaultPageLen;
         this._page = 1;
         this.totalPages = 0;
         this.totalItems = 0;
         this.items = null;
         this.filters = [];
+        this.prevFilter = "";
         this.observers = observers;
+
     }
 
 
@@ -508,19 +511,25 @@ export class FilteredDataset {
         let filter = this.getFilters();
         
         try {
+            // if the filter or page length changes jump to the first page
+            if (this.prevFilter != filter || this.prevPageLen != this.pageLen) {
+                this.page = 1;
+            }
+            this.prevFilter = filter;
+            this.prevPageLen = this.pageLen;
+
 
             // fetch dataset
             const response = await pb.collection(this.dataset)
                                     .getList(this._page, this.pageLen, {
                                         filter: filter
                                     });
-
+            
             this.items = response.items;
-
+            
             // update the total page number
             this.totalItems = response.totalItems;
             this.totalPages = Math.ceil(this.totalItems / this.pageLen);
-            
             this.notifyObservers();
         } 
         catch (error) {
@@ -623,6 +632,7 @@ export class FilterElements {
     constructor(filteredDataset) {
         this.filteredDataset = filteredDataset;
         this.pageSelect = null;
+        this.pageLenOptions = [1, 5, 10, 25, 50];
     }
 
 
@@ -777,8 +787,8 @@ export class FilterElements {
                                     filteredDataset.totalPages - Math.ceil(MaxPagesSelectable / 2), 
                                     filteredDataset.page
                                 );
-        pageStart = Math.max(1, pageStart - Math.floor(MaxPagesSelectable / 2));
-        
+        pageStart = Math.max(1, pageStart - Math.floor(MaxPagesSelectable / 2) + 1);
+    
         // create jump to start page button
         if (pageStart > 1) {
             const startButton = document.createElement("button");           
@@ -810,7 +820,7 @@ export class FilterElements {
             startButton.value = filteredDataset.totalPages;
             startButton.type = "submit";
             startButton.innerText = filteredDataset.totalPages;
-            pageSelect.appendChild(ellipsisButton);
+            pageSelect.appendChild(ellipsisButton.cloneNode(true));
             pageSelect.appendChild(startButton);
         }
 
@@ -827,7 +837,32 @@ export class FilterElements {
 
 
     }
+
+
+
     
+    initPageLenSelect(pageLenSelector) {
+        const filteredDataset = this.filteredDataset;
+        
+        this.pageLenOptions.forEach(len => {
+            const option = document.createElement('option');
+            option.text = len;
+            option.value = len;
+            if (this.filteredDataset.pageLen == len) {
+                option.selected = true;
+            }
+            pageLenSelector.appendChild(option);
+        });
+
+        pageLenSelector.addEventListener('change', e => {
+            filteredDataset.pageLen = pageLenSelector.value;
+            
+            filteredDataset.update();
+        });
+
+        
+        
+    }    
 
 
 }
