@@ -10,28 +10,32 @@
 
     <!-- External JavaScript file -->
     <script type="module" src="../js/login.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-
+    
     <!-- Wrapper for the background -->
-    <div class="background-wrapper">
-        
         <!-- Login box to the right -->
-        <form id="login" class="login-box">
-            <!-- Input for username -->
-            <input type="text" id="username" name="username" placeholder="Username" required>
+        <form id="login">
+            <div class="login-box">
 
-            <!-- Input for password -->
-            <input type="password" id="password" name="password" placeholder="Password" required>
+            
+                <!-- Input for username -->
+                <input type="text" id="username" name="username" placeholder="Username" required>
 
-            <!-- Submit button -->
-            <input type="submit" value="Login">
+                <!-- Input for password -->
+                <input type="password" id="password" name="password" placeholder="Password" required>
+    
+                <!-- Submit button -->
+                <input type="submit" value="Login"></input> 
+                
 
-            <!-- Placeholder to display login status messages (success or failure) -->
-            <p id="login-status"></p>
+                <!-- Placeholder to display login status messages (success or failure) -->
+                <p id="login-status"></p>
+
+            </div>
         </form>
 
-    </div>
-
+    
 </body>
 </html>
