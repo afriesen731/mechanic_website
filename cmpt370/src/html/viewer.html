@@ -3,22 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Viewer Dashboard</title>
-
-    <!-- External JavaScript file -->
-    <script src="../js/app.js"></script>
-
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="../css/admin.css">
 </head>
 <body>
-    <!-- Main header for the viewer dashboard -->
-    <h1>Viewer Dashboard</h1>
 
-    <!-- Button to download completed work orders as a file (PDF or CSV) -->
-    <button onclick="downloadWorkOrders()">Download Completed Work Orders</button>
+    <div class="top-bar">
+        <div class="logo">
+            <a href="admin.html">
+                <img src="../images/FINAL_logo.png" alt="Logo" class="logo">
+            </a>
+        </div>
+        <div class="menu">
+            <a onclick="showIframe('iframe-container-order-table')">Order</a>
+        </div>
+    </div>
 
-    <!-- Placeholder to display work orders for the viewer -->
-    <div id="work-orders"></div>
+    <div class="main-content" id="main-content">
+        <div id="employee-page" class="content-page">
+            <!-- Employee Table with Search and Sort -->
+            <div class="search-sort-container">
+                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
+                <select class="sort-button" onchange="sortEmployees(this.value)">
+                    <option value="">Sort By</option>
+                    <option value="asc">From A - Z</option>
+                    <option value="desc">From Z - A</option>
+                </select>
+            </div>
+            <div class="table-container">
+                <table id="employee-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Date Created</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
 
+
+        <!-- Iframe container for Work Order Table -->
+        <div id="iframe-container-order-table" class="content-page" style="display: none;">
+            <iframe id="workorder-table-iframe" src="../html/workorders.html"></iframe>
+        </div>
+
+
+
+        <!-- Iframe container for Create Work Order -->
+        <div id="iframe-container" class="content-page" style="display: none;">
+            <iframe id="workorder-iframe" src="../html/create_workorder.html"></iframe>
+        </div>
+    </div>
+
+    <script src="../js/admin.js"></script>
 
 </body>
 </html>
