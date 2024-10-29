@@ -4,16 +4,13 @@ import PocketBase from 'pocketbase';
 import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options';
 import $ from 'jquery';
 
-// PocketBase SDK initialization
 const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
 
 
-
-
 /**
- * Creates a table that can observe a FilteredDataset for work orders
+ * Creates a table that can observe a FilteredDataset for employees
  */
-export class OrderTable extends Table {
+export class EmployeeTable extends Table {
     /**
      * Createst an instance of Table.
      * @param {HTMLElement} table html element with tag "table".
@@ -71,17 +68,9 @@ export class OrderTable extends Table {
 
 
 
-
-
-
-
 document.addEventListener("DOMContentLoaded", async function() {
     const tableElement = document.getElementById('table');
     const employeeSelect = document.getElementById('employee-select');
-    const startDate = document.getElementById('start-date');
-    const endDate = document.getElementById('end-date');
-    const statusSelect = document.getElementById('status-select');
-    const serviceSelect = document.getElementById('service-select');
     const pageSelect = document.getElementById('page-select');
     const pageLenSelector = document.getElementById('page-len-selector');
     const authData = await pb.collection('users')
@@ -89,7 +78,7 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     
     
-    const columns = ['created', 'mechanics', 'license_plate', 'type_of_service', 'model', 'status', 'actions'];
+    const columns = ['name', 'id', 'created', 'username', 'actions'];
     const users = await pb.collection('users').getFullList({
         fields: 'id, name'
     });
@@ -99,28 +88,17 @@ document.addEventListener("DOMContentLoaded", async function() {
         value: user.id
     }));
 
-    const table = new OrderTable(tableElement, columns);
+    const table = new EmployeeTable(tableElement, columns);
     
-    const filteredDataset = new FilteredDataset('work_orders', [table]);
+    const filteredDataset = new FilteredDataset('users', [table]);
     
     const filterElements = new FilterElements(filteredDataset);
-    filterElements.initDateSelector(startDate, endDate, 'created');
+    // filterElements.initDateSelector(startDate, endDate, 'created');
     // filterElements.initStatusSelector(statusSelect, 'status');
     
     filterElements.initSelect2Filter(
                                         employeeSelect, 'mechanics', 
-                                        userOptions, 'Select Mechanics', 
-                                        HasAnyFilter
-                                    );
-    filterElements.initSelect2Filter(
-                                    statusSelect, 'status', 
-                                    WorkOrderStatus, 'Select Order Status', 
-                                    SetFilter
-                                );
-
-    filterElements.initSelect2Filter(
-                                        serviceSelect, 'type_of_service', 
-                                        WorkOrderServiceTypes, 'Select Service Types', 
+                                        userOptions, 'Search', 
                                         HasAnyFilter
                                     );
 
@@ -134,8 +112,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     filterElements.initPagination(pageSelect);
     
     
+
     
 
 });
-
-

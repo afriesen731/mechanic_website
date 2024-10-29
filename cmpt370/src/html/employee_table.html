@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <script type="module" src="../js/employee_table.js" ></script>
+</head>
+<body>
+    <div class="main-content" id="main-content">
+        <div id="employee-page" class="content-page">
+            <!-- Employee Table with Search and Sort -->
+            <!-- <div class="search-sort-container"> -->
+                <select id="employee-select" name="employee-select"></select>
+            <!-- </div> -->
+            <div class="table-container">
+                <table id="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Employee ID</th>
+                            <th>Date Created</th>
+                            <th>Username</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+
+
+
+            <form id="page-select" action="javascript:void(0);"></form>
+            <label>page size:</label>
+            <select id="page-len-selector"></select>
+        </div>
+</body>
+</html>
