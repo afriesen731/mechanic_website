@@ -16,8 +16,10 @@
         </div>
         <div class="menu">
             <a onclick="showIframe('iframe-container-employee-table')">Employee</a>
+            <a onclick="showIframe('iframe-container-employee-create')">Create Employee</a>
             <a onclick="showIframe('iframe-container-order-table')">Order</a>
             <a onclick="showIframe('iframe-container')">Create Work Order</a>
+            
         </div>
         <div class="user-avatar">
             <a href="setting.html">
@@ -28,6 +30,9 @@
 
     <div class="main-content" id="main-content">
 
+        <div id="iframe-container-employee-create" class="content-page" style="display: none;">
+            <iframe id="employee-create-iframe" src="../html/employee_create.html"></iframe>
+        </div>
         <div id="iframe-container-employee-table" class="content-page" style="display: none;">
             <iframe id="employee-table-iframe" src="../html/employee_table.html"></iframe>
         </div>
