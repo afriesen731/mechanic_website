@@ -1,0 +1,50 @@
+body {
+    background-image: url('../images/backgr_log_in.png'); 
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    margin: 0; 
+    color: rgb(140, 140, 130);
+}
+
+
+.heading {
+    text-align: center; 
+    margin-bottom: 80px; 
+    margin-top: -10px;
+    font-size: 100px;
+    font-weight: bold; 
+}
+
+.input-group {
+    margin-bottom: 20px; 
+}
+
+input[type="text"],
+input[type="password"] {
+    text-align: center;
+    width: 50%; 
+    height: 30px;
+    padding: 10px;
+    border: none; 
+    border-radius: 5px; 
+    outline: none;
+}
+
+button {
+    margin-left: 450px;
+    margin-top: 20px;
+    width: 20%; 
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    background-color: #4CAF50;
+    color: black; 
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #45a049; 
+}

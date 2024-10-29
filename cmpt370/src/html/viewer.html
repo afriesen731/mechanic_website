@@ -4,22 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/viewer.css">
 </head>
 <body>
 
     <div class="top-bar">
         <div class="logo">
-            <a href="viewer.html">
+            <a href="javascript:void(0);" onclick="showPage('main-dashboard')">
                 <img src="../images/FINAL_logo.png" alt="Logo" class="logo">
             </a>
         </div>
+
         <div class="menu">
             <a onclick="showIframe('iframe-container-order-table')">Order</a>
         </div>
     </div>
 
+    
+
     <div class="main-content" id="main-content">
+
+        <div id="main-dashboard-page" class="content-page" style="display: block;">
+            <div class="welcome-container">
+                <h1>WELCOME BACK!</h1>
+            </div>
+        </div>
+
         <div id="employee-page" class="content-page">
             <!-- Employee Table with Search and Sort -->
             <div class="search-sort-container">
