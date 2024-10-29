@@ -10,18 +10,23 @@ body {
 }
 
 
-h1 {
+.heading {
     text-align: center; 
-    margin-bottom: 20px; 
+    margin-bottom: 80px; 
+    margin-top: -10px;
+    font-size: 100px;
+    font-weight: bold; 
 }
 
 .input-group {
-    margin-bottom: 15px; 
+    margin-bottom: 20px; 
 }
 
 input[type="text"],
 input[type="password"] {
-    width: 100%; 
+    text-align: center;
+    width: 50%; 
+    height: 30px;
     padding: 10px;
     border: none; 
     border-radius: 5px; 
@@ -29,8 +34,10 @@ input[type="password"] {
 }
 
 button {
-    width: 100%; 
-    padding: 10px;
+    margin-left: 450px;
+    margin-top: 20px;
+    width: 20%; 
+    padding: 8px;
     border: none;
     border-radius: 5px;
     background-color: #4CAF50;
