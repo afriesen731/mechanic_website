@@ -1,5 +1,5 @@
 #main-dashboard {
-    background-image: url('../images/your-background-image.jpg'); /* Replace with your image path */
+    background-image: url('../images/backgr_log_in.png');
     background-size: cover;
     background-position: center;
     height: 100vh;
@@ -13,9 +13,10 @@
 .welcome-container h1 {
     font-size: 4em;
     font-weight: bold;
-    background-color: rgba(0, 0, 0, 0.6); /* Optional: adds contrast */
-    padding: 20px;
+    background-color: gainsboro; /* Optional: adds contrast */
+    padding: 0px 20px 0px 250px;
     border-radius: 10px;
+
 }
 /* General Styling */
 html, body {
@@ -72,6 +73,9 @@ body {
 /* Main content */
 .main-content {
     margin-top: 20px;
+    background-image: url('../images/backgr_log_in.png');
+    background-size: cover;
+    background-position: center;
     width: 90%;
     max-width: 1200px;
 }
