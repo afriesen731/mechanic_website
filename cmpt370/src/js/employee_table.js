@@ -47,7 +47,7 @@ export class EmployeeTable extends Table {
             }
             else if (column == "actions") {
                 const removeButton = document.createElement('button');
-                removeButton.textContent = "Remove";
+                removeButton.textContent = "Edit";
                 removeButton.classList = "action-btn";
                 cell.appendChild(removeButton);
             }
@@ -73,8 +73,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     const employeeSelect = document.getElementById('employee-select');
     const pageSelect = document.getElementById('page-select');
     const pageLenSelector = document.getElementById('page-len-selector');
-    const authData = await pb.collection('users')
-                                .authWithPassword('password', 'password');
 
     
     
@@ -97,9 +95,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     // filterElements.initStatusSelector(statusSelect, 'status');
     
     filterElements.initSelect2Filter(
-                                        employeeSelect, 'mechanics', 
+                                        employeeSelect, 'id', 
                                         userOptions, 'Search', 
-                                        HasAnyFilter
+                                        SetFilter
                                     );
 
 

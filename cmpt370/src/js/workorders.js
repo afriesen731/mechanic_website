@@ -84,8 +84,6 @@ document.addEventListener("DOMContentLoaded", async function() {
     const serviceSelect = document.getElementById('service-select');
     const pageSelect = document.getElementById('page-select');
     const pageLenSelector = document.getElementById('page-len-selector');
-    const authData = await pb.collection('users')
-                                .authWithPassword('password', 'password');
 
     
     

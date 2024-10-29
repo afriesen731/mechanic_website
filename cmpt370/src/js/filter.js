@@ -525,6 +525,7 @@ export class FilteredDataset {
                                         filter: filter
                                     });
             
+            
             this.items = response.items;
             
             // update the total page number

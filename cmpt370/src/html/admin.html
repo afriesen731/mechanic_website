@@ -15,39 +15,17 @@
             </a>
         </div>
         <div class="menu">
-            <a onclick="showPage('employee')">Employee</a>
+            <a onclick="showIframe('iframe-container-employee-table')">Employee</a>
             <a onclick="showIframe('iframe-container-order-table')">Order</a>
             <a onclick="showIframe('iframe-container')">Create Work Order</a>
         </div>
     </div>
 
     <div class="main-content" id="main-content">
-        <div id="employee-page" class="content-page">
-            <!-- Employee Table with Search and Sort -->
-            <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
-                <select class="sort-button" onchange="sortEmployees(this.value)">
-                    <option value="">Sort By</option>
-                    <option value="asc">From A - Z</option>
-                    <option value="desc">From Z - A</option>
-                </select>
-            </div>
-            <div class="table-container">
-                <table id="employee-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Employee ID</th>
-                            <th>Date Created</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
 
+        <div id="iframe-container-employee-table" class="content-page" style="display: none;">
+            <iframe id="employee-table-iframe" src="../html/employee_table.html"></iframe>
+        </div>
 
         <!-- Iframe container for Work Order Table -->
         <div id="iframe-container-order-table" class="content-page" style="display: none;">

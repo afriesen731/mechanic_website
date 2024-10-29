@@ -129,7 +129,7 @@ function sortEmployees(order) {
 }
 
 // Initialize the employee table on page load and generate random employees
-document.addEventListener('DOMContentLoaded', () => {
-    generateRandomEmployees();
-    renderEmployeeTable();
-});
+// document.addEventListener('DOMContentLoaded', () => {
+//     generateRandomEmployees();
+//     renderEmployeeTable();
+// });
