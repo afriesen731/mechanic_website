@@ -1,7 +1,6 @@
-import PocketBase from 'pocketbase';
-// PocketBase SDK initialization
-const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+import { pb } from "../js/import_pb.js"
 
+console.log(import.meta.env);
 
 document.addEventListener('DOMContentLoaded', function(){
     const loginForm = document.getElementById('login');

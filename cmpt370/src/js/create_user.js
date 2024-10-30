@@ -1,6 +1,4 @@
-import PocketBase from 'pocketbase';
-// PocketBase SDK initialization
-const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+import { pb } from "../js/import_pb.js"
 
 
 

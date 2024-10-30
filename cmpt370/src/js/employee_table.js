@@ -1,10 +1,9 @@
 import { FilteredDataset, FilterElements, HasAnyFilter, SetFilter } from '../js/filter.js';
 import { Table } from '../js/table.js';
-import PocketBase from 'pocketbase';
 import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options';
 import $ from 'jquery';
 
-const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+import { pb } from "../js/import_pb.js"
 
 
 /**
@@ -114,3 +113,15 @@ document.addEventListener("DOMContentLoaded", async function() {
     
 
 });
+
+
+
+// Detect resizing of the body or main content and send the height to the parent
+const resizeObserver = new ResizeObserver(() => {
+    const height = document.documentElement.scrollHeight;
+    window.parent.postMessage({ height }, '*');
+  });
+  
+  // Observe the body or main content area
+  resizeObserver.observe(document.body);
+  

@@ -1,4 +1,3 @@
-import PocketBase from 'pocketbase';
 import $ from 'jquery';
 import 'select2/dist/css/select2.min.css';
 import select2 from 'select2';
@@ -6,8 +5,7 @@ import '../js/pb_select_options'
 
 select2();
 
-// PocketBase SDK initialization
-const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+import { pb } from "../js/import_pb.js"
 
 const DefaultPageLen = 10;
 

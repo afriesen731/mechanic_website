@@ -128,8 +128,19 @@ function sortEmployees(order) {
     renderEmployeeTable(); // Re-render the table after sorting
 }
 
-// Initialize the employee table on page load and generate random employees
-// document.addEventListener('DOMContentLoaded', () => {
-//     generateRandomEmployees();
-//     renderEmployeeTable();
-// });
+
+
+
+const iframes = document.querySelectorAll('iframe');
+
+window.addEventListener('message', (event) => {
+    // Filter by origin if needed
+    if (!event.data.height) return;
+
+    // Find the target iframe and update its height
+    iframes.forEach((iframe) => {
+        if (iframe.contentWindow === event.source) {
+        iframe.style.height = `${event.data.height}px`;
+        }
+    });
+});

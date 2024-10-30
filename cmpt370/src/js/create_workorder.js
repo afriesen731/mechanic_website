@@ -1,6 +1,4 @@
-import PocketBase from 'pocketbase';
-// PocketBase SDK initialization
-const pb = new PocketBase('http://ddmpmc.duckdns.org:8090');
+import { pb } from "../js/import_pb.js"
 
 // Function to safely get the element by ID and avoid null reference errors
 function getElementValue(id) {
@@ -117,3 +115,6 @@ document.addEventListener('DOMContentLoaded', () => {
         submitButton.addEventListener('click', submitWorkOrder);
     }
 });
+
+
+
