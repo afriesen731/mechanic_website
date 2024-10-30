@@ -20,4 +20,10 @@ to ADD a jobs, and once the PMA inspection has been done, and all new jobs are i
  THE MECHANIC, he should then be able to work on that same work order, with the jobs HE created.
 
 ``````````
-
+Todo:
+Create work order resets after submitting
+assign mechanic to work order
+mechanic joins a work order
+json active pending work orders
+active work orders on admin first page
+dropdown for jobs
