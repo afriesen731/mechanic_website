@@ -22,22 +22,39 @@ body {
     height: auto;
 }
 
+.logo a {
+    display: inline-block
+}
+
 /* Top Bar */
 .top-bar {
     display: flex;
     align-items: center;
+
     width: 100%;
     background-color: #000000; /* Set the top bar to black */
     padding: 15px;
     color: white;
 }
 
+
 .top-bar .menu {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     flex-grow: 1; /* Ensure menu aligns next to the logo */
+    height: 10vh;
 }
+
+.menu a {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    height: 100%;  
+    text-decoration: none; 
+}
+
+
 
 .top-bar a {
     color: white;
