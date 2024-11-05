@@ -31,6 +31,7 @@ async function loadMechanics() {
             filter: 'role="Mechanic"',
             fields: 'id, name'
         });
+        console.log("Loaded Mechanics:", mechacnics); // Debug line
         cachedMechanics = mechanics;
         return mechanics;
     } catch (error) {
@@ -80,10 +81,12 @@ export class OrderTable extends Table {
                     cell.textContent = "Not assigned";
                 }
             } else if (column === "actions") {
-                // Mechanic Dropdown for assignment
                 const mechanicSelect = document.createElement('select');
                 mechanicSelect.innerHTML = `<option value="">Select Mechanic</option>`;
-                
+            
+                // Debug line to check if mechanics array is available
+                console.log("Mechanics in buildRow:", mechanics);
+            
                 mechanics.forEach(mechanic => {
                     const option = document.createElement('option');
                     option.value = mechanic.id;
