@@ -13,13 +13,6 @@ function getElementValue(id) {
 export async function submitWorkOrder() {
     console.log("submitWorkOrder called");
 
-    // Debugging logs to identify missing elements
-    console.log(getElementValue('workOrderNumber'));
-    console.log(getElementValue('unitNumber'));
-    console.log(getElementValue('make'));
-    console.log(getElementValue('model'));
-    console.log(getElementValue('year'));
-
     // Get the values from the work order form using the safer function
     const workOrderNumber = getElementValue('workOrderNumber');
     const unitNumber = getElementValue('unitNumber');
@@ -86,6 +79,13 @@ export async function submitWorkOrder() {
     try {
         // Send the work order data to PocketBase
         const response = await pb.collection('work_orders').create(workOrderData);
+        document.querySelectorAll("input[type='text'], input[type='number'], input[type='checkbox']").forEach(input => {
+            if (input.type === "checkbox") {
+                input.checked = false;
+            } else {
+                input.value = '';
+            }
+        });
         alert('Work order created successfully!');
     } catch (error) {
         console.error('Error creating work order:', error);
@@ -113,7 +113,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitButton = document.getElementById('submitWorkOrderButton');
     if (submitButton) {
         submitButton.addEventListener('click', submitWorkOrder);
-    }
+    }    
+
 });
 
 
