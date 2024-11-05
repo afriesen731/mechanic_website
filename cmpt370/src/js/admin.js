@@ -13,7 +13,15 @@ function showIframe(frameId) {
     const iframe = document.getElementById(frameId); // Select the iframe
     document.getElementById(frameId).style.display = 'block'; // Show the iframe container
 }
+// Default page for admin: Show In Progress Work Orders
+document.addEventListener('DOMContentLoaded', () => {
+    showIframe('iframe-container-in-progress-orders');
+});
 
+// Update the logo to trigger showing the In Progress Orders iframe when clicked
+document.querySelector('.logo img').addEventListener('click', () => {
+    showIframe('iframe-container-in-progress-orders');
+});
 // Employees Data
 let employees = [];
 let employeeToRemove = null;

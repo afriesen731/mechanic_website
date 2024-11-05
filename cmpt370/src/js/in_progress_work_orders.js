@@ -2,28 +2,17 @@ import { pb } from "../js/import_pb.js";
 
 async function loadInProgressWorkOrders() {
     try {
-        console.log("Fetching in-progress work orders...");
-
-        // Fetch in-progress work orders with 'mechanics' expanded
         const workOrders = await pb.collection('work_orders').getFullList({
             filter: 'status="In Progress"',
-            expand: 'mechanics',
+            expand: 'mechanics'
         });
 
-        console.log("Fetched work orders:", workOrders);
-
-        // Check if table body exists
         const tableBody = document.getElementById('inProgressTable').querySelector('tbody');
-        if (!tableBody) {
-            console.error("Table body not found. Ensure the table ID 'inProgressTable' is correct.");
-            return;
-        }
-
-        tableBody.innerHTML = ''; // Clear existing rows
+        tableBody.innerHTML = '';
 
         workOrders.forEach(order => {
             const row = document.createElement('tr');
-            
+
             // Work Order Number
             const workOrderCell = document.createElement('td');
             workOrderCell.textContent = order.work_order_number || 'N/A';
@@ -36,7 +25,7 @@ async function loadInProgressWorkOrders() {
 
             // Mechanic(s)
             const mechanicCell = document.createElement('td');
-            if (order.expand && order.expand.mechanics && order.expand.mechanics.length > 0) {
+            if (order.expand && order.expand.mechanics) {
                 mechanicCell.textContent = order.expand.mechanics.map(mechanic => mechanic.name).join(', ');
             } else {
                 mechanicCell.textContent = "Not assigned";
@@ -45,23 +34,33 @@ async function loadInProgressWorkOrders() {
 
             // Service Type
             const serviceTypeCell = document.createElement('td');
-            serviceTypeCell.textContent = Array.isArray(order.type_of_service) ? order.type_of_service.join(', ') : 'N/A';
+            serviceTypeCell.textContent = order.type_of_service.join(', ');
             row.appendChild(serviceTypeCell);
 
             // Status
             const statusCell = document.createElement('td');
-            statusCell.textContent = order.status || 'N/A';
+            statusCell.textContent = order.status;
             row.appendChild(statusCell);
+
+            // Actions - View Button
+            const actionsCell = document.createElement('td');
+            const viewButton = document.createElement('button');
+            viewButton.textContent = 'View';
+            viewButton.onclick = () => openModal(`
+                Work Order #: ${order.work_order_number || 'N/A'}\n
+                Unit #: ${order.unit_number || 'N/A'}\n
+                Mechanic: ${order.expand?.mechanics?.map(m => m.name).join(', ') || 'Not assigned'}\n
+                Service Type: ${order.type_of_service.join(', ')}\n
+                Status: ${order.status}
+            `);
+            actionsCell.appendChild(viewButton);
+            row.appendChild(actionsCell);
 
             tableBody.appendChild(row);
         });
-
-        console.log("In-progress work orders loaded successfully.");
-
     } catch (error) {
         console.error("Error loading in-progress work orders:", error);
     }
 }
 
-// Load the data when the page is loaded
 document.addEventListener("DOMContentLoaded", loadInProgressWorkOrders);
