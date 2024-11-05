@@ -1,9 +1,8 @@
-// Show the correct page based on the menu clicked
-function showPage(page) {
-    const pages = document.querySelectorAll('.content-page'); // Select all content pages
-    pages.forEach(p => p.style.display = 'none'); // Hide all pages
-    document.getElementById(`${page}-page`).style.display = 'block'; // Show selected page
-}
+import { verify } from "../js/redirect.js"
+
+
+
+
 
 // Function to show the Create Work Order iframe
 function showIframe(frameId) {
@@ -12,6 +11,57 @@ function showIframe(frameId) {
     
     const iframe = document.getElementById(frameId); // Select the iframe
     document.getElementById(frameId).style.display = 'block'; // Show the iframe container
+}
+
+
+
+const iframes = document.querySelectorAll('iframe');
+
+// verify that the user is an admin
+verify('admin');
+
+
+// update the size of the iframe window
+window.addEventListener('message', (event) => {
+    if (!event.data.height) return;
+
+    iframes.forEach((iframe) => {
+        if (iframe.contentWindow === event.source) {
+        iframe.style.height = `${event.data.height}px`;
+        }
+    });
+});
+
+// add EventListener to each link
+document.getElementById('employee-link').addEventListener('click', () => {
+    showIframe('iframe-container-employee-table');
+});
+
+document.getElementById('create-employee-link').addEventListener('click', () => {
+    showIframe('iframe-container-employee-create');
+});
+
+document.getElementById('order-link').addEventListener('click', () => {
+    showIframe('iframe-container-order-table');
+});
+
+document.getElementById('create-work-order-link').addEventListener('click', () => {
+    showIframe('iframe-container');
+});
+
+
+
+
+
+
+
+/*
+
+// Show the correct page based on the menu clicked
+function showPage(page) {
+    const pages = document.querySelectorAll('.content-page'); // Select all content pages
+    pages.forEach(p => p.style.display = 'none'); // Hide all pages
+    document.getElementById(`${page}-page`).style.display = 'block'; // Show selected page
 }
 
 // Employees Data
@@ -128,19 +178,5 @@ function sortEmployees(order) {
     renderEmployeeTable(); // Re-render the table after sorting
 }
 
+*/
 
-
-
-const iframes = document.querySelectorAll('iframe');
-
-window.addEventListener('message', (event) => {
-    // Filter by origin if needed
-    if (!event.data.height) return;
-
-    // Find the target iframe and update its height
-    iframes.forEach((iframe) => {
-        if (iframe.contentWindow === event.source) {
-        iframe.style.height = `${event.data.height}px`;
-        }
-    });
-});

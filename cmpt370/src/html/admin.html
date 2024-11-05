@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
     <link rel="stylesheet" href="../css/admin.css">
+    <script src="../js/admin.js" type="module" defer></script>
 </head>
 <body>
 
@@ -15,19 +16,18 @@
             </a>
         </div>
         <div class="menu">
-            <a onclick="showIframe('iframe-container-employee-table')">
+            <a id="employee-link">
                 <div>Employee</div>
             </a>
-            <a onclick="showIframe('iframe-container-employee-create')">
+            <a id="create-employee-link">
                 <div>Create Employee</div>
             </a>
-            <a onclick="showIframe('iframe-container-order-table')">
+            <a id="order-link">
                 <div>Order</div>
             </a>
-            <a onclick="showIframe('iframe-container')">
+            <a id="create-work-order-link">
                 <div>Create Work Order</div>
             </a>
-            
         </div>
         <div class="user-avatar">
             <a href="setting.html">
@@ -45,20 +45,16 @@
             <iframe id="employee-table-iframe" src="../html/employee_table.html"></iframe>
         </div>
 
-        <!-- Iframe container for Work Order Table -->
         <div id="iframe-container-order-table" class="content-page" style="display: none;">
             <iframe id="workorder-table-iframe" src="../html/workorders.html"></iframe>
         </div>
 
-
-
-        <!-- Iframe container for Create Work Order -->
         <div id="iframe-container" class="content-page" style="display: none;">
             <iframe id="workorder-iframe" src="../html/create_workorder.html"></iframe>
         </div>
     </div>
 
-    <script src="../js/admin.js"></script>
+    
 
 </body>
 </html>

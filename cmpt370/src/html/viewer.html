@@ -3,24 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Employee Dashboard</title>
     <link rel="stylesheet" href="../css/viewer.css">
+    <script src="../js/viewer.js" type="module" defer></script>
 </head>
 <body>
 
     <div class="top-bar">
         <div class="logo">
-            <a href="javascript:void(0);" onclick="showPage('main-dashboard')">
+            <a href="javascript:void(0);" id="main-dashboard-link">
                 <img src="../images/FINAL_logo.png" alt="Logo" class="logo">
             </a>
         </div>
 
         <div class="menu">
-            <a onclick="showIframe('iframe-container-order-table')">Order</a>
+            <a href="javascript:void(0);" id="order-link">Order</a>
         </div>
     </div>
-
-    
 
     <div class="main-content" id="main-content">
 
@@ -31,10 +30,9 @@
         </div>
 
         <div id="employee-page" class="content-page">
-            <!-- Employee Table with Search and Sort -->
             <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search here..." onkeyup="searchEmployee()">
-                <select class="sort-button" onchange="sortEmployees(this.value)">
+                <input type="text" class="search-bar" placeholder="Search here..." id="search-bar">
+                <select class="sort-button" id="sort-select">
                     <option value="">Sort By</option>
                     <option value="asc">From A - Z</option>
                     <option value="desc">From Z - A</option>
@@ -56,21 +54,16 @@
             </div>
         </div>
 
-
-        <!-- Iframe container for Work Order Table -->
         <div id="iframe-container-order-table" class="content-page" style="display: none;">
             <iframe id="workorder-table-iframe" src="../html/workorders.html"></iframe>
         </div>
 
-
-
-        <!-- Iframe container for Create Work Order -->
         <div id="iframe-container" class="content-page" style="display: none;">
             <iframe id="workorder-iframe" src="../html/create_workorder.html"></iframe>
         </div>
     </div>
 
-    <script src="../js/admin.js"></script>
+    
 
 </body>
 </html>

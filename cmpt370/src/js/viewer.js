@@ -1,8 +1,24 @@
-// Show the correct page based on the menu clicked
-function showPage(page) {
-    const pages = document.querySelectorAll('.content-page'); // Select all content pages
-    pages.forEach(p => p.style.display = 'none'); // Hide all pages
-    document.getElementById(`${page}-page`).style.display = 'block'; // Show selected page
-}
+import { showPage, showIframe, updateIframes } from "../js/display_iframe.js"
+import {verify} from "../js/redirect.js"
 
 
+// Verify the users permissions
+verify(['mechanic', 'viewer']);
+
+updateIframes();
+
+
+
+// Add event listeners to elements
+document.getElementById('main-dashboard-link').addEventListener('click', () => {
+    showPage('main-dashboard');
+});
+
+document.getElementById('order-link').addEventListener('click', () => {
+    showIframe('iframe-container-order-table');
+});
+
+
+document.getElementById('sort-select').addEventListener('change', (event) => {
+    sortEmployees(event.target.value);
+});

@@ -1,7 +1,10 @@
 import { pb } from "../js/import_pb.js"
 
-export async function verify(role) {
+export async function verify(roles) {
     const user = pb.authStore.model;
+    if (! (roles instanceof Array)) {
+        roles = [roles];
+    }
 
     if (!user) {
         // Redirect to login
@@ -14,7 +17,7 @@ export async function verify(role) {
         const userData = await pb.collection('users').getOne(user.id);
 
         // Check if the required field exists and meets your criteria
-        if (userData.role === role) {
+        if (roles.includes(userData.role)) {
             return;
         } else {
             // Redirect or show an error
