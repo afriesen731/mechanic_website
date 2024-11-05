@@ -12,6 +12,10 @@ function showIframe(frameId) {
     const iframe = document.getElementById(frameId); // Select the iframe
     document.getElementById(frameId).style.display = 'block'; // Show the iframe container
 }
+// Default page for admin: Show In Progress Work Orders
+document.addEventListener('DOMContentLoaded', () => {
+    showIframe('iframe-container-in-progress-orders');
+});
 
 
 

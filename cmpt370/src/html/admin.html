@@ -11,9 +11,7 @@
 
     <div class="top-bar">
         <div class="logo">
-            <a href="admin.html">
-                <img src="../images/FINAL_logo.png" alt="Logo" class="logo">
-            </a>
+            <img src="../images/FINAL_logo.png" alt="Logo" class="logo" onclick="showIframe('iframe-container-in-progress-orders')">
         </div>
         <div class="menu">
             <a id="employee-link">
@@ -49,6 +47,11 @@
             <iframe id="workorder-table-iframe" src="../html/workorders.html"></iframe>
         </div>
 
+        <div id="iframe-container-in-progress-orders" class="content-page" style="display: none;">
+            <iframe id="in-progress-orders-iframe" src="../html/in_progress_work_orders.html"></iframe>
+        </div>
+
+        <!-- Iframe container for Create Work Order -->
         <div id="iframe-container" class="content-page" style="display: none;">
             <iframe id="workorder-iframe" src="../html/create_workorder.html"></iframe>
         </div>
