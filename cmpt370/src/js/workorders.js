@@ -74,8 +74,8 @@ export class OrderTable extends Table {
             if (column === "mechanics") {
                 // Display assigned mechanic or "Not assigned"
                 if (row[column] && row[column].length > 0) {
-                    const assignedMechanic = await pb.collection('users').getOne(row[column][0], { fields: 'name' });
-                    cell.textContent = assignedMechanic.name;
+                    const assignedMechanic = mechanics.find(m => m.id === row[column][0]);
+                    cell.textContent = assignedMechanic ? assignedMechanic.name : "Not assigned";
                 } else {
                     cell.textContent = "Not assigned";
                 }
@@ -107,7 +107,6 @@ export class OrderTable extends Table {
                 removeButton.textContent = "Remove";
                 removeButton.classList = "action-btn";
                 removeButton.onclick = async () => {
-                    // Here, add your logic for removing the work order or mechanic assignment
                     alert('Remove functionality not yet implemented.');
                 };
 
