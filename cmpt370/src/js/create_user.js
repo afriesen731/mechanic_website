@@ -18,7 +18,7 @@ async function submit(username, name, password, role) {
                 role: role,
             });
 
-        document.getElementById("form").reset();
+        document.getElementById("settings-form").reset();
         
         
         document.getElementById('result').innerText = `user \"${username}\" created`;
@@ -42,7 +42,7 @@ async function submit(username, name, password, role) {
 
 
 
-document.getElementById("form").addEventListener("submit", function(event) {
+document.getElementById("settings-form").addEventListener("submit", function(event) {
     event.preventDefault(); 
 
     const username = document.getElementById("username").value;
