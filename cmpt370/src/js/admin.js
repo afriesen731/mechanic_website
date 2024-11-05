@@ -53,6 +53,9 @@ document.getElementById('create-work-order-link').addEventListener('click', () =
     showIframe('iframe-container');
 });
 
+document.getElementById('in-progress-orders-logo').addEventListener('click', () => {
+    showIframe('iframe-container-in-progress-orders');
+});
 
 
 
