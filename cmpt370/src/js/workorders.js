@@ -7,13 +7,17 @@ import { pb } from "../js/import_pb.js"
 
 
 
-// Function to assign a mechanic to a work order
 async function assignMechanic(workOrderId, mechanicId) {
     try {
-        await pb.collection('work_orders').update(workOrderId, {
-            mechanics: [mechanicId], // Adds the mechanic to the work order
-            status: "Active"         // Sets the status to Active
-        });
+        console.log("Assigning mechanic with workOrderId:", workOrderId, "and mechanicId:", mechanicId);
+
+        // Corrected payload with status set to "In Progress"
+        const payload = {
+            "mechanics": [mechanicId], // Wrap mechanicId in an array
+            "status": "In Progress"    // Update status to "In Progress"
+        };
+        const response = await pb.collection('work_orders').update(workOrderId, payload);
+        
         alert('Mechanic assigned successfully!');
         loadWorkOrders(); // Reload the table to reflect changes
     } catch (error) {
@@ -21,17 +25,20 @@ async function assignMechanic(workOrderId, mechanicId) {
         alert('There was an error assigning the mechanic. Please try again.');
     }
 }
-// Cached mechanics list
+
+
 let cachedMechanics = null;
 
 async function loadMechanics() {
-    if (cachedMechanics) return cachedMechanics; // Return cached data if available
+    if (cachedMechanics) {
+        return cachedMechanics;
+    }
+
     try {
         const mechanics = await pb.collection('users').getFullList({
-            filter: 'role="Mechanic"',
+            filter: 'role="mechanic"',
             fields: 'id, name'
         });
-        console.log("Loaded Mechanics:", mechacnics); // Debug line
         cachedMechanics = mechanics;
         return mechanics;
     } catch (error) {
@@ -72,29 +79,25 @@ export class OrderTable extends Table {
         for (i=0; i < this.columns.length; i++) {
             const column = this.columns[i];
             const cell = document.createElement('td');
+
             if (column === "mechanics") {
-                // Display assigned mechanic or "Not assigned"
                 if (row[column] && row[column].length > 0) {
-                    const assignedMechanic = mechanics.find(m => m.id === row[column][0]);
-                    cell.textContent = assignedMechanic ? assignedMechanic.name : "Not assigned";
+                    const mechanic = mechanics.find(mech => mech.id === row[column][0]);
+                    cell.textContent = mechanic ? mechanic.name : "Not assigned";
                 } else {
                     cell.textContent = "Not assigned";
                 }
             } else if (column === "actions") {
                 const mechanicSelect = document.createElement('select');
                 mechanicSelect.innerHTML = `<option value="">Select Mechanic</option>`;
-            
-                // Debug line to check if mechanics array is available
-                console.log("Mechanics in buildRow:", mechanics);
-            
+    
                 mechanics.forEach(mechanic => {
                     const option = document.createElement('option');
                     option.value = mechanic.id;
                     option.textContent = mechanic.name;
                     mechanicSelect.appendChild(option);
                 });
-
-                // Assign Button
+                
                 const assignButton = document.createElement('button');
                 assignButton.textContent = "Assign";
                 assignButton.onclick = async () => {
@@ -200,7 +203,14 @@ document.addEventListener("DOMContentLoaded", async function() {
     
 
 });
+async function loadWorkOrders() {
+    const tableElement = document.getElementById('table');
+    const columns = ['created', 'mechanics', 'license_plate', 'type_of_service', 'model', 'status', 'actions'];
+    const table = new OrderTable(tableElement, columns);
 
+    const filteredDataset = new FilteredDataset('work_orders', [table]);
+    await filteredDataset.update();
+}
 
 // Detect resizing of the body or main content and send the height to the parent
 const resizeObserver = new ResizeObserver(() => {
