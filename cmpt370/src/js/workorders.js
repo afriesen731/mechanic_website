@@ -110,18 +110,24 @@ export class AdminOrderTable extends Table {
                     }
                 };
 
-                // Remove Button
-                const removeButton = document.createElement('button');
-                removeButton.textContent = "Remove";
-                removeButton.classList = "action-btn";
-                removeButton.onclick = async () => {
-                    alert('Remove functionality not yet implemented.');
+
+
+                // View Button
+                const viewButton = document.createElement('button');
+                viewButton.textContent = "View";
+                viewButton.classList = "action-btn";
+                viewButton.onclick = async () => {
+                    const iframe = parent.document.getElementById("view-order-iframe");
+                    const scrollPosition = parent.window.pageYOffset || parent.document.documentElement.scrollTop || parent.document.body.scrollTop;
+
+                    iframe.src = `../html/view_order.html?order=${row.id}&prevFrame=${window.frameElement.parentNode.id}&prevScroll=${scrollPosition}`;
+                    parent.showIframe("iframe-container-view-order");
                 };
 
                 // Append elements to actions cell
                 cell.appendChild(mechanicSelect);
                 cell.appendChild(assignButton);
-                cell.appendChild(removeButton);
+                cell.appendChild(viewButton);
             } else {
                 // Default case for other columns
                 cell.textContent = row[column];

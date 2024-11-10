@@ -2,10 +2,10 @@ import { verify } from "../js/redirect.js"
 
 
 
-
-
+// Allow function to be accessed by other Iframes
+window.showIframe = showIframe;
 // Function to show the Create Work Order iframe
-function showIframe(frameId) {
+export function showIframe(frameId) {
     const pages = document.querySelectorAll('.content-page'); // Select all content pages
     pages.forEach(p => p.style.display = 'none'); // Hide all pages
     

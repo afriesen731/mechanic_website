@@ -1,4 +1,4 @@
-import { pb } from "./import_pb.js";
+import { pb } from "../js/import_pb.js";
 
 
 // Function to open the modal with work order details
