@@ -626,8 +626,14 @@ export class FilteredDataset {
 
 
 
-
+/**
+ * a class that manages and creates filters for a FilteredDataset class
+ */
 export class FilterElements {
+    /**
+     * Creates and object that manages and creates filters for a FilteredDataset class
+     * @param {FilteredDataset} filteredDataset A dataset to be filtered by this class
+     */
     constructor(filteredDataset) {
         this.filteredDataset = filteredDataset;
         this.pageSelect = null;
@@ -636,7 +642,15 @@ export class FilterElements {
 
 
 
-
+    /**
+     * Initializes event listeners for start and end date input elements, updating the dataset with a date range filter.
+     *
+     * @param {HTMLElement} startElement - The input element for the start date.
+     * @param {HTMLElement} endElement - The input element for the end date.
+     * @param {string} dateField - The field in the dataset to filter by the date range.
+     * @example
+     * initDateSelector(document.getElementById('startDate'), document.getElementById('endDate'), 'createdAt');
+    */
     async initDateSelector(startElement, endElement, dateField) {
         let filterElements = this;
         startElement.addEventListener('change', e => {
@@ -672,10 +686,11 @@ export class FilterElements {
      * @param {Array<Object|string>} options - Options for the dropdown, as strings or objects with `text` and `value` keys.
      * @param {string} placeholder - The placeholder text for the dropdown.
      * @param {typeof Filter} FilterType - The type of filter to create.
+     * @param {Array<Object|String>} defaultVal - The default selected values for the select2
      * @example
-     * initSelect2Filter(document.getElementById('statusSelect'), 'status', statusOptions, 'Select Status');
+     * initSelect2Filter(document.getElementById('statusSelect'), 'status', statusOptions, 'Select Status', {'Pending'});
     */
-    async initSelect2Filter(select, field, options, placeholder, FilterType) {
+    async initSelect2Filter(select, field, options, placeholder, FilterType, defaultVal=[]) {
         let filterElements = this;
     
         // Add options to the select element
@@ -689,7 +704,11 @@ export class FilterElements {
         // Initialize select2 with the provided placeholder
         $(`#${select.id}`).select2({
             placeholder: placeholder
+            
         });
+
+        // Sets default value for select
+        $(`#${select.id}`).val(defaultVal).trigger('change');
     
         // Handle option selection
         $(`#${select.id}`).on('select2:select', function () {
@@ -715,7 +734,13 @@ export class FilterElements {
         });
     }
 
-
+    /**
+     * Initializes pagination for the dataset, handling page changes through event listeners.
+     *
+     * @param {HTMLElement} pageSelect - The container element for pagination controls.
+     * @example
+     * initPagination(document.getElementById('paginationContainer'));
+    */
     async initPagination(pageSelect) {
         const filteredDataset = this.filteredDataset;
         const filterElements = this;
@@ -743,6 +768,7 @@ export class FilterElements {
 
     /**
      * Called by filter observer. Updates page selection
+     * @param {FilteredDataset} filteredDataset - The dataset instance being updated.
      */
     update(filteredDataset) {
         if (filteredDataset instanceof FilteredDataset ) {
@@ -753,7 +779,9 @@ export class FilterElements {
         }
     }
 
-
+    /**
+     * Updates the pagination controls in the DOM based on the current page and total pages of the dataset.
+    */
     updatePagination() {
         const filteredDataset = this.filteredDataset;
         const pageSelect = this.pageSelect;
@@ -839,7 +867,13 @@ export class FilterElements {
 
 
 
-    
+    /**
+     * Initializes a dropdown for selecting the page length, updating the dataset's page length when changed.
+     *
+     * @param {HTMLSelectElement} pageLenSelector - The `select` element for page length options.
+     * @example
+     * initPageLenSelect(document.getElementById('pageLenSelector'));
+    */
     initPageLenSelect(pageLenSelector) {
         const filteredDataset = this.filteredDataset;
         

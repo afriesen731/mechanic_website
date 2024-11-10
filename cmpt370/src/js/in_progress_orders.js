@@ -1,4 +1,22 @@
-import { pb } from "../js/import_pb.js";
+import { pb } from "./import_pb.js";
+
+
+// Function to open the modal with work order details
+function openModal(content) {
+    document.getElementById('modal-content').innerText = content;
+    document.getElementById('modal').style.display = 'flex';
+}
+
+// Function to close the modal
+function closeModal() {
+    document.getElementById('modal').style.display = 'none';
+}
+
+
+
+
+
+/*
 
 async function loadInProgressWorkOrders() {
     try {
@@ -62,5 +80,16 @@ async function loadInProgressWorkOrders() {
         console.error("Error loading in-progress work orders:", error);
     }
 }
+*/
+
+
+
+
+
+
+
+
+
+
 
 document.addEventListener("DOMContentLoaded", loadInProgressWorkOrders);

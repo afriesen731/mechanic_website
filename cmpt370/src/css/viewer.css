@@ -35,6 +35,10 @@ body {
     color: black;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 /* Logo */
 .logo img {
     width: 90px; 

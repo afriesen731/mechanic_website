@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>In Progress Work Orders</title>
-    <script type="module" src="../js/in_progress_work_orders.js"></script>
+    <script type="module" src="../js/in_progress_orders.js"></script>
     <link rel="stylesheet" href="../css/table.css">
 </head>
 <body>
@@ -25,6 +25,7 @@
         </tbody>
     </table>
 
+    
     <!-- Modal Structure -->
     <div id="modal" class="modal" style="display: none;">
         <div class="modal-content">
@@ -34,17 +35,6 @@
         </div>
     </div>
 
-    <script>
-        // Function to open the modal with work order details
-        function openModal(content) {
-            document.getElementById('modal-content').innerText = content;
-            document.getElementById('modal').style.display = 'flex';
-        }
 
-        // Function to close the modal
-        function closeModal() {
-            document.getElementById('modal').style.display = 'none';
-        }
-    </script>
 </body>
 </html>
