@@ -15,6 +15,13 @@ async function assignMechanic(workOrderId, mechanicId) {
         // Fetch the current work order to get the existing list of mechanics
         const currentWorkOrder = await pb.collection('work_orders').getOne(workOrderId);
 
+        // Check if the mechanic is already assigned
+        if (currentWorkOrder.mechanics && currentWorkOrder.mechanics.includes(mechanicId)) {
+            console.log("Mechanic is already assigned to this work order.");
+            alert("This mechanic is already assigned to the work order.");
+            return;
+        }
+
         // Append the new mechanicId to the existing mechanics array
         const updatedMechanics = currentWorkOrder.mechanics ? [...currentWorkOrder.mechanics, mechanicId] : [mechanicId];
 
@@ -26,14 +33,13 @@ async function assignMechanic(workOrderId, mechanicId) {
 
         const response = await pb.collection('work_orders').update(workOrderId, payload);
 
-        // alert('Mechanic assigned successfully!');
         await filteredDataset.update();
-        // loadWorkOrders(); // Reload the table to reflect changes
     } catch (error) {
         console.error('Error assigning mechanic:', error);
         alert('There was an error assigning the mechanic. Please try again.');
     }
 }
+
 
 
 
@@ -115,7 +121,7 @@ export class AdminOrderTable extends Table {
                     
                     // Create and append mechanic names with remove buttons
                     row[column].forEach(mechId => {
-                        const mechanic = this.users.find(user => user.value === mechId);
+                        const mechanic = this.users.find(user => user.id === mechId);
                         if (mechanic) {
                             // Create a container for the mechanic and the button
                             const mechanicContainer = document.createElement('div');
@@ -125,7 +131,7 @@ export class AdminOrderTable extends Table {
         
                             // Create a span for the mechanic's name
                             const mechanicName = document.createElement('span');
-                            mechanicName.textContent = mechanic.text;
+                            mechanicName.textContent = mechanic.name;
         
                             // Create a small "x" button
                             const removeButton = document.createElement('button');
@@ -155,6 +161,7 @@ export class AdminOrderTable extends Table {
 
 
             } else if (column === "actions") {
+                
                 const mechanicSelect = this.mechanicSelect.cloneNode(true);
                 
                 // Initialize Select2 on the select element
@@ -163,7 +170,8 @@ export class AdminOrderTable extends Table {
                 $(mechanicSelect).select2({
                     placeholder: 'Select Mechanic',
                 });
-
+                
+                
                 const assignButton = document.createElement('button');
                 assignButton.classList = "action-btn";
                 assignButton.textContent = "Assign";
@@ -227,8 +235,9 @@ export class EmployeeOrderTable extends Table {
      * @param {FilteredDataset} filteredDataset dataset the table is displaying
      *                                  In the order they should be displayed.
      */
-    constructor(table, columns, filteredDataset) {
+    constructor(table, columns, users, filteredDataset) {
         super(table, columns);
+        this.users = users;
         this.filteredDataset = filteredDataset;
     }
 
@@ -245,27 +254,69 @@ export class EmployeeOrderTable extends Table {
         for (i=0; i < this.columns.length; i++) {
             const column = this.columns[i];
             const cell = document.createElement('td');
-
+            
             if (column === "mechanics") {
                 if (row[column] && row[column].length > 0) {
-                    const mechanic = users.find(mech => mech.id === row[column][0]);
-                    cell.textContent = mechanic ? mechanic.name : "Not assigned";
+                    cell.innerHTML = ''; // Clear existing content
+                    
+                    // Create and append mechanic names with remove buttons
+                    row[column].forEach(mechId => {
+                        const mechanic = this.users.find(user => user.id === mechId);
+                        if (mechanic) {
+                            // Create a container for the mechanic and the button
+                            const mechanicContainer = document.createElement('div');
+                            mechanicContainer.style.display = 'inline-flex';
+                            mechanicContainer.style.alignItems = 'center';
+                            mechanicContainer.style.marginRight = '5px';
+        
+                            // Create a span for the mechanic's name
+                            const mechanicName = document.createElement('span');
+                            mechanicName.textContent = mechanic.name;
+        
+                            // Append the name
+                            mechanicContainer.appendChild(mechanicName);
+
+        
+                            // Append the container to the cell
+                            cell.appendChild(mechanicContainer);
+                        }
+                    });
                 } else {
                     cell.textContent = "Not assigned";
                 }
             } else if (column === "actions") {
-                
-                const joinButton = document.createElement('button');
-                joinButton.textContent = "Join";
-                joinButton.onclick = async () => {
-                    if (mechanicSelect.value) {
-                        await assignMechanic(row.id, pb.authStore.model.id);
-                    }
-                    this.filteredDataset.update();
-                };
+                const mechanics = row["mechanics"];
+                // add leave button
+                if (mechanics.includes(pb.authStore.model.id)) {
+                    const leaveButton = document.createElement('button');
+                    leaveButton.textContent = "Leave";
+                    leaveButton.classList = "action-btn"
+                    leaveButton.onclick = async () => {
+                    
+                        await removeMechanic(row.id, pb.authStore.model.id);
+                        
+                        this.filteredDataset.update();
+                    };
 
-                // Append elements to actions cell
-                cell.appendChild(joinButton);
+                    // Append elements to actions cell
+                    cell.appendChild(leaveButton);
+                }
+                // add join button
+                else {
+                    const joinButton = document.createElement('button');
+                    joinButton.textContent = "Join";
+                    joinButton.classList = "action-btn"
+                    joinButton.onclick = async () => {
+                    
+                        await assignMechanic(row.id, pb.authStore.model.id);
+                        
+                        this.filteredDataset.update();
+                    };
+
+                    // Append elements to actions cell
+                    cell.appendChild(joinButton);
+
+                }
             } else {
                 // Default case for other columns
                 cell.textContent = row[column];
@@ -334,12 +385,12 @@ document.addEventListener("DOMContentLoaded", async function() {
 
     if (role == "admin") {
         verify("admin")
-        table = new AdminOrderTable(tableElement, columns, userOptions, filteredDataset);
+        table = new AdminOrderTable(tableElement, columns, users, filteredDataset);
         
     }
     else if (role == "mechanic" || role == "viewer") {
         verify(["mechanic", "viewer"]);
-        table = new EmployeeOrderTable(tableElement, columns, filteredDataset)
+        table = new EmployeeOrderTable(tableElement, columns, users, filteredDataset)
     }
 
 
