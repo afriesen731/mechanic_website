@@ -12,14 +12,21 @@ async function assignMechanic(workOrderId, mechanicId) {
     try {
         console.log("Assigning mechanic with workOrderId:", workOrderId, "and mechanicId:", mechanicId);
 
+        // Fetch the current work order to get the existing list of mechanics
+        const currentWorkOrder = await pb.collection('work_orders').getOne(workOrderId);
+
+        // Append the new mechanicId to the existing mechanics array
+        const updatedMechanics = currentWorkOrder.mechanics ? [...currentWorkOrder.mechanics, mechanicId] : [mechanicId];
+
         // Corrected payload with status set to "In Progress"
         const payload = {
-            "mechanics": [mechanicId], // Wrap mechanicId in an array
-            "status": "In Progress"    // Update status to "In Progress"
+            "mechanics": updatedMechanics, // Append the new mechanicId
+            "status": "In Progress"       // Update status to "In Progress"
         };
+
         const response = await pb.collection('work_orders').update(workOrderId, payload);
-        
-        alert('Mechanic assigned successfully!');
+
+        // alert('Mechanic assigned successfully!');
         await filteredDataset.update();
         // loadWorkOrders(); // Reload the table to reflect changes
     } catch (error) {
@@ -29,26 +36,32 @@ async function assignMechanic(workOrderId, mechanicId) {
 }
 
 
-let cachedMechanics = null;
 
-async function loadMechanics() {
-    if (cachedMechanics) {
-        return cachedMechanics;
-    }
-
+async function removeMechanic(workOrderId, mechanicId) {
     try {
-        const mechanics = await pb.collection('users').getFullList({
-            filter: 'role="mechanic"',
-            fields: 'id, name'
-        });
-        cachedMechanics = mechanics;
-        return mechanics;
+        console.log("Removing mechanic with workOrderId:", workOrderId, "and mechanicId:", mechanicId);
+
+        // Fetch the current work order to get the existing list of mechanics
+        const currentWorkOrder = await pb.collection('work_orders').getOne(workOrderId);
+
+        // Filter out the mechanicId to be removed
+        const updatedMechanics = currentWorkOrder.mechanics.filter(id => id !== mechanicId);
+
+        // Update the work order with the modified mechanics list
+        const payload = {
+            "mechanics": updatedMechanics
+        };
+
+        const response = await pb.collection('work_orders').update(workOrderId, payload);
+
+        await filteredDataset.update();
     } catch (error) {
-        console.error('Error loading mechanics:', error);
-        alert('Failed to load mechanics. Check console for details.');
-        return [];
+        console.error('Error removing mechanic:', error);
+        alert('There was an error removing the mechanic. Please try again.');
     }
 }
+
+
 
 
 
@@ -58,13 +71,27 @@ async function loadMechanics() {
  */
 export class AdminOrderTable extends Table {
     /**
-     * Createst an instance of Table.
-     * @param {HTMLElement} table html element with tag "table".
-     * @param {Array<String>} columns List of columns in the database to display. 
-     *                                  In the order they should be displayed.
-     */
-    constructor(table, columns) {
+     * Creates an instance of Table.
+     * @param {HTMLElement} table - The HTML element with the tag "table".
+     * @param {Array<String>} columns - List of columns in the database to display, in the order they should be displayed.
+     * @param {Array<Object>} users - List of user objects retrieved from the database, where each object contains user data.
+     * @param {FilteredDataset} filteredDataset dataset the table is displaying
+    */
+    constructor(table, columns, users, filteredDataset) {
         super(table, columns);
+        this.users = users;
+        this.mechanicSelect = document.createElement('select');
+        this.mechanicSelect.multiple = true;
+        // build userOptions
+        this.users.forEach(option => {
+            const opt = document.createElement('option');
+            opt.selected = false;
+            opt.text = option.text || option;
+            opt.value = option.value || option;
+            this.mechanicSelect.appendChild(opt);
+        });
+
+        this.filteredDataset = filteredDataset
     }
 
 
@@ -75,7 +102,7 @@ export class AdminOrderTable extends Table {
      */
     async buildRow(row) {
         const rowElement = document.createElement('tr');
-        const mechanics = await loadMechanics();
+
         
         let i;
         for (i=0; i < this.columns.length; i++) {
@@ -84,31 +111,78 @@ export class AdminOrderTable extends Table {
 
             if (column === "mechanics") {
                 if (row[column] && row[column].length > 0) {
-                    const mechanic = mechanics.find(mech => mech.id === row[column][0]);
-                    cell.textContent = mechanic ? mechanic.name : "Not assigned";
+                    cell.innerHTML = ''; // Clear existing content
+                    
+                    // Create and append mechanic names with remove buttons
+                    row[column].forEach(mechId => {
+                        const mechanic = this.users.find(user => user.value === mechId);
+                        if (mechanic) {
+                            // Create a container for the mechanic and the button
+                            const mechanicContainer = document.createElement('div');
+                            mechanicContainer.style.display = 'inline-flex';
+                            mechanicContainer.style.alignItems = 'center';
+                            mechanicContainer.style.marginRight = '5px';
+        
+                            // Create a span for the mechanic's name
+                            const mechanicName = document.createElement('span');
+                            mechanicName.textContent = mechanic.text;
+        
+                            // Create a small "x" button
+                            const removeButton = document.createElement('button');
+                            removeButton.textContent = 'x';
+                            removeButton.style.marginLeft = '3px';
+                            removeButton.style.fontSize = '0.8em';
+                            removeButton.onclick = async () => {
+                                await removeMechanic(row.id, mechId);
+                            };
+        
+                            // Append the name and button to the container
+                            mechanicContainer.appendChild(mechanicName);
+                            mechanicContainer.appendChild(removeButton);
+        
+                            // Append the container to the cell
+                            cell.appendChild(mechanicContainer);
+                        }
+                    });
                 } else {
                     cell.textContent = "Not assigned";
                 }
-            } else if (column === "actions") {
-                const mechanicSelect = document.createElement('select');
-                mechanicSelect.innerHTML = `<option value="">Select Mechanic</option>`;
-    
-                mechanics.forEach(mechanic => {
-                    const option = document.createElement('option');
-                    option.value = mechanic.id;
-                    option.textContent = mechanic.name;
-                    mechanicSelect.appendChild(option);
-                });
+
+
                 
+
+
+
+
+            } else if (column === "actions") {
+                const mechanicSelect = this.mechanicSelect.cloneNode(true);
+                
+                // Initialize Select2 on the select element
+                
+                cell.appendChild(mechanicSelect);
+                $(mechanicSelect).select2({
+                    placeholder: 'Select Mechanic',
+                });
+
                 const assignButton = document.createElement('button');
+                assignButton.classList = "action-btn";
                 assignButton.textContent = "Assign";
+
                 assignButton.onclick = async () => {
-                    if (mechanicSelect.value) {
-                        await assignMechanic(row.id, mechanicSelect.value);
-                    } else {
-                        alert("Please select a mechanic.");
+                    const selectedMechanicsId = $(mechanicSelect).val();
+                    for (const selectedMechanicId of selectedMechanicsId) {
+                        if (selectedMechanicId) {
+                            await assignMechanic(row.id, selectedMechanicId);
+
+                        } else {
+                            alert("Please select a mechanic.");
+                        }
                     }
+
+                    this.filteredDataset.update()
+
                 };
+                
 
 
 
@@ -119,13 +193,13 @@ export class AdminOrderTable extends Table {
                 viewButton.onclick = async () => {
                     const iframe = parent.document.getElementById("view-order-iframe");
                     const scrollPosition = parent.window.pageYOffset || parent.document.documentElement.scrollTop || parent.document.body.scrollTop;
-
+                    
                     iframe.src = `../html/view_order.html?order=${row.id}&prevFrame=${window.frameElement.parentNode.id}&prevScroll=${scrollPosition}`;
                     parent.showIframe("iframe-container-view-order");
                 };
 
                 // Append elements to actions cell
-                cell.appendChild(mechanicSelect);
+                
                 cell.appendChild(assignButton);
                 cell.appendChild(viewButton);
             } else {
@@ -150,10 +224,12 @@ export class EmployeeOrderTable extends Table {
      * Createst an instance of Table.
      * @param {HTMLElement} table html element with tag "table".
      * @param {Array<String>} columns List of columns in the database to display. 
+     * @param {FilteredDataset} filteredDataset dataset the table is displaying
      *                                  In the order they should be displayed.
      */
-    constructor(table, columns) {
+    constructor(table, columns, filteredDataset) {
         super(table, columns);
+        this.filteredDataset = filteredDataset;
     }
 
 
@@ -164,7 +240,6 @@ export class EmployeeOrderTable extends Table {
      */
     async buildRow(row) {
         const rowElement = document.createElement('tr');
-        const mechanics = await loadMechanics();
         
         let i;
         for (i=0; i < this.columns.length; i++) {
@@ -173,7 +248,7 @@ export class EmployeeOrderTable extends Table {
 
             if (column === "mechanics") {
                 if (row[column] && row[column].length > 0) {
-                    const mechanic = mechanics.find(mech => mech.id === row[column][0]);
+                    const mechanic = users.find(mech => mech.id === row[column][0]);
                     cell.textContent = mechanic ? mechanic.name : "Not assigned";
                 } else {
                     cell.textContent = "Not assigned";
@@ -186,6 +261,7 @@ export class EmployeeOrderTable extends Table {
                     if (mechanicSelect.value) {
                         await assignMechanic(row.id, pb.authStore.model.id);
                     }
+                    this.filteredDataset.update();
                 };
 
                 // Append elements to actions cell
@@ -226,6 +302,11 @@ let filteredDataset = null;
 let filterElements = null;
 
 
+let users = null;
+
+let userOptions = null;
+
+
 
 document.addEventListener("DOMContentLoaded", async function() {
 
@@ -239,30 +320,35 @@ document.addEventListener("DOMContentLoaded", async function() {
     let defaultMechanic = {};
     let defaultStatus= {};
 
-    if (role == "admin") {
-        verify("admin")
-        table = new AdminOrderTable(tableElement, columns);
-        
-    }
-    else if (role == "mechanic" || role == "viewer") {
-        verify(["mechanic", "viewer"]);
-        table = new EmployeeOrderTable(tableElement, columns)
-    }
 
-
-
-    
-    
-
-    
     const users = await pb.collection('users').getFullList({
         fields: 'id, name'
     });
 
+    
     const userOptions = users.map(user => ({
         text: user.name,
         value: user.id
     }));
+
+
+    if (role == "admin") {
+        verify("admin")
+        table = new AdminOrderTable(tableElement, columns, userOptions, filteredDataset);
+        
+    }
+    else if (role == "mechanic" || role == "viewer") {
+        verify(["mechanic", "viewer"]);
+        table = new EmployeeOrderTable(tableElement, columns, filteredDataset)
+    }
+
+
+
+
+    
+
+    
+
 
     
     
@@ -277,6 +363,9 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (type == "in_progress") {
         defaultStatus = ["In Progress"];
     }
+
+
+
 
 
     
