@@ -92,8 +92,8 @@ export class AdminOrderTable extends Table {
         this.users.forEach(option => {
             const opt = document.createElement('option');
             opt.selected = false;
-            opt.text = option.text || option;
-            opt.value = option.value || option;
+            opt.text = option.name || option;
+            opt.value = option.id || option;
             this.mechanicSelect.appendChild(opt);
         });
 
