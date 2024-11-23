@@ -5,7 +5,7 @@ import { pb } from "../js/import_pb.js"
 
 
 
-function displayOrder(parent, order) {
+function displayOrderMechanic(parent, order) {
     parent.innerText = `Work Order #: ${order.work_order_number || 'N/A'}\n
     Unit #: ${order.unit_number || 'N/A'}\n
     Mechanic: ${order.expand?.mechanics?.map(m => m.name).join(', ') || 'Not assigned'}\n
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", async e => {
             top: 0,
         });
 
-        displayOrder(container, order);
+        displayOrderMechanic(container, order);
         
     }
     catch (error) {
@@ -53,4 +53,3 @@ backButton.addEventListener("click", e => {
         top: prevScrollPosition,
     });
 });
-
