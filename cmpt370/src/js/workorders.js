@@ -4,7 +4,7 @@ import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options'
 import $ from 'jquery';
 
 import { pb } from "../js/import_pb.js"
-import { verify } from './redirect.js';
+import { verify, getIframeContainerId, getParentScroll, switchToFrame } from './redirect.js';
 
 
 
@@ -199,11 +199,10 @@ export class AdminOrderTable extends Table {
                 viewButton.textContent = "View";
                 viewButton.classList = "action-btn";
                 viewButton.onclick = async () => {
-                    const iframe = parent.document.getElementById("view-order-iframe");
-                    const scrollPosition = parent.window.pageYOffset || parent.document.documentElement.scrollTop || parent.document.body.scrollTop;
-                    
-                    iframe.src = `../html/view_order.html?order=${row.id}&prevFrame=${window.frameElement.parentNode.id}&prevScroll=${scrollPosition}`;
-                    parent.showIframe("iframe-container-view-order");
+                    const scrollPosition = getParentScroll();
+                    const src = `../html/view_order.html?order=${row.id}&prevFrame=${getIframeContainerId()}&prevScroll=${scrollPosition}`;
+                    switchToFrame("view-order-iframe", "iframe-container-view-order", src);
+
                 };
 
                 // Append elements to actions cell

@@ -28,3 +28,33 @@ export async function verify(roles) {
         window.location.href = 'index.html';
     }
 }
+
+
+
+/**
+ * swiches the current shown frame
+ * @param {String} prevFrame The id of the container to the iframe to switch to
+ * @param {Number} prevScrollPosition The height to scroll to after switching to the frame
+*/
+export function returnToFrame(frameContainer, scrollPosition) {
+    parent.showIframe(frameContainer);
+    parent.window.scrollTo({
+        top: scrollPosition,
+    });
+}
+
+export function switchToFrame(frameId, frameContainer, frameSrc) {
+    const iframe = parent.document.getElementById(frameId);
+    
+    iframe.src = frameSrc;
+    parent.showIframe(frameContainer);
+}
+
+export function getParentScroll() {
+    return parent.window.pageYOffset || parent.document.documentElement.scrollTop || parent.document.body.scrollTop
+}
+
+
+export function getIframeContainerId() {
+    return window.frameElement.parentNode.id;
+}

@@ -4,6 +4,7 @@ import { WorkOrderServiceTypes, WorkOrderStatus } from '../js/pb_select_options'
 import $ from 'jquery';
 
 import { pb } from "../js/import_pb.js"
+import { switchToFrame, getParentScroll, getIframeContainerId } from './redirect.js';
 
 
 /**
@@ -45,10 +46,15 @@ export class EmployeeTable extends Table {
                 
             }
             else if (column == "actions") {
-                const removeButton = document.createElement('button');
-                removeButton.textContent = "Edit";
-                removeButton.classList = "action-btn";
-                cell.appendChild(removeButton);
+                const editButton = document.createElement('button');
+                editButton.textContent = "Edit";
+                editButton.classList = "action-btn";
+                editButton.onclick = async () => {
+                    const scrollPosition = getParentScroll();
+                    const src = `../html/edit_user.html?id=${row.id}&prevFrame=${getIframeContainerId()}&prevScroll=${scrollPosition}`;
+                    switchToFrame("edit-user-iframe", "iframe-container-edit-user", src);
+                };
+                cell.appendChild(editButton);
             }
             else {
                 cell.textContent = row[column];

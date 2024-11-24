@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Settings</title>
     <link rel="stylesheet" href="../css/create_user.css"> 
-    <script src="../js/create_user.js" type="module" defer></script>
+    <script src="../js/edit_user.js" type="module" defer></script>
 </head>
 <body>
 
     
     <div class="settings-container">
-        <h1 class="heading">New Employee</h1>
+        <h1 class="heading">Edit Employee</h1>
         <form id="settings-form">
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required><br><br>
@@ -20,7 +20,7 @@
             <input type="text" id="username" name="username" required><br><br>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br><br>
+            <input type="password" id="password" name="password"><br><br>
             
             <label>Role: </label>
             <select id="role-select">
@@ -29,7 +29,9 @@
                 <option value="admin">Admin</option>
             </select>
             <button type="submit">Done</button>
+            
         </form>
+        <button id="back-button">Back</button>
         <p id="result"></p>
 
     </div>

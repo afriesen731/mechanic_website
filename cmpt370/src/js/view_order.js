@@ -1,5 +1,5 @@
 import { pb } from "../js/import_pb.js" 
-
+import { returnToFrame } from "../js/redirect.js"
 
 
 
@@ -48,9 +48,6 @@ document.addEventListener("DOMContentLoaded", async e => {
 
 
 backButton.addEventListener("click", e => {
-    parent.showIframe(prevFrame);
-    parent.window.scrollTo({
-        top: prevScrollPosition,
-    });
+    returnToFrame(prevFrame, prevScrollPosition);
 });
 
