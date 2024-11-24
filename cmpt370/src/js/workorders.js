@@ -297,8 +297,13 @@ export class EmployeeOrderTable extends Table {
                         this.filteredDataset.update();
                     };
 
+
+
+
+
                     // Append elements to actions cell
                     cell.appendChild(leaveButton);
+
                 }
                 // add join button
                 else {
@@ -316,11 +321,29 @@ export class EmployeeOrderTable extends Table {
                     cell.appendChild(joinButton);
 
                 }
+                // View Button
+                const viewButton = document.createElement('button');
+                viewButton.textContent = "View";
+                viewButton.classList = "action-btn";
+                viewButton.onclick = async () => {
+                    const scrollPosition = getParentScroll();
+                    const src = `../html/view_order_m.html?order=${row.id}&prevFrame=${getIframeContainerId()}&prevScroll=${scrollPosition}`;
+                    switchToFrame("view-order-iframe", "iframe-container-view-order", src);
+
+                };
+                cell.appendChild(viewButton);
+
             } else {
                 // Default case for other columns
                 cell.textContent = row[column];
 
             }
+
+
+
+
+
+
 
             rowElement.appendChild(cell);
         }

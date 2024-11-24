@@ -1,17 +1,9 @@
-import { verify } from "../js/redirect.js"
-
+import { verify, showIframe } from "../js/redirect.js"
 
 
 // Allow function to be accessed by other Iframes
 window.showIframe = showIframe;
-// Function to show the Create Work Order iframe
-export function showIframe(frameId) {
-    const pages = document.querySelectorAll('.content-page'); // Select all content pages
-    pages.forEach(p => p.style.display = 'none'); // Hide all pages
-    
-    const iframe = document.getElementById(frameId); // Select the iframe
-    document.getElementById(frameId).style.display = 'block'; // Show the iframe container
-}
+
 // Default page for admin: Show In Progress Work Orders
 document.addEventListener('DOMContentLoaded', () => {
     showIframe('iframe-container-in-progress-orders');
@@ -46,7 +38,7 @@ document.getElementById('create-employee-link').addEventListener('click', () => 
 });
 
 document.getElementById('order-link').addEventListener('click', () => {
-    showIframe('iframe-container-order-table');
+    showIframe('iframe-container-in-progress-orders');
 });
 
 document.getElementById('create-work-order-link').addEventListener('click', () => {

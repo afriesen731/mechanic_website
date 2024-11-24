@@ -5,6 +5,12 @@ import {verify} from "../js/redirect.js"
 // Verify the users permissions
 verify(['mechanic', 'viewer']);
 
+
+
+
+// Allow function to be accessed by other Iframes
+window.showIframe = showIframe;
+
 updateIframes();
 
 

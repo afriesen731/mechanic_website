@@ -31,6 +31,18 @@ export async function verify(roles) {
 
 
 
+
+// Function to show the Create Work Order iframe
+export function showIframe(frameId) {
+    const pages = document.querySelectorAll('.content-page'); // Select all content pages
+    pages.forEach(p => p.style.display = 'none'); // Hide all pages
+    
+    const iframe = document.getElementById(frameId); // Select the iframe
+    document.getElementById(frameId).style.display = 'block'; // Show the iframe container
+}
+
+
+
 /**
  * swiches the current shown frame
  * @param {String} prevFrame The id of the container to the iframe to switch to
