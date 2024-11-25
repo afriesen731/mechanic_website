@@ -23,44 +23,11 @@
 
     <div class="main-content" id="main-content">
 
-        <div id="main-dashboard-page" class="content-page" style="display: block;">
-            <div class="welcome-container">
-                <h1>WELCOME BACK!</h1>
-            </div>
-        </div>
-
-        <div id="employee-page" class="content-page">
-            <div class="search-sort-container">
-                <input type="text" class="search-bar" placeholder="Search here..." id="search-bar">
-                <select class="sort-button" id="sort-select">
-                    <option value="">Sort By</option>
-                    <option value="asc">From A - Z</option>
-                    <option value="desc">From Z - A</option>
-                </select>
-            </div>
-            <div class="table-container">
-                <table id="employee-table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Employee ID</th>
-                            <th>Date Created</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="iframe-container-order-table" class="content-page" style="display: none;">
+        <div id="iframe-container-order-table" class="content-page">
             <iframe id="workorder-table-iframe" src="../html/workorders.html?role=mechanic&type=all"></iframe>
         </div>
 
-        <div id="iframe-container" class="content-page" style="display: none;">
-            <iframe id="workorder-iframe" src="../html/create_workorder.html"></iframe>
-        </div>
+
 
 
         <!-- Shows an individual work order -->

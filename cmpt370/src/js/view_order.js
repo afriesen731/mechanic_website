@@ -1,7 +1,6 @@
 import { pb } from "../js/import_pb.js" 
 import { returnToFrame } from "../js/redirect.js"
-
-
+import { downloadElement } from "./save_order.js";
 
 
 
@@ -39,7 +38,10 @@ document.addEventListener("DOMContentLoaded", async e => {
         });
 
         displayOrder(container, order);
-        
+        // Download/print order
+        document.getElementById('download-button').addEventListener('click', () => {
+            downloadElement(container, `order_${order.created}`);
+        });
     }
     catch (error) {
         container.innerHTML = error;

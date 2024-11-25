@@ -1,6 +1,5 @@
 import { pb } from "../js/import_pb.js" 
-
-
+import { downloadElement } from "../js/save_order.js"
 
 
 
@@ -39,6 +38,12 @@ document.addEventListener("DOMContentLoaded", async e => {
         });
 
         displayOrderMechanic(container, order);
+
+        // Download/print order
+        document.getElementById('download-button').addEventListener('click', () => {
+            downloadElement(container, `order_${order.created}`);
+        });
+
         
     }
     catch (error) {
@@ -53,3 +58,5 @@ backButton.addEventListener("click", e => {
         top: prevScrollPosition,
     });
 });
+
+

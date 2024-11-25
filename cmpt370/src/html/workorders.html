@@ -11,19 +11,29 @@
 
     <div id="order-page" class="content-page">
 
+        <h1>Filters</h1>
         <div id="filters">
+            <div>
+                <label>Mechanic: </label> 
+                <select id="employee-select" name="employee-select" multiple></select>    
+            </div>
 
-                
-            <select id="employee-select" name="employee-select" multiple></select>
             
             <div>
+                <label>Start Date:</label>
                 <input type="date" id="start-date">
                 -
                 <input type="date" id="end-date">
             </div>
-            <select id="status-select" name="status-select" multiple></select>
-            <select id="service-select" name="service-select" multiple></select>
-            
+
+            <div>
+                <label>Status: </label>
+                <select id="status-select" name="status-select" multiple></select>    
+            </div>
+            <div>
+                <label>Service Type: </label>
+                <select id="service-select" name="service-select" multiple></select>   
+            </div>            
         </div>
         <div class="table-container">
             <table id="table">
@@ -47,6 +57,8 @@
         <form id="page-select" action="javascript:void(0);"></form>
         <label>page size:</label>
         <select id="page-len-selector"></select>
+ 
+
     </div>
 
 </body>

@@ -17,14 +17,15 @@ updateIframes();
 
 // Add event listeners to elements
 document.getElementById('main-dashboard-link').addEventListener('click', () => {
-    showPage('main-dashboard');
+    showIframe('iframe-container-order-table');
 });
 
 document.getElementById('order-link').addEventListener('click', () => {
     showIframe('iframe-container-order-table');
 });
 
-
-document.getElementById('sort-select').addEventListener('change', (event) => {
-    sortEmployees(event.target.value);
+document.addEventListener('DOMContentLoaded', () => {
+    showIframe('iframe-container-order-table');
 });
+
+

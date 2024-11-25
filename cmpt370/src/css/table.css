@@ -35,6 +35,22 @@ th {
     font-weight: bold;
 }
 
+
+
+
+label {
+    font-size: 18px;
+    color: black;
+    font-weight: bold;
+
+}
+
+
+#filters div {
+    padding: 10px
+}
+
+
 /* Remove button in employee Styling */
 .action-btn {
     background-color: #007bff; /* Set button background color */

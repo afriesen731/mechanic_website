@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "dotenv": "^16.4.5",
+    "html2pdf.js": "^0.10.2",
     "jquery": "^3.7.1",
     "pagination-js": "^2.0.2",
     "pocketbase": "^0.21.5"
