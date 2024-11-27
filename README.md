@@ -87,15 +87,44 @@ Open your browser and navigate to the PocketBase admin dashboard to set up your 
 
 1. **Access the Admin Dashboard**: Go to [http://localhost:8090/_](http://localhost:8090/_).
 2. **Create an Admin Account**: Follow the prompts to create a new admin account.
-3. **Add an Admin User**:
-   - After logging in, navigate to the **Users** section.
-   - Add a new user and assign them the role of **Admin**.
-4. **Log In with New Admin User**: Use the credentials of the newly created admin user to log in to the dashboard.
 
-### 9. Access the Website
+### 9. Import Collections into PocketBase
+
+After creating your admin account, you'll need to import the database schema into PocketBase:
+
+1. **Go to Settings**: In the PocketBase admin dashboard, click on the **Settings** icon in the sidebar.
+2. **Import Collections**: Scroll down to the **Import Collections** section.
+3. **Load from JSON File**: Click on the **Load from JSON File** button.
+4. **Select `pb_schema.json`**:
+   - Navigate to the project directory where the `pb_schema.json` file is located.
+   - Select the `pb_schema.json` file.
+5. **Choose Import Options**:
+   - In the import dialog, select **Merge** to combine the imported collections with any existing ones.
+   - Review the changes to ensure they are correct.
+6. **Confirm Import**: Click on **Import** to apply the schema.
+
+### 10. Add an Admin User
+
+Now, add a new user with admin privileges:
+
+1. **Navigate to Users**: In the PocketBase admin dashboard, click on **Users** in the sidebar.
+2. **Add New User**: Click on the **+ New User** button.
+3. **Fill in User Details**: Provide the necessary details for the new user, such as email and password.
+4. **Assign Admin Role**: Set the user's role to **Admin**.
+5. **Save User**: Click **Create** to save the new admin user.
+
+### 11. Log In with the New Admin User
+
+Log out of the current admin account and log in using the credentials of the new admin user you just created.
+
+### 12. Access the Website
 
 Open your browser and go to the URL displayed by the development server (e.g., [http://localhost:5173](http://localhost:5173)) to use the website.
 
 ---
 
-**Note**: Ensure that both the PocketBase server and the development server are running simultaneously. If you encounter any issues, check the terminal outputs for error messages and verify that all steps were followed correctly.
+**Note**:
+
+- Ensure that both the PocketBase server and the development server are running simultaneously.
+- If you encounter any issues, check the terminal outputs for error messages and verify that all steps were followed correctly.
+- The `pb_schema.json` file contains the database schema required for the project. Importing it ensures that all necessary collections and fields are set up correctly in PocketBase.
