@@ -4,7 +4,7 @@ This guide will help you set up the website on your local machine.
 
 ## Prerequisites
 
-1. **Docker** - Ensure Docker is installed and running on your computer. [Download Docker](https://www.docker.com/products/docker-desktop)
+1. **Docker** - Ensure Docker is installed and running on your computer. [Download Docker](https://docs.docker.com/engine/install/)
 2. **Node.js** - Install Node.js, which includes npm. [Download Node.js](https://nodejs.org/en/download/)
 
 ## Setup Steps
