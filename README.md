@@ -17,7 +17,52 @@ Open your terminal and run the following command to create a Docker volume named
 docker volume create pocketbase
 ```
 
-### 2. Create a Docker Network
+### 2. Inspect the Volume
+
+You can inspect the volume to find its mount point on your system:
+
+```sh
+docker volume inspect pocketbase
+```
+
+This will output information similar to:
+
+```json
+[
+    {
+        "CreatedAt": "2024-11-28T10:07:16-06:00",
+        "Driver": "local",
+        "Labels": null,
+        "Mountpoint": "/var/lib/docker/volumes/pocketbase/_data",
+        "Name": "pocketbase",
+        "Options": null,
+        "Scope": "local"
+    }
+]
+```
+
+Note the `Mountpoint` path (`/var/lib/docker/volumes/pocketbase/_data`), which we'll use in the next steps.
+
+### 3. Set Permissions for the PocketBase Volume
+
+Before running the PocketBase container, set the appropriate permissions on the volume's mount point to ensure that the container can read and write data correctly.
+
+#### Steps:
+
+1. **Change Permissions**: Set the directory permissions to `775`:
+
+   ```sh
+   sudo chmod -R 775 /var/lib/docker/volumes/pocketbase/_data
+   ```
+
+2. **Change Ownership**: Change the owner and group to `1001` (the default user ID in the PocketBase Docker image):
+
+   ```sh
+   sudo chown -R 1001:1001 /var/lib/docker/volumes/pocketbase/_data
+   ```
+
+
+### 4. Create a Docker Network
 
 Create a Docker network named `pocketbase_network`:
 
@@ -25,7 +70,7 @@ Create a Docker network named `pocketbase_network`:
 docker network create pocketbase_network
 ```
 
-### 3. Run PocketBase
+### 5. Run PocketBase
 
 Run the PocketBase Docker container with the following command:
 
@@ -44,9 +89,11 @@ This command does the following:
 - **Maps** port `8090` of the container to port `8090` on your local machine (`-p 8090:8090`).
 - **Sets** an environment variable `USER_DEFINED_KEY` to `custom_value`.
 - **Connects** the container to the `pocketbase_network`.
-- **Mounts** the Docker volume `pocketbase` to the container's `/pocketbase` directory.
+- **Mounts** the Docker volume's data directory to the container's `/pocketbase` directory.
 
-### 4. Clone the Repository
+> **Important**: Ensure that the volume path in the `--volume` flag matches the `Mountpoint` from the `docker volume inspect pocketbase` command.
+
+### 6. Clone the Repository
 
 Clone the project repository from GitLab and navigate to the project directory:
 
@@ -55,7 +102,7 @@ git clone https://git.cs.usask.ca/dal165/cmpt370-team11.git
 cd cmpt370-team11/cmpt370/
 ```
 
-### 5. Install Dependencies
+### 7. Install Dependencies
 
 Install the required Node.js packages:
 
@@ -63,15 +110,15 @@ Install the required Node.js packages:
 npm install
 ```
 
-### 6. Update Environment Variables
+### 8. Update Environment Variables
 
 Edit the `.env` file in the project root directory. Set the `VITE_DATABASE_URL` to point to your local PocketBase instance:
 
 ```env
-VITE_DATABASE_URL=http://localhost:8090
+VITE_DATABASE_URL="http://localhost:8090"
 ```
 
-### 7. Run the Development Server
+### 9. Run the Development Server
 
 Start the development server:
 
@@ -81,14 +128,14 @@ npm run dev
 
 The terminal will display a local URL (e.g., `http://localhost:5173`) where you can access the website.
 
-### 8. Set Up PocketBase Admin Account
+### 10. Set Up PocketBase Admin Account
 
 Open your browser and navigate to the PocketBase admin dashboard to set up your admin account:
 
 1. **Access the Admin Dashboard**: Go to [http://localhost:8090/_](http://localhost:8090/_).
 2. **Create an Admin Account**: Follow the prompts to create a new admin account.
 
-### 9. Import Collections into PocketBase
+### 11. Import Collections into PocketBase
 
 After creating your admin account, you'll need to import the database schema into PocketBase:
 
@@ -102,7 +149,7 @@ After creating your admin account, you'll need to import the database schema int
    - In the import dialog, select **Merge** to combine the imported collections with any existing ones.
 6. **Confirm Import**: Click on **Import** to apply the schema.
 
-### 10. Add an Admin User
+### 12. Add an Admin User
 
 Now, add a new user with admin privileges:
 
@@ -112,6 +159,6 @@ Now, add a new user with admin privileges:
 4. **Assign Admin Role**: Set the user's role to **Admin**.
 5. **Save User**: Click **Create** to save the new admin user.
 
-### 11. Access the Website
+### 13. Access the Website
 
 Open your browser and go to the URL displayed by the npm development server (e.g., [http://localhost:5173](http://localhost:5173)) to use the website.
