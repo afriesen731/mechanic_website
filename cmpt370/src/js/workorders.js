@@ -436,6 +436,10 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (type == "in_progress") {
         defaultStatus = ["In Progress"];
     }
+    else if (type == "mechanic") {
+        defaultMechanic = [pb.authStore.model.id];
+        defaultStatus = ["In Progress"];
+    }
 
 
 

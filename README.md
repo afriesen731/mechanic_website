@@ -115,3 +115,91 @@ Now, add a new user with admin privileges:
 ### 11. Access the Website
 
 Open your browser and go to the URL displayed by the npm development server (e.g., [http://localhost:5173](http://localhost:5173)) to use the website.
+
+
+----
+
+# How to Use the Program
+
+This guide provides step-by-step instructions on how to use the program for both **Admin** and **Mechanic** roles. The program is designed to manage work orders efficiently, allowing users to create, assign, and track orders with ease.
+
+--
+
+## Admin
+
+### Order Page
+
+- **Viewing Orders**:
+  - Access the **Orders** table to view all work orders.
+  - The table displays comprehensive information about each work order.
+
+- **Filtering Orders**:
+  - Use any combination of filter values to refine the list of displayed orders.
+  - By default, only orders that are **In Progress** are shown.
+
+- **Assigning Mechanics to Orders**:
+  - In the **Actions** column, use the **Select Mechanic** field to search for mechanics.
+  - Select a mechanic to assign to the order.
+  - Click the **Assign** button to assign the selected mechanic.
+
+- **Managing Assigned Mechanics**:
+  - In the **Mechanics** column, view the list of mechanics assigned to each order.
+  - Click the **X** button next to a mechanic's name to unassign them from the work order.
+
+- **Viewing and Editing Orders**:
+  - Click the **View** button in the **Actions** column to access detailed information about a work order.
+    - Modify the form fields as needed.
+    - Click **Submit** to save changes.
+    - Click the **Download** button to download a PDF of the work order.
+    - Click the **Back** button to return to the orders table.
+
+### Employee Management
+
+#### Employee Page
+
+- **Searching for Employees**:
+  - Enter the employee's name in the search bar.
+  - Click the **Search** button to locate the employee.
+
+- **Editing Employee Information**:
+  - In the **Actions** column of the employee table, click **Edit**.
+  - Modify the employee's data in the edit form.
+    - **Note**: Leave the **Password** field empty if you do not wish to change it.
+  - Click **Submit** to update the employee's information.
+
+#### Create Employee Page
+
+- **Creating a New Employee**:
+  - Fill in the required form fields with the new employee's information.
+  - Click the **Done** button to create the employee profile.
+
+### Creating Work Orders
+
+- **Create Work Order Page**:
+  - Fill in the relevant fields for the new work order.
+  - Click the **Submit Work Order** button to create the work order.
+
+---
+
+## Mechanic
+
+### Order Page
+
+- **Viewing Orders**:
+  - Access the **Orders** table to view work orders assigned to you.
+  - The table displays key information about each work order.
+
+- **Filtering Orders**:
+  - Use any combination of filter values to refine the list of displayed orders.
+  - By default, only orders assigned to you are shown.
+
+- **Joining or Leaving Orders**:
+  - In the **Actions** column, click the **Join** button to assign yourself to an order.
+  - Click the **Leave** button to unassign yourself from an order.
+
+- **Viewing and Editing Orders**:
+  - Click the **View** button in the **Actions** column to access detailed information about a work order.
+    - Modify the form fields as necessary.
+    - Click **Submit** to save changes.
+    - Click the **Download** button to download a PDF of the work order.
+    - Click the **Back** button to return to the orders table.
