@@ -732,6 +732,11 @@ export class FilterElements {
             }
             filterElements.filteredDataset.update();
         });
+
+        let filter = filterElements.filteredDataset.getFilter(field, FilterType);
+        filter.set = defaultVal;
+        filterElements.filteredDataset.update();
+
     }
 
     /**
