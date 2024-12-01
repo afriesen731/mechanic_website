@@ -6,7 +6,6 @@ const prevScrollPosition = new URLSearchParams(window.location.search).get("prev
 
 const backButton = document.getElementById("back-button");
 const jobList = document.getElementById("job-list");
-const workorderInfo = document.getElementById("workorder-info");
 const stopJobModal = document.getElementById("stop-job-modal");
 const commentInput = document.getElementById("comment");
 const partsUsedInput = document.getElementById("parts-used");
@@ -21,42 +20,42 @@ let selectedJobId = null; // To track the job being stopped
  */
 async function fetchWorkOrderDetails() {
     try {
-        const workOrder = await pb.collection("work_orders").getOne(workorderId, {
-            expand: "jobs",
-        });
+        const workOrder = await pb.collection("work_orders").getOne(workorderId);
 
-        document.getElementById("workorder-id").textContent = workOrder.id;
-        document.getElementById("workorder-status").textContent = workOrder.status;
+        document.getElementById("workorder-id").textContent = workOrder.work_order_number || "N/A";
+        document.getElementById("workorder-status").textContent = workOrder.status || "Unknown";
 
-        displayJobs(workOrder.jobs);
+        displayJobs(workOrder.jobs || []);
     } catch (error) {
         console.error("Error fetching work order details:", error);
         alert("Failed to fetch work order details. Please try again.");
     }
 }
 
+
 /**
  * Displays the list of jobs for the work order.
- * @param {Array} jobs - List of jobs associated with the work order.
+ * @param {Array} jobs - List of jobs (JSON objects) associated with the work order.
  */
 function displayJobs(jobs) {
     jobList.innerHTML = ""; // Clear existing jobs
 
-    jobs.forEach((job) => {
+    jobs.forEach((job, index) => {
         const jobItem = document.createElement("li");
         jobItem.className = "job-item";
-        jobItem.dataset.jobId = job.id;
+        jobItem.dataset.jobId = index; // Use index if no unique ID
 
         const jobTitle = document.createElement("div");
-        jobTitle.textContent = `${job.title} (Status: ${job.status})`;
+        jobTitle.textContent = `${job.description || "Untitled Job"} (Status: ${job.status || "Unknown"})`;
         jobItem.appendChild(jobTitle);
 
         const timer = document.createElement("span");
         timer.className = "job-timer";
-        timer.textContent = formatTime(job.timeSpent || 0);
+        timer.textContent = formatTime(job.hours || 0);
+        timer.setAttribute("data-time", job.hours || 0);
         jobItem.appendChild(timer);
 
-        const actions = createJobActions(job);
+        const actions = createJobActions(index, job.status || "Pending");
         jobItem.appendChild(actions);
 
         jobList.appendChild(jobItem);
@@ -65,36 +64,37 @@ function displayJobs(jobs) {
 
 /**
  * Creates action buttons for a job.
- * @param {Object} job - The job object.
+ * @param {Number} jobIndex - The index of the job in the jobs array.
+ * @param {String} status - The current status of the job.
  * @returns {HTMLElement} - A container with action buttons.
  */
-function createJobActions(job) {
+function createJobActions(jobIndex, status) {
     const actionContainer = document.createElement("div");
     actionContainer.className = "job-actions";
 
-    if (job.status === "Pending" || job.status === "Paused") {
+    if (status === "Pending" || status === "Paused") {
         const startButton = document.createElement("button");
         startButton.textContent = "Start";
-        startButton.onclick = () => startJob(job.id);
+        startButton.onclick = () => startJob(jobIndex);
         actionContainer.appendChild(startButton);
     }
 
-    if (job.status === "In Progress") {
+    if (status === "In Progress") {
         const pauseButton = document.createElement("button");
         pauseButton.textContent = "Pause";
-        pauseButton.onclick = () => pauseJob(job.id);
+        pauseButton.onclick = () => pauseJob(jobIndex);
         actionContainer.appendChild(pauseButton);
 
         const stopButton = document.createElement("button");
         stopButton.textContent = "Stop";
-        stopButton.onclick = () => showStopJobModal(job.id);
+        stopButton.onclick = () => showStopJobModal(jobIndex);
         actionContainer.appendChild(stopButton);
     }
 
-    if (job.status === "Paused") {
+    if (status === "Paused") {
         const resumeButton = document.createElement("button");
         resumeButton.textContent = "Resume";
-        resumeButton.onclick = () => resumeJob(job.id);
+        resumeButton.onclick = () => resumeJob(jobIndex);
         actionContainer.appendChild(resumeButton);
     }
 
