@@ -118,29 +118,70 @@ async function startJob(jobIndex) {
 
 /**
  * Pauses a job and stops its timer.
- * @param {String} jobId - The ID of the job to pause.
+ * @param {Number} jobIndex - The index of the job in the jobs array.
  */
-async function pauseJob(jobId) {
+async function pauseJob(jobIndex) {
     try {
-        await updateJobStatus(jobId, "Paused");
-        clearInterval(activeTimers[jobId]);
-        delete activeTimers[jobId];
-        fetchWorkOrderDetails();
+        // Fetch the current work order
+        const workOrder = await pb.collection("work_orders").getOne(workorderId);
+
+        if (workOrder.jobs && workOrder.jobs[jobIndex]) {
+            const job = workOrder.jobs[jobIndex];
+            const jobItem = document.querySelector(`li[data-job-id="${jobIndex}"]`);
+            const timer = jobItem.querySelector(".job-timer");
+
+            // Save the current timer value into the job's "hours" attribute
+            const elapsedSeconds = parseInt(timer.getAttribute("data-time"), 10) || 0;
+            job.hours = elapsedSeconds; // Update hours in the JSON
+
+            // Update the job's status to "Paused"
+            job.status = "Paused";
+
+            // Save the updated job data to PocketBase
+            await pb.collection("work_orders").update(workorderId, {
+                jobs: workOrder.jobs,
+            });
+
+            // Stop the timer
+            clearInterval(activeTimers[jobIndex]);
+            delete activeTimers[jobIndex];
+
+            console.log(`Job ${jobIndex} paused with ${elapsedSeconds} seconds.`);
+            fetchWorkOrderDetails();
+        } else {
+            console.error(`Job at index ${jobIndex} not found.`);
+        }
     } catch (error) {
         console.error("Error pausing job:", error);
         alert("Failed to pause the job. Please try again.");
     }
 }
 
-/**
- * Resumes a paused job and restarts its timer.
- * @param {String} jobId - The ID of the job to resume.
- */
-async function resumeJob(jobId) {
+async function resumeJob(jobIndex) {
     try {
-        await updateJobStatus(jobId, "In Progress");
-        activeTimers[jobId] = setInterval(() => updateTimer(jobId), 1000);
-        fetchWorkOrderDetails();
+        // Fetch the current work order
+        const workOrder = await pb.collection("work_orders").getOne(workorderId);
+
+        if (workOrder.jobs && workOrder.jobs[jobIndex]) {
+            const job = workOrder.jobs[jobIndex];
+            const savedSeconds = job.hours || 0; // Get saved hours or default to 0
+
+            // Update the job's status to "In Progress"
+            job.status = "In Progress";
+
+            // Save the updated job data to PocketBase
+            await pb.collection("work_orders").update(workorderId, {
+                jobs: workOrder.jobs,
+            });
+
+            // Start the timer from the saved value
+            activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex, savedSeconds), 1000);
+
+            console.log(`Job ${jobIndex} resumed.`);
+            fetchWorkOrderDetails();
+        } else {
+            console.error(`Job at index ${jobIndex} not found.`);
+        }
     } catch (error) {
         console.error("Error resuming job:", error);
         alert("Failed to resume the job. Please try again.");
@@ -248,21 +289,25 @@ async function updateJobStatus(jobIndex, status) {
  * Updates the timer display for a job.
  * @param {String} jobId - The ID of the job.
  */
-function updateTimer(jobId) {
-    const jobItem = document.querySelector(`li[data-job-id="${jobId}"]`);
-    const timer = jobItem.querySelector(".job-timer");
-
-    // Stop updating timer if job is no longer "In Progress"
-    const jobStatus = jobItem.querySelector(".job-title").textContent.includes("Completed");
-    if (jobStatus) {
-        clearInterval(activeTimers[jobId]);
-        delete activeTimers[jobId];
+function updateTimer(jobIndex, savedSeconds = 0) {
+    const jobItem = document.querySelector(`li[data-job-id="${jobIndex}"]`);
+    if (!jobItem) {
+        console.error(`Job item with ID ${jobIndex} not found.`);
         return;
     }
 
-    const time = parseInt(timer.getAttribute("data-time"), 10) || 0;
-    timer.textContent = formatTime(time + 1);
-    timer.setAttribute("data-time", time + 1);
+    const timer = jobItem.querySelector(".job-timer");
+    if (!timer) {
+        console.error(`Timer element for job ID ${jobIndex} not found.`);
+        return;
+    }
+
+    let time = parseInt(timer.getAttribute("data-time"), 10) || savedSeconds;
+
+    // Increment and display the time
+    time += 1;
+    timer.textContent = formatTime(time);
+    timer.setAttribute("data-time", time);
 }
 
 /**
