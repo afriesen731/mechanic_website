@@ -4,23 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mechanic Dashboard</title>
-
-    <!-- External JavaScript file -->
-    <script src="../js/app.js"></script>
+    <link rel="stylesheet" href="../css/mechanic.css">
+    <script src="../js/mechanic.js" type="module" defer></script>
 </head>
 <body>
-    <!-- Main header for the mechanic dashboard -->
-    <h1>Mechanic Dashboard</h1>
+    <div class="top-bar">
+        <div class="logo">
+            <a href="javascript:void(0);" id="main-dashboard-link">
+                <img src="../images/FINAL_logo.png" alt="Logo" class="logo">
+            </a>
+        </div>
 
-    <!-- Input section for mechanic to enter work order number -->
-    <div id="work-order-input">
-        <input type="text" id="workOrderNumber" placeholder="Enter Work Order Number">
-        <button onclick="loadWorkOrder()">Load Work Order</button>
+        <div class="menu">
+            <a href="javascript:void(0);" id="my-workorders-link">My Work-Orders</a>
+        </div>
     </div>
 
-    <!-- Placeholder to display the list of faults and control buttons (start/stop) for each fault -->
-    <div id="faults-list"></div>
-
-
+    <div class="main-content" id="main-content">
+        <!-- Container for the work orders table -->
+        <div id="iframe-container-my-workorders" class="content-page">
+            <iframe id="workorders-iframe" src=""></iframe> 
+        </div>
+    </div>
 </body>
 </html>
