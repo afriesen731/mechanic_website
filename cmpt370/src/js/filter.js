@@ -532,7 +532,12 @@ export class FilteredDataset {
             this.notifyObservers();
         } 
         catch (error) {
-            console.error('Error fetching work orders:', error);
+            if (error.name === "AbortError" || error.message.includes("autocancelled")) {
+                console.warn("Request auto-cancelled. This is expected behavior:", error);
+            } else {
+                // Log other errors as usual
+                console.error("Error fetching work orders:", error);
+            }
         }
 
         

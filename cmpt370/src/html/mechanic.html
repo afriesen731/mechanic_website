@@ -23,8 +23,31 @@
     <div class="main-content" id="main-content">
         <!-- Container for the work orders table -->
         <div id="iframe-container-my-workorders" class="content-page">
-            <iframe id="workorders-iframe" src=""></iframe> 
+            <iframe id="workorders-iframe" src="../html/workorders.html?role=mechanic&type=in_progress"></iframe>
+        </div>
+
+        <!-- Container for detailed work order view -->
+        <div id="iframe-container-workorder-details" class="content-page" style="display: none;">
+            <iframe id="workorder-details-iframe" src=""></iframe>
         </div>
     </div>
+
+    <!-- Script to expose the showIframe function to parent -->
+    <script>
+        function showIframe(frameId) {
+            const contentPages = document.querySelectorAll('.content-page');
+            contentPages.forEach(page => page.style.display = 'none');
+
+            const targetFrame = document.getElementById(frameId) || document.getElementById('iframe-container-my-workorders');
+            if (targetFrame) {
+                targetFrame.style.display = 'block';
+            } else {
+                console.error(`Iframe with ID ${frameId} not found.`);
+            }
+        }
+
+        // Attach showIframe to the window object so it can be called by parent scripts
+        window.showIframe = showIframe;
+    </script>
 </body>
 </html>

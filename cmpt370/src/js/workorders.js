@@ -327,9 +327,19 @@ export class EmployeeOrderTable extends Table {
                 viewButton.classList = "action-btn";
                 viewButton.onclick = async () => {
                     const scrollPosition = getParentScroll();
-                    const src = `../html/view_order_m.html?order=${row.id}&prevFrame=${getIframeContainerId()}&prevScroll=${scrollPosition}`;
-                    switchToFrame("view-order-iframe", "iframe-container-view-order", src);
-
+                    const role = new URLSearchParams(window.location.search).get("role"); // Get role from URL
+                    if (role === "mechanic") {
+                        // Mechanic-specific behavior
+                        const src = `../html/workorder_details.html?order=${row.id}`;
+                        switchToFrame("workorder-details-iframe", "iframe-container-workorder-details", src);
+                    } else if (role === "viewer") {
+                        // Viewer-specific behavior
+                        const src = `../html/view_order_m.html?order=${row.id}&prevFrame=${getIframeContainerId()}&prevScroll=${scrollPosition}`;
+                        switchToFrame("view-order-iframe", "iframe-container-view-order", src);
+                    } else {
+                        console.error("Unknown role: ", role);
+                        alert("Invalid role detected. Please contact support.");
+                    }
                 };
                 cell.appendChild(viewButton);
 

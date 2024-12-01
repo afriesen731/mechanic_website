@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Work Order Details</title>
+    <link rel="stylesheet" href="../css/workorder_details.css">
+    <script src="../js/workorder_details.js" type="module" defer></script>
+</head>
+<body>
+    <div class="top-bar">
+        <h1>Work Order Details</h1>
+        <button id="back-button">Back</button>
+    </div>
+
+    <div id="workorder-info">
+        <h2>Work Order #<span id="workorder-id"></span></h2>
+        <p>Status: <span id="workorder-status"></span></p>
+    </div>
+
+    <div id="jobs-container">
+        <h3>Jobs</h3>
+        <ul id="job-list">
+            <!-- Jobs will be dynamically populated -->
+        </ul>
+    </div>
+
+    <!-- Modal for stopping a job -->
+    <div id="stop-job-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h2>Complete Job</h2>
+            <label for="comment">Comment (required):</label>
+            <textarea id="comment" placeholder="Describe what was done"></textarea>
+            <label for="parts-used">Parts Used (optional):</label>
+            <textarea id="parts-used" placeholder="List parts used"></textarea>
+            <button id="confirm-stop-button">Submit</button>
+            <button id="cancel-stop-button">Cancel</button>
+        </div>
+    </div>
+</body>
+</html>

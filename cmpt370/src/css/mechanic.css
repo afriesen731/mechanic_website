@@ -88,17 +88,20 @@ body {
 }
 
 /* Iframe container */
-#iframe-container-my-workorders {
+#iframe-container-my-workorders,
+#iframe-container-workorder-details {
     width: 100%; /* Full width */
     height: 100%; /* Full height */
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 10px;
+    padding: 0;
     box-sizing: border-box;
 }
 
-#iframe-container-my-workorders iframe {
+/* Iframe styling */
+#iframe-container-my-workorders iframe,
+#iframe-container-workorder-details iframe {
     width: 100%;
     height: 100%;
     border: none;
