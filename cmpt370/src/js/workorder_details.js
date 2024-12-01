@@ -103,13 +103,13 @@ function createJobActions(jobIndex, status) {
 
 /**
  * Starts a job and begins its timer.
- * @param {String} jobId - The ID of the job to start.
+ * @param {Number} jobIndex - The index of the job to start.
  */
-async function startJob(jobId) {
+async function startJob(jobIndex) {
     try {
-        await updateJobStatus(jobId, "In Progress");
-        activeTimers[jobId] = setInterval(() => updateTimer(jobId), 1000);
-        fetchWorkOrderDetails();
+        await updateJobStatus(jobIndex, "In Progress");
+        activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex), 1000);
+        fetchWorkOrderDetails(); // Refresh the work order details
     } catch (error) {
         console.error("Error starting job:", error);
         alert("Failed to start the job. Please try again.");
@@ -169,17 +169,37 @@ async function handleStopJob() {
     }
 
     try {
-        const payload = {
-            status: "Completed",
-            comment,
-            partsUsed,
-        };
+        // Fetch the current work order
+        const workOrder = await pb.collection("work_orders").getOne(workorderId);
 
-        await pb.collection("jobs").update(selectedJobId, payload);
-        clearInterval(activeTimers[selectedJobId]);
-        delete activeTimers[selectedJobId];
-        stopJobModal.style.display = "none";
-        fetchWorkOrderDetails();
+        // Update the job's status and add the comment/partsUsed
+        const jobIndex = workOrder.jobs.findIndex(job => job.jobNumber === selectedJobId);
+        if (jobIndex !== -1) {
+            workOrder.jobs[jobIndex].status = "Completed";
+            workOrder.jobs[jobIndex].comment = comment;
+            workOrder.jobs[jobIndex].partsUsed = partsUsed;
+
+            // Update the work order with the modified jobs array
+            await pb.collection("work_orders").update(workorderId, {
+                jobs: workOrder.jobs,
+            });
+
+            // Stop the timer for the completed job
+            if (activeTimers[selectedJobId]) {
+                clearInterval(activeTimers[selectedJobId]);
+                delete activeTimers[selectedJobId];
+            }
+
+            // Clear modal inputs and close the modal
+            commentInput.value = "";
+            partsUsedInput.value = "";
+            stopJobModal.style.display = "none";
+
+            // Refresh work order details
+            fetchWorkOrderDetails();
+        } else {
+            console.error(`Job with ID ${selectedJobId} not found.`);
+        }
     } catch (error) {
         console.error("Error stopping job:", error);
         alert("Failed to stop the job. Please try again.");
@@ -196,12 +216,32 @@ function cancelStopJob() {
 }
 
 /**
- * Updates a job's status.
- * @param {String} jobId - The ID of the job to update.
+ * Updates the status of a job in the work order's jobs array.
+ * @param {Number} jobIndex - The index of the job in the jobs array.
  * @param {String} status - The new status of the job.
  */
-async function updateJobStatus(jobId, status) {
-    await pb.collection("jobs").update(jobId, { status });
+async function updateJobStatus(jobIndex, status) {
+    try {
+        // Fetch the current work order
+        const workOrder = await pb.collection("work_orders").getOne(workorderId);
+
+        // Update the job's status
+        if (workOrder.jobs && workOrder.jobs[jobIndex]) {
+            workOrder.jobs[jobIndex].status = status;
+
+            // Update the work order with the modified jobs array
+            await pb.collection("work_orders").update(workorderId, {
+                jobs: workOrder.jobs,
+            });
+
+            console.log(`Job ${jobIndex} updated to status: ${status}`);
+        } else {
+            console.error(`Job at index ${jobIndex} not found.`);
+        }
+    } catch (error) {
+        console.error("Error updating job status:", error);
+        throw error;
+    }
 }
 
 /**
@@ -211,6 +251,14 @@ async function updateJobStatus(jobId, status) {
 function updateTimer(jobId) {
     const jobItem = document.querySelector(`li[data-job-id="${jobId}"]`);
     const timer = jobItem.querySelector(".job-timer");
+
+    // Stop updating timer if job is no longer "In Progress"
+    const jobStatus = jobItem.querySelector(".job-title").textContent.includes("Completed");
+    if (jobStatus) {
+        clearInterval(activeTimers[jobId]);
+        delete activeTimers[jobId];
+        return;
+    }
 
     const time = parseInt(timer.getAttribute("data-time"), 10) || 0;
     timer.textContent = formatTime(time + 1);
@@ -241,7 +289,7 @@ backButton.addEventListener("click", () => {
 // Event listeners for modals
 confirmStopButton.addEventListener("click", () => {
     console.log("Submit clicked");
-    // Add logic for stopping a job here
+    confirmStopButton.addEventListener("click", handleStopJob);
 });
 
 cancelStopButton.addEventListener("click", () => {
