@@ -405,14 +405,26 @@ document.addEventListener("DOMContentLoaded", async function() {
     }));
 
 
-    if (role == "admin") {
-        verify("admin")
+    if (role === "admin") {
+        verify("admin");
         table = new AdminOrderTable(tableElement, columns, users, filteredDataset);
-        
-    }
-    else if (role == "mechanic" || role == "viewer") {
-        verify(["mechanic", "viewer"]);
-        table = new EmployeeOrderTable(tableElement, columns, users, filteredDataset)
+
+        defaultMechanic = [];
+        defaultStatus = [];
+    } else if (role === "mechanic") {
+        verify("mechanic");
+        table = new EmployeeOrderTable(tableElement, columns, users, filteredDataset);
+    
+        // Set defaults specific to mechanics
+        defaultMechanic = [pb.authStore.model.id];
+        defaultStatus = ["In Progress"];
+    } else if (role === "viewer") {
+        verify("viewer");
+        table = new EmployeeOrderTable(tableElement, columns, users, filteredDataset);
+    
+        // Set defaults specific to viewers
+        defaultMechanic = [];
+        defaultStatus = ["Completed"];
     }
 
 
@@ -433,10 +445,12 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 
     // set default values for select2
-    if (type == "in_progress") {
+    if (role === "viewer") {
+        defaultMechanic = []; // No default mechanic for viewers
+        defaultStatus = [];   // No default status filter for viewers
+    } else if (type === "in_progress") {
         defaultStatus = ["In Progress"];
-    }
-    else if (type == "mechanic") {
+    } else if (type === "mechanic") {
         defaultMechanic = [pb.authStore.model.id];
         defaultStatus = ["In Progress"];
     }
@@ -446,33 +460,39 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 
     
+    if (role === "viewer") {
+        // Set empty defaults for viewers
+        defaultMechanic = [];
+        defaultStatus = [];
+    }
+    
+    // Initialize filters based on role
     filterElements.initSelect2Filter(
                                         employeeSelect, 'mechanics', 
                                         userOptions, 'Select Mechanics', 
                                         HasAnyFilter, defaultMechanic
                                     );
     filterElements.initSelect2Filter(
-                                    statusSelect, 'status', 
-                                    WorkOrderStatus, 'Select Order Status', 
-                                    SetFilter, defaultStatus
-                                );
-
+                                        statusSelect, 'status', 
+                                        WorkOrderStatus, 'Select Order Status', 
+                                        SetFilter, defaultStatus
+                                    );
     filterElements.initSelect2Filter(
                                         serviceSelect, 'type_of_service', 
                                         WorkOrderServiceTypes, 'Select Service Types', 
                                         HasAnyFilter
                                     );
+    
+
 
 
     filterElements.initPageLenSelect(pageLenSelector)
 
-    
-    filteredDataset.update();
-
     // impliment pagination
     filterElements.initPagination(pageSelect);
     
-    
+    // Update the dataset with the applied filters
+    filteredDataset.update();
     
 
 });

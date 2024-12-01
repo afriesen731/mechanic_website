@@ -27,6 +27,11 @@ document.addEventListener("DOMContentLoaded", async e => {
             top: 0,
         });
 
+        // Use the updated displayOrder to show all fields
+        const orderDetails = displayOrder(order);
+        container.innerHTML = '';
+        container.appendChild(orderDetails);
+
         // Download/print order
         document.getElementById('download-button').addEventListener('click', () => {
             downloadElement(displayOrder(order), `order_${order.created}`);
@@ -38,8 +43,9 @@ document.addEventListener("DOMContentLoaded", async e => {
 });
 
 
-backButton.addEventListener("click", e => {
-    returnToFrame(prevFrame, prevScrollPosition);
+backButton.addEventListener("click", () => {
+    parent.showIframe(prevFrame);
+    parent.window.scrollTo({ top: prevScrollPosition });
 });
 
 

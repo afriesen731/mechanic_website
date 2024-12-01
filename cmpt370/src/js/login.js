@@ -22,12 +22,13 @@ document.addEventListener('DOMContentLoaded', function(){
             if (authData.record.role === 'admin') {
                 window.location.href = 'admin.html';
             } else if (authData.record.role === 'mechanic') {
-                window.location.href = 'viewer.html';
+                window.location.href = 'mechanic.html';
             } else if (authData.record.role === 'viewer') {
                 window.location.href = 'viewer.html';
             }
             console.log(authData);
         } catch (error) {
+            console.error("Login failed:", error);
             document.getElementById('login-status').innerText = 'Login failed. Please try again.';
         }
     }
