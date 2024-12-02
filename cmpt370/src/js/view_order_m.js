@@ -1,6 +1,6 @@
 import { pb } from "../js/import_pb.js" 
 import { downloadElement, displayOrder } from "../js/save_order.js"
-
+import { detectSize, navigateBack } from "../js/display_iframe.js"
 
 
 const container = document.getElementById("order-container");
@@ -37,10 +37,11 @@ document.addEventListener("DOMContentLoaded", async e => {
 
 
 backButton.addEventListener("click", e => {
-    parent.showIframe(prevFrame);
-    parent.window.scrollTo({
-        top: prevScrollPosition,
-    });
+    navigateBack(prevFrame, prevScrollPosition);
 });
 
+window.addEventListener('beforeunload', (event) => {
+    navigateBack(prevFrame, prevScrollPosition);
+});
 
+detectSize();

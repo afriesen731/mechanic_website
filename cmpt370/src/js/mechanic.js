@@ -1,57 +1,23 @@
-import { pb } from "../js/import_pb.js"; // PocketBase instance
-import { verify } from "../js/redirect.js";
+import { showIframe, updateIframes, reloadFrame, updateIframeSize } from "../js/display_iframe.js";
+import { verify } from "../js/redirect.js"
+import { pb } from "../js/import_pb.js"; // Ensure PocketBase is imported
 
-// Verify the user's role is "mechanic"
+// Verify the user's permissions
 verify('mechanic');
 
-document.addEventListener("DOMContentLoaded", async () => {
-    const iframe = document.getElementById("workorders-iframe");
-    const workordersContainer = document.getElementById("iframe-container-my-workorders");
-    const workorderDetailsContainer = document.getElementById("iframe-container-workorder-details");
-    const workorderDetailsIframe = document.getElementById("workorder-details-iframe");
+// Dynamically set the iframe source based on the user's role
+document.addEventListener('DOMContentLoaded', () => {
 
-    // Fetch the logged-in mechanic's ID
-    const mechanicId = pb.authStore.model?.id;
 
-    if (!mechanicId) {
-        console.error("Mechanic ID is missing. Redirecting to login...");
-        window.location.href = "index.html";
-        return;
-    }
+    // Allow function to be accessed by other Iframes
+    window.showIframe = showIframe;
 
-    // Set iframe source dynamically to show mechanic's work orders
-    iframe.src = `../html/workorders.html?role=mechanic&assignedTo=${mechanicId}`;
+    // Update iframes dynamically
+    updateIframes();
 
-    /**
-     * Show the work orders list
-     */
-    function showWorkOrders() {
-        workordersContainer.style.display = "block";
-        workorderDetailsContainer.style.display = "none";
-    }
-
-    /**
-     * Show the work order details
-     * @param {string} workorderId - The ID of the work order to display.
-     */
-    function showWorkOrderDetails(workorderId) {
-        workorderDetailsIframe.src = `../html/workorder_details.html?order=${workorderId}&prevFrame=iframe-container-my-workorders`;
-        workordersContainer.style.display = "none";
-        workorderDetailsContainer.style.display = "block";
-    }
-
-    // Add event listener for "My Work-Orders" menu
-    document.getElementById('my-workorders-link').addEventListener('click', showWorkOrders);
-
-    // Listen for messages from the work orders iframe
-    window.addEventListener("message", (event) => {
-        if (event.data.action === "viewWorkOrder") {
-            const workorderId = event.data.workorderId;
-            if (workorderId) {
-                showWorkOrderDetails(workorderId);
-            } else {
-                console.error("Work order ID is missing in the message data.");
-            }
-        }
-    });
+    // Show the initial iframe content
+    reloadFrame('iframe-container-my-workorders');
 });
+
+const iframes = document.querySelectorAll('iframe');
+updateIframeSize(iframes);

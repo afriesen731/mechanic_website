@@ -1,6 +1,6 @@
 import { pb } from "../js/import_pb.js" 
 import { returnToFrame } from "../js/redirect.js"
-
+import { detectSize } from "../js/display_iframe.js"
 
 
 
@@ -100,3 +100,5 @@ document.getElementById("settings-form").addEventListener("submit", function(eve
 
     
 });
+
+detectSize()

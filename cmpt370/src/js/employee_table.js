@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import { pb } from "../js/import_pb.js"
 import { switchToFrame, getParentScroll, getIframeContainerId } from './redirect.js';
-
+import { detectSize } from "../js/display_iframe.js"
 
 /**
  * Creates a table that can observe a FilteredDataset for employees
@@ -122,12 +122,5 @@ document.addEventListener("DOMContentLoaded", async function() {
 
 
 
-// Detect resizing of the body or main content and send the height to the parent
-const resizeObserver = new ResizeObserver(() => {
-    const height = document.documentElement.scrollHeight;
-    window.parent.postMessage({ height }, '*');
-  });
-  
-  // Observe the body or main content area
-  resizeObserver.observe(document.body);
+detectSize();
   

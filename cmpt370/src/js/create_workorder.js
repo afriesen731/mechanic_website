@@ -1,5 +1,5 @@
 import { pb } from "../js/import_pb.js"
-
+import { detectSize } from "../js/display_iframe.js"
 // Function to safely get the element by ID and avoid null reference errors
 function getElementValue(id) {
     const element = document.getElementById(id);
@@ -118,4 +118,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-
+detectSize()

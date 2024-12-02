@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import { pb } from "../js/import_pb.js"
 import { verify, getIframeContainerId, getParentScroll, switchToFrame } from './redirect.js';
-
+import { detectSize } from "../js/display_iframe.js"
 
 
 async function assignMechanic(workOrderId, mechanicId) {
@@ -330,7 +330,7 @@ export class EmployeeOrderTable extends Table {
                     const role = new URLSearchParams(window.location.search).get("role"); // Get role from URL
                     if (role === "mechanic") {
                         // Mechanic-specific behavior
-                        const src = `../html/workorder_details.html?order=${row.id}`;
+                        const src = `../html/workorder_details.html?order=${row.id}&prevFrame=${getIframeContainerId()}&prevScroll=${scrollPosition}`;
                         switchToFrame("workorder-details-iframe", "iframe-container-workorder-details", src);
                     } else if (role === "viewer") {
                         // Viewer-specific behavior
@@ -508,12 +508,5 @@ document.addEventListener("DOMContentLoaded", async function() {
 });
 
 
-// Detect resizing of the body or main content and send the height to the parent
-const resizeObserver = new ResizeObserver(() => {
-    const height = document.documentElement.scrollHeight;
-    window.parent.postMessage({ height }, '*');
-  });
-  
-  // Observe the body or main content area
-  resizeObserver.observe(document.body);
+detectSize();
   

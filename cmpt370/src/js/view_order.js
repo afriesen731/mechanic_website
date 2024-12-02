@@ -2,6 +2,9 @@
 
 import { pb } from "../js/import_pb.js";
 import { downloadElement, displayOrder } from "./save_order.js";
+import { detectSize } from "../js/display_iframe.js"
+
+
 
 const container = document.getElementById("order-container");
 const backButton = document.getElementById("back-button");
@@ -69,3 +72,6 @@ backButton.addEventListener("click", () => {
     parent.showIframe(prevFrame);
     parent.window.scrollTo({ top: prevScrollPosition });
 });
+
+
+detectSize();

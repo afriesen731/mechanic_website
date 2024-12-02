@@ -1,8 +1,15 @@
 import { pb } from "../js/import_pb.js";
+import { navigateBack, showIframe } from "../js/display_iframe.js"
+import { cleanAndReload } from "./redirect.js";
 
 const workorderId = new URLSearchParams(window.location.search).get("order");
 const prevFrame = new URLSearchParams(window.location.search).get("prevFrame");
 const prevScrollPosition = new URLSearchParams(window.location.search).get("prevScroll");
+
+if (prevFrame == null) {
+    cleanAndReload();
+
+}
 
 const backButton = document.getElementById("back-button");
 const jobList = document.getElementById("job-list");
@@ -435,15 +442,19 @@ function formatTime(seconds) {
 }
 
 // Event Listeners
-backButton.addEventListener("click", () => {
-    parent.showIframe(prevFrame);
-    parent.window.scrollTo({ top: prevScrollPosition });
+backButton.addEventListener("click", e => {
+    navigateBack(prevFrame, prevScrollPosition);
 });
+
 
 confirmStopButton.addEventListener("click", handleStopJob);
 
 cancelStopButton.addEventListener("click", () => {
     stopJobModal.style.display = "none";
+});
+
+parent.window.scrollTo({
+    top: 0,
 });
 
 // Initial Fetch
