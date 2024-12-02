@@ -61,10 +61,6 @@ export function displayOrder(order, costPerHour = null) {
     const leftColumn = document.createElement('div');
     leftColumn.classList.add('left-column');
 
-    // Right Column
-    const rightColumn = document.createElement('div');
-    rightColumn.classList.add('right-column');
-
     /*** General Information Section ***/
     const generalSection = document.createElement('section');
     generalSection.classList.add('order-section');
@@ -73,7 +69,6 @@ export function displayOrder(order, costPerHour = null) {
     generalHeader.textContent = 'General Information';
     generalSection.appendChild(generalHeader);
 
-    // Remove mechanics from generalSection
     const status = document.createElement('p');
     status.innerHTML = `<strong>Status:</strong> ${order.status || 'N/A'}`;
     generalSection.appendChild(status);
@@ -110,6 +105,10 @@ export function displayOrder(order, costPerHour = null) {
     });
 
     leftColumn.appendChild(vehicleSection);
+
+    // Right Column
+    const rightColumn = document.createElement('div');
+    rightColumn.classList.add('right-column');
 
     /*** Mechanics Information Section ***/
     const mechanicsSection = document.createElement('section');
@@ -155,87 +154,87 @@ export function displayOrder(order, costPerHour = null) {
 
     container.appendChild(middleSection);
 
-/*** Jobs Section ***/
-const jobsSection = document.createElement('section');
-jobsSection.classList.add('order-section', 'jobs-section');
+    /*** Jobs Section ***/
+    const jobsSection = document.createElement('section');
+    jobsSection.classList.add('order-section', 'jobs-section');
 
-const jobsHeader = document.createElement('h2');
-jobsHeader.textContent = 'Jobs';
-jobsSection.appendChild(jobsHeader);
+    const jobsHeader = document.createElement('h2');
+    jobsHeader.textContent = 'Jobs';
+    jobsSection.appendChild(jobsHeader);
 
-if (order.jobs && order.jobs.length > 0) {
-    let totalTime = 0;
+    if (order.jobs && order.jobs.length > 0) {
+        let totalTime = 0;
 
-    // Create a table for jobs
-    const jobsTable = document.createElement('table');
-    jobsTable.classList.add('jobs-table');
+        // Create a table for jobs
+        const jobsTable = document.createElement('table');
+        jobsTable.classList.add('jobs-table');
 
-    // Table Header
-    const tableHeader = document.createElement('tr');
-    const headers = ['Job #', 'Description', 'Status', 'Comment', 'Parts Used', 'Time Spent'];
-    headers.forEach(headerText => {
-        const th = document.createElement('th');
-        th.textContent = headerText;
-        tableHeader.appendChild(th);
-    });
-    jobsTable.appendChild(tableHeader);
+        // Table Header
+        const tableHeader = document.createElement('tr');
+        const headers = ['Job #', 'Description', 'Status', 'Comment', 'Parts Used', 'Time Spent'];
+        headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            tableHeader.appendChild(th);
+        });
+        jobsTable.appendChild(tableHeader);
 
-    // Table Rows
-    order.jobs.forEach((job, index) => {
-        const tr = document.createElement('tr');
+        // Table Rows
+        order.jobs.forEach((job, index) => {
+            const tr = document.createElement('tr');
 
-        const jobNumberCell = document.createElement('td');
-        jobNumberCell.textContent = index + 1;
-        tr.appendChild(jobNumberCell);
+            const jobNumberCell = document.createElement('td');
+            jobNumberCell.textContent = index + 1;
+            tr.appendChild(jobNumberCell);
 
-        const descriptionCell = document.createElement('td');
-        descriptionCell.textContent = job.description || 'No description provided';
-        tr.appendChild(descriptionCell);
+            const descriptionCell = document.createElement('td');
+            descriptionCell.textContent = job.description || 'No description provided';
+            tr.appendChild(descriptionCell);
 
-        const statusCell = document.createElement('td');
-        statusCell.textContent = job.status || 'N/A';
-        tr.appendChild(statusCell);
+            const statusCell = document.createElement('td');
+            statusCell.textContent = job.status || 'N/A';
+            tr.appendChild(statusCell);
 
-        const commentCell = document.createElement('td');
-        commentCell.textContent = job.comment || 'No comment provided';
-        tr.appendChild(commentCell);
+            const commentCell = document.createElement('td');
+            commentCell.textContent = job.comment || 'No comment provided';
+            tr.appendChild(commentCell);
 
-        const partsUsedCell = document.createElement('td');
-        partsUsedCell.textContent = job.partsUsed || 'No parts used';
-        tr.appendChild(partsUsedCell);
+            const partsUsedCell = document.createElement('td');
+            partsUsedCell.textContent = job.partsUsed || 'No parts used';
+            tr.appendChild(partsUsedCell);
 
-        const timeSpentCell = document.createElement('td');
-        const formattedTime = formatTime(job.hours || 0);
-        timeSpentCell.textContent = formattedTime;
-        tr.appendChild(timeSpentCell);
+            const timeSpentCell = document.createElement('td');
+            const formattedTime = formatTime(job.hours || 0);
+            timeSpentCell.textContent = formattedTime;
+            tr.appendChild(timeSpentCell);
 
-        jobsTable.appendChild(tr);
+            jobsTable.appendChild(tr);
 
-        totalTime += job.hours || 0;
-    });
+            totalTime += job.hours || 0;
+        });
 
-    jobsSection.appendChild(jobsTable);
+        jobsSection.appendChild(jobsTable);
 
-    // Display total time and cost
-    const totalTimeElement = document.createElement('p');
-    totalTimeElement.classList.add('total-time');
-    totalTimeElement.textContent = `Total Time Spent: ${formatTime(totalTime)}`;
-    jobsSection.appendChild(totalTimeElement);
+        // Display total time and cost
+        const totalTimeElement = document.createElement('p');
+        totalTimeElement.classList.add('total-time');
+        totalTimeElement.textContent = `Total Time Spent: ${formatTime(totalTime)}`;
+        jobsSection.appendChild(totalTimeElement);
 
-    if (costPerHour !== null && !isNaN(costPerHour) && costPerHour >= 0) {
-        const totalHours = totalTime / 3600;
-        const totalCost = totalHours * costPerHour;
+        if (costPerHour !== null && !isNaN(costPerHour) && costPerHour >= 0) {
+            const totalHours = totalTime / 3600;
+            const totalCost = totalHours * costPerHour;
 
-        const totalCostElement = document.createElement('p');
-        totalCostElement.classList.add('total-cost');
-        totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
-        jobsSection.appendChild(totalCostElement);
+            const totalCostElement = document.createElement('p');
+            totalCostElement.classList.add('total-cost');
+            totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+            jobsSection.appendChild(totalCostElement);
+        }
+    } else {
+        const noJobs = document.createElement('p');
+        noJobs.textContent = 'No jobs assigned.';
+        jobsSection.appendChild(noJobs);
     }
-} else {
-    const noJobs = document.createElement('p');
-    noJobs.textContent = 'No jobs assigned.';
-    jobsSection.appendChild(noJobs);
-}
 
     container.appendChild(jobsSection);
 
