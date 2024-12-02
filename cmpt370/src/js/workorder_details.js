@@ -59,6 +59,7 @@ async function fetchWorkOrderDetails() {
  */
 function displayJobs(jobs) {
     jobList.innerHTML = ""; // Clear existing jobs
+    let totalTime = 0; // Initialize total time
 
     jobs.forEach((job, index) => {
         const jobItem = document.createElement("li");
@@ -68,6 +69,13 @@ function displayJobs(jobs) {
         const jobTitle = document.createElement("div");
         jobTitle.textContent = `${job.description || "Untitled Job"} (Status: ${job.status || "Unknown"})`;
         jobItem.appendChild(jobTitle);
+
+        // Display comment if available
+        if (job.comment) {
+            const jobComment = document.createElement("div");
+            jobComment.textContent = `Comment: ${job.comment}`;
+            jobItem.appendChild(jobComment);
+        }
 
         const timer = document.createElement("span");
         timer.className = "job-timer";
@@ -79,7 +87,22 @@ function displayJobs(jobs) {
         jobItem.appendChild(actions);
 
         jobList.appendChild(jobItem);
+
+        // Accumulate total time
+        totalTime += job.hours || 0;
     });
+
+    // Display total time somewhere on the page
+    const totalTimeElement = document.getElementById("total-time");
+    if (totalTimeElement) {
+        totalTimeElement.textContent = `Total Time: ${formatTime(totalTime)}`;
+    } else {
+        // Create the element if it doesn't exist
+        const totalTimeElem = document.createElement("div");
+        totalTimeElem.id = "total-time";
+        totalTimeElem.textContent = `Total Time: ${formatTime(totalTime)}`;
+        jobList.parentElement.appendChild(totalTimeElem);
+    }
 }
 
 /**
@@ -156,8 +179,13 @@ async function startJob(jobIndex) {
                 jobs: workOrder.jobs,
             });
 
+            // Get the timer element and initialize data-time
+            const jobItem = document.querySelector(`li[data-job-id="${jobIndex}"]`);
+            const timer = jobItem.querySelector(".job-timer");
+            timer.setAttribute("data-time", job.hours || 0);
+
             // Start the timer
-            activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex, startTime), 1000);
+            activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex), 1000);
 
             console.log(`Job ${jobIndex} started.`);
             fetchWorkOrderDetails();
@@ -228,8 +256,13 @@ async function resumeJob(jobIndex) {
                 jobs: workOrder.jobs,
             });
 
-            // Start the timer from the saved value
-            activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex, savedSeconds), 1000);
+            // Get the timer element and initialize data-time
+            const jobItem = document.querySelector(`li[data-job-id="${jobIndex}"]`);
+            const timer = jobItem.querySelector(".job-timer");
+            timer.setAttribute("data-time", savedSeconds);
+
+            // Start the timer
+            activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex), 1000);
 
             console.log(`Job ${jobIndex} resumed.`);
             fetchWorkOrderDetails();
@@ -271,44 +304,55 @@ async function handleStopJob() {
         // Fetch the current work order
         const workOrder = await pb.collection("work_orders").getOne(workorderId);
 
-        console.log("Selected Job ID:", selectedJobId);
-        console.log("Work Order Jobs:", workOrder.jobs);
+        // Use selectedJobId as jobIndex
+        const jobIndex = parseInt(selectedJobId, 10);
 
-        // Convert selectedJobId to a number for strict equality
-        const jobIndex = workOrder.jobs.findIndex(job => job.jobNumber === Number(selectedJobId)+1);
+        if (workOrder.jobs && workOrder.jobs[jobIndex]) {
+            const job = workOrder.jobs[jobIndex];
+            const jobItem = document.querySelector(`li[data-job-id="${jobIndex}"]`);
+            const timer = jobItem.querySelector(".job-timer");
 
-        console.log("Matched Job Index:", jobIndex);
+            // Save the current timer value into the job's "hours" attribute
+            const elapsedSeconds = parseInt(timer.getAttribute("data-time"), 10) || 0;
+            job.hours = elapsedSeconds; // Update hours in the job
 
-        if (jobIndex !== -1) {
-            // Update the job's status and add the comment/partsUsed
-            workOrder.jobs[jobIndex].status = "Completed";
-            workOrder.jobs[jobIndex].comment = comment;
-            workOrder.jobs[jobIndex].partsUsed = partsUsed;
+            // Update the job's status and other details
+            job.status = "Completed";
+            job.comment = comment;
+            job.partsUsed = partsUsed;
 
-            // Update the work order with the modified jobs array
-            await pb.collection("work_orders").update(workorderId, {
-                jobs: workOrder.jobs,
-            });
+            // Update the work order
+            await pb.collection("work_orders").update(workOrder.id, { jobs: workOrder.jobs });
 
-            // Stop the timer for the completed job
-            if (activeTimers[selectedJobId]) {
-                clearInterval(activeTimers[selectedJobId]);
-                delete activeTimers[selectedJobId];
+            // Stop the timer
+            if (activeTimers[jobIndex]) {
+                clearInterval(activeTimers[jobIndex]);
+                delete activeTimers[jobIndex];
             }
 
-            // Clear modal inputs and close the modal
+            // Clear modal inputs and refresh the work order
             commentInput.value = "";
             partsUsedInput.value = "";
             stopJobModal.style.display = "none";
 
-            // Refresh work order details
+            // Check if all jobs are completed
+            await checkAndCompleteWorkOrder(workOrder);
+
             fetchWorkOrderDetails();
         } else {
-            console.error(`Job with ID ${selectedJobId} not found.`);
+            console.error(`Job at index ${jobIndex} not found.`);
         }
     } catch (error) {
         console.error("Error stopping job:", error);
         alert("Failed to stop the job. Please try again.");
+    }
+}
+
+async function checkAndCompleteWorkOrder(workOrder) {
+    const allJobsCompleted = workOrder.jobs.every(job => job.status === "Completed");
+    if (allJobsCompleted && workOrder.status !== "Completed") {
+        await pb.collection("work_orders").update(workOrder.id, { status: "Completed" });
+        console.log("Work order marked as Completed.");
     }
 }
 
@@ -354,7 +398,7 @@ async function updateJobStatus(jobIndex, status) {
  * Updates the timer display for a job.
  * @param {String} jobId - The ID of the job.
  */
-function updateTimer(jobIndex, savedSeconds = 0) {
+function updateTimer(jobIndex) {
     const jobItem = document.querySelector(`li[data-job-id="${jobIndex}"]`);
     if (!jobItem) {
         console.error(`Job item with ID ${jobIndex} not found.`);
@@ -367,7 +411,7 @@ function updateTimer(jobIndex, savedSeconds = 0) {
         return;
     }
 
-    let time = parseInt(timer.getAttribute("data-time"), 10) || savedSeconds;
+    let time = parseInt(timer.getAttribute("data-time"), 10) || 0;
 
     // Increment and display the time
     time += 1;
