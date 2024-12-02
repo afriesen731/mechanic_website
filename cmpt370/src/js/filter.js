@@ -520,8 +520,10 @@ export class FilteredDataset {
             // fetch dataset
             const response = await pb.collection(this.dataset)
                                     .getList(this._page, this.pageLen, {
-                                        filter: filter
+                                        filter: filter,
+                                        sort: '-created'
                                     });
+
             
             
             this.items = response.items;
