@@ -1,0 +1,51 @@
+/* Style for the order container */
+.order-container {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+/* Style for sections */
+.order-section {
+    margin-bottom: 30px;
+}
+
+.order-section h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+}
+
+/* Style for job container */
+.job-container {
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin-bottom: 15px;
+}
+
+.job-container h3 {
+    margin-top: 0;
+}
+
+/* Style for total time */
+.order-section h3 {
+    margin-top: 20px;
+    font-size: 1.2em;
+}
+
+/* Adjust styles for printing */
+@media print {
+    /* Hide buttons */
+    button {
+        display: none;
+    }
+
+    /* Ensure all content is visible */
+    body {
+        margin: 0;
+        font-size: 12pt;
+    }
+
+    /* Adjust margins */
+    @page {
+        margin: 1cm;
+    }
+}

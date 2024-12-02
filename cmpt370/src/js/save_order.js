@@ -1,7 +1,9 @@
+// save_order.js
+
 import html2pdf from "html2pdf.js";
 
 /**
- * Download a dom element as a file 
+ * Download a DOM element as a file
  * @param {HTMLElement} element element to download the contents of
  * @param {String} fileName the name of the file that will be downloaded
  */
@@ -16,19 +18,27 @@ export async function downloadElement(element, fileName) {
     if (element.style.display == 'none') {
         element.style.display == '';
         await html2pdf().set(options).from(element).save();
-    }
-    else {
+    } else {
         html2pdf().set(options).from(element).save();
-
     }
-    
 }
 
+/**
+ * Formats time in seconds to HH:MM:SS.
+ * @param {Number} seconds - The time in seconds.
+ * @returns {String} - The formatted time.
+ */
+function formatTime(seconds) {
+    const hrs = Math.floor(seconds / 3600);
+    const mins = Math.floor((seconds % 3600) / 60);
+    const secs = seconds % 60;
+
+    return `${hrs.toString().padStart(2, "0")}:${mins
+        .toString()
+        .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
 
 export function displayOrder(order) {
-    // Clear the parent element
-
-
     // Create a container for the order details
     const container = document.createElement('div');
     container.classList.add('order-container');
@@ -118,16 +128,51 @@ export function displayOrder(order) {
     jobsHeader.textContent = 'Jobs';
     jobsSection.appendChild(jobsHeader);
 
-    if (order.jobs && Object.keys(order.jobs).length > 0) {
-        const jobsList = document.createElement('ul');
+    if (order.jobs && order.jobs.length > 0) {
+        let totalTime = 0;
 
-        order.jobs.forEach(job => {
-            const jobItem = document.createElement('li');
-            jobItem.innerHTML = `<strong>${job.title || 'Job'}:</strong> ${job.description || 'No description provided'}`;
-            jobsList.appendChild(jobItem);
+        order.jobs.forEach((job, index) => {
+            const jobContainer = document.createElement('div');
+            jobContainer.classList.add('job-container');
+
+            const jobTitle = document.createElement('h3');
+            jobTitle.textContent = `Job ${index + 1}: ${job.description || 'No description provided'}`;
+            jobContainer.appendChild(jobTitle);
+
+            const jobStatus = document.createElement('p');
+            jobStatus.innerHTML = `<strong>Status:</strong> ${job.status || 'N/A'}`;
+            jobContainer.appendChild(jobStatus);
+
+            const jobComment = document.createElement('p');
+            jobComment.innerHTML = `<strong>Comment:</strong> ${job.comment || 'No comment provided'}`;
+            jobContainer.appendChild(jobComment);
+
+            const jobPartsUsed = document.createElement('p');
+            jobPartsUsed.innerHTML = `<strong>Parts Used:</strong> ${job.partsUsed || 'No parts used'}`;
+            jobContainer.appendChild(jobPartsUsed);
+
+            const jobTime = document.createElement('p');
+            const formattedTime = formatTime(job.hours || 0);
+            jobTime.innerHTML = `<strong>Time Spent:</strong> ${formattedTime}`;
+            jobContainer.appendChild(jobTime);
+
+            totalTime += job.hours || 0;
+
+            jobsSection.appendChild(jobContainer);
         });
 
-        jobsSection.appendChild(jobsList);
+        // Display total time
+        const totalTimeElement = document.createElement('h3');
+        totalTimeElement.textContent = `Total Time Spent: ${formatTime(totalTime)}`;
+        jobsSection.appendChild(totalTimeElement);
+        const hourlyRate = 50; // Replace with your rate or fetch from settings
+        const totalHours = totalTime / 3600;
+        const totalCost = totalHours * hourlyRate;
+
+        const totalCostElement = document.createElement('h3');
+        totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+        jobsSection.appendChild(totalCostElement);
+
     } else {
         const noJobs = document.createElement('p');
         noJobs.textContent = 'No jobs assigned.';
@@ -136,6 +181,6 @@ export function displayOrder(order) {
 
     container.appendChild(jobsSection);
 
-    // Append the container to the parent element
+    // Return the container
     return container;
 }

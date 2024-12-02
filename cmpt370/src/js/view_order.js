@@ -1,12 +1,7 @@
-import { pb } from "../js/import_pb.js" 
-import { returnToFrame } from "../js/redirect.js"
+// view_order.js
+
+import { pb } from "../js/import_pb.js";
 import { downloadElement, displayOrder } from "./save_order.js";
-
-
-
-
-
-
 
 const container = document.getElementById("order-container");
 const backButton = document.getElementById("back-button");
@@ -19,9 +14,10 @@ const prevFrame = params.get("prevFrame");
 const prevScrollPosition = params.get("prevScroll");
 
 document.addEventListener("DOMContentLoaded", async e => {
-
     try {
-        const order = await pb.collection("work_orders").getOne(orderId);
+        const order = await pb.collection("work_orders").getOne(orderId, {
+            expand: 'mechanics' // Ensure mechanics' names are expanded
+        });
         // Scroll to top
         parent.window.scrollTo({
             top: 0,
@@ -34,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async e => {
 
         // Download/print order
         document.getElementById('download-button').addEventListener('click', () => {
-            downloadElement(displayOrder(order), `order_${order.created}`);
+            downloadElement(orderDetails, `order_${order.work_order_number || order.created}`);
         });
     }
     catch (error) {
@@ -42,12 +38,7 @@ document.addEventListener("DOMContentLoaded", async e => {
     }
 });
 
-
 backButton.addEventListener("click", () => {
     parent.showIframe(prevFrame);
     parent.window.scrollTo({ top: prevScrollPosition });
 });
-
-
-
-
