@@ -22,9 +22,29 @@ async function fetchWorkOrderDetails() {
     try {
         const workOrder = await pb.collection("work_orders").getOne(workorderId);
 
+        // Populate General Information
         document.getElementById("workorder-id").textContent = workOrder.work_order_number || "N/A";
         document.getElementById("workorder-status").textContent = workOrder.status || "Unknown";
+        document.getElementById("unit-number").textContent = workOrder.unit_number || "N/A";
+        document.getElementById("make").textContent = workOrder.make || "N/A";
+        document.getElementById("model").textContent = workOrder.model || "N/A";
+        document.getElementById("year").textContent = workOrder.year || "N/A";
+        document.getElementById("license-plate").textContent = workOrder.license_plate || "N/A";
+        document.getElementById("vin-number").textContent = workOrder.vin_number || "N/A";
+        document.getElementById("retorque-number").textContent = workOrder.retorque_number || "N/A";
+        document.getElementById("kms").textContent = workOrder.kms || "N/A";
 
+        // Populate Reefer Information
+        document.getElementById("reefer-vin-number").textContent = workOrder.reefer_vin_number || "N/A";
+        document.getElementById("reefer-make").textContent = workOrder.reefer_make || "N/A";
+        document.getElementById("reefer-model").textContent = workOrder.reefer_model || "N/A";
+        document.getElementById("reefer-hours").textContent = workOrder.reefer_hours || "N/A";
+
+        // Populate Type of Service
+        const typeOfServiceList = workOrder.type_of_service?.join(", ") || "N/A";
+        document.getElementById("type-of-service-list").textContent = typeOfServiceList;
+
+        // Display Jobs
         displayJobs(workOrder.jobs || []);
     } catch (error) {
         console.error("Error fetching work order details:", error);
@@ -72,7 +92,8 @@ function createJobActions(jobIndex, status) {
     const actionContainer = document.createElement("div");
     actionContainer.className = "job-actions";
 
-    if (status === "Pending" || status === "Paused") {
+    // Logic for which buttons to display based on status
+    if (status === "Pending") {
         const startButton = document.createElement("button");
         startButton.textContent = "Start";
         startButton.onclick = () => startJob(jobIndex);
@@ -96,6 +117,18 @@ function createJobActions(jobIndex, status) {
         resumeButton.textContent = "Resume";
         resumeButton.onclick = () => resumeJob(jobIndex);
         actionContainer.appendChild(resumeButton);
+
+        const stopButton = document.createElement("button");
+        stopButton.textContent = "Stop";
+        stopButton.onclick = () => showStopJobModal(jobIndex);
+        actionContainer.appendChild(stopButton);
+    }
+
+    if (status === "Completed") {
+        const completedLabel = document.createElement("span");
+        completedLabel.textContent = "Job Completed";
+        completedLabel.className = "job-completed-label";
+        actionContainer.appendChild(completedLabel);
     }
 
     return actionContainer;
@@ -107,9 +140,30 @@ function createJobActions(jobIndex, status) {
  */
 async function startJob(jobIndex) {
     try {
-        await updateJobStatus(jobIndex, "In Progress");
-        activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex), 1000);
-        fetchWorkOrderDetails(); // Refresh the work order details
+        const startTime = Date.now(); // Capture current timestamp
+
+        // Fetch the current work order
+        const workOrder = await pb.collection("work_orders").getOne(workorderId);
+
+        if (workOrder.jobs && workOrder.jobs[jobIndex]) {
+            const job = workOrder.jobs[jobIndex];
+
+            // Update the job's status to "In Progress" and save the start time
+            job.status = "In Progress";
+            job.startTime = startTime; // Save start time to the server
+
+            await pb.collection("work_orders").update(workorderId, {
+                jobs: workOrder.jobs,
+            });
+
+            // Start the timer
+            activeTimers[jobIndex] = setInterval(() => updateTimer(jobIndex, startTime), 1000);
+
+            console.log(`Job ${jobIndex} started.`);
+            fetchWorkOrderDetails();
+        } else {
+            console.error(`Job at index ${jobIndex} not found.`);
+        }
     } catch (error) {
         console.error("Error starting job:", error);
         alert("Failed to start the job. Please try again.");
@@ -208,14 +262,25 @@ async function handleStopJob() {
         alert("Comment is required to stop the job.");
         return;
     }
+    if (!partsUsed) {
+        alert("Parts added field is required.");
+        return;
+    }
 
     try {
         // Fetch the current work order
         const workOrder = await pb.collection("work_orders").getOne(workorderId);
 
-        // Update the job's status and add the comment/partsUsed
-        const jobIndex = workOrder.jobs.findIndex(job => job.jobNumber === selectedJobId);
+        console.log("Selected Job ID:", selectedJobId);
+        console.log("Work Order Jobs:", workOrder.jobs);
+
+        // Convert selectedJobId to a number for strict equality
+        const jobIndex = workOrder.jobs.findIndex(job => job.jobNumber === Number(selectedJobId)+1);
+
+        console.log("Matched Job Index:", jobIndex);
+
         if (jobIndex !== -1) {
+            // Update the job's status and add the comment/partsUsed
             workOrder.jobs[jobIndex].status = "Completed";
             workOrder.jobs[jobIndex].comment = comment;
             workOrder.jobs[jobIndex].partsUsed = partsUsed;
@@ -331,11 +396,7 @@ backButton.addEventListener("click", () => {
     parent.window.scrollTo({ top: prevScrollPosition });
 });
 
-// Event listeners for modals
-confirmStopButton.addEventListener("click", () => {
-    console.log("Submit clicked");
-    confirmStopButton.addEventListener("click", handleStopJob);
-});
+confirmStopButton.addEventListener("click", handleStopJob);
 
 cancelStopButton.addEventListener("click", () => {
     stopJobModal.style.display = "none";
