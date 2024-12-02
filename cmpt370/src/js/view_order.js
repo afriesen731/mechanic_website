@@ -5,6 +5,9 @@ import { downloadElement, displayOrder } from "./save_order.js";
 
 const container = document.getElementById("order-container");
 const backButton = document.getElementById("back-button");
+const costPerHourInput = document.getElementById("cost-per-hour");
+const updateCostButton = document.getElementById("update-cost-button");
+const downloadButton = document.getElementById("download-button");
 
 // Url parameters
 const params = new URLSearchParams(window.location.search);
@@ -13,9 +16,15 @@ const prevFrame = params.get("prevFrame");
 // Save scroll position
 const prevScrollPosition = params.get("prevScroll");
 
+// Variable to store the current order
+let currentOrder = null;
+
+// Variable to store the current cost per hour
+let currentCostPerHour = null;
+
 document.addEventListener("DOMContentLoaded", async e => {
     try {
-        const order = await pb.collection("work_orders").getOne(orderId, {
+        currentOrder = await pb.collection("work_orders").getOne(orderId, {
             expand: 'mechanics' // Ensure mechanics' names are expanded
         });
         // Scroll to top
@@ -23,20 +32,38 @@ document.addEventListener("DOMContentLoaded", async e => {
             top: 0,
         });
 
-        // Use the updated displayOrder to show all fields
-        const orderDetails = displayOrder(order);
-        container.innerHTML = '';
-        container.appendChild(orderDetails);
+        // Initially display the order without cost per hour
+        renderOrder();
+
+        // Add event listener for "Update Cost" button
+        updateCostButton.addEventListener('click', () => {
+            const costPerHourValue = parseFloat(costPerHourInput.value);
+            if (!isNaN(costPerHourValue) && costPerHourValue >= 0) {
+                currentCostPerHour = costPerHourValue;
+            } else {
+                alert("Please enter a valid non-negative number for Cost per Hour.");
+                costPerHourInput.value = '';
+                currentCostPerHour = null; // Reset if invalid
+            }
+            renderOrder();
+        });
 
         // Download/print order
-        document.getElementById('download-button').addEventListener('click', () => {
-            downloadElement(orderDetails, `order_${order.work_order_number || order.created}`);
+        downloadButton.addEventListener('click', () => {
+            const orderDetails = displayOrder(currentOrder, currentCostPerHour);
+            downloadElement(orderDetails, `order_${currentOrder.work_order_number || currentOrder.created}`);
         });
     }
     catch (error) {
         container.innerHTML = error;
     }
 });
+
+function renderOrder() {
+    const orderDetails = displayOrder(currentOrder, currentCostPerHour);
+    container.innerHTML = '';
+    container.appendChild(orderDetails);
+}
 
 backButton.addEventListener("click", () => {
     parent.showIframe(prevFrame);

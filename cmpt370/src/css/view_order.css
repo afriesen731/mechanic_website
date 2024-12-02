@@ -31,6 +31,25 @@
     font-size: 1.2em;
 }
 
+/* Style for the cost input container */
+#cost-input-container {
+    margin: 20px 0;
+}
+
+#cost-input-container label {
+    margin-right: 10px;
+}
+
+#cost-input-container input {
+    width: 100px;
+    padding: 5px;
+}
+
+#cost-input-container button {
+    margin-left: 10px;
+    padding: 5px 10px;
+}
+
 /* Adjust styles for printing */
 @media print {
     /* Hide buttons */

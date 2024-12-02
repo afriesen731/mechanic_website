@@ -38,7 +38,7 @@ function formatTime(seconds) {
         .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 }
 
-export function displayOrder(order) {
+export function displayOrder(order, costPerHour = null) {
     // Create a container for the order details
     const container = document.createElement('div');
     container.classList.add('order-container');
@@ -165,14 +165,15 @@ export function displayOrder(order) {
         const totalTimeElement = document.createElement('h3');
         totalTimeElement.textContent = `Total Time Spent: ${formatTime(totalTime)}`;
         jobsSection.appendChild(totalTimeElement);
-        const hourlyRate = 50; // Replace with your rate or fetch from settings
-        const totalHours = totalTime / 3600;
-        const totalCost = totalHours * hourlyRate;
 
-        const totalCostElement = document.createElement('h3');
-        totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
-        jobsSection.appendChild(totalCostElement);
-
+        if (costPerHour !== null && !isNaN(costPerHour) && costPerHour >= 0) {
+            const totalHours = totalTime / 3600;
+            const totalCost = totalHours * costPerHour;
+            // Conditionally display total cost
+            const totalCostElement = document.createElement('h3');
+            totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+            jobsSection.appendChild(totalCostElement);
+        }
     } else {
         const noJobs = document.createElement('p');
         noJobs.textContent = 'No jobs assigned.';
