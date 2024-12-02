@@ -1,59 +1,79 @@
-/* Style for the order container */
+/* Order Container */
 .order-container {
     font-family: Arial, sans-serif;
     margin: 20px;
 }
 
-/* Style for sections */
-.order-section {
+/* Title Section */
+.title-section h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Middle Section */
+.middle-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     margin-bottom: 30px;
+}
+
+.left-column,
+.right-column {
+    width: 48%; /* Adjust as needed */
+}
+
+.order-section {
+    margin-bottom: 20px;
 }
 
 .order-section h2 {
     border-bottom: 1px solid #ccc;
     padding-bottom: 5px;
-}
-
-/* Style for job container */
-.job-container {
-    border: 1px solid #ccc;
-    padding: 15px;
-    margin-bottom: 15px;
-}
-
-.job-container h3 {
     margin-top: 0;
 }
 
-/* Style for total time */
-.order-section h3 {
-    margin-top: 20px;
+.order-section p {
+    margin: 5px 0;
+}
+
+/* Jobs Section */
+.jobs-section h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 5px;
+    margin-top: 0;
+}
+
+.jobs-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.jobs-table th,
+.jobs-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+.jobs-table th {
+    background-color: #f2f2f2;
+}
+
+/* Total Time and Cost */
+.total-time,
+.total-cost {
     font-size: 1.2em;
-}
-
-/* Style for the cost input container */
-#cost-input-container {
-    margin: 20px 0;
-}
-
-#cost-input-container label {
-    margin-right: 10px;
-}
-
-#cost-input-container input {
-    width: 100px;
-    padding: 5px;
-}
-
-#cost-input-container button {
-    margin-left: 10px;
-    padding: 5px 10px;
+    font-weight: bold;
+    margin-top: 20px;
 }
 
 /* Adjust styles for printing */
 @media print {
     /* Hide buttons */
-    button {
+    button,
+    #cost-input-container {
         display: none;
     }
 
@@ -66,5 +86,10 @@
     /* Adjust margins */
     @page {
         margin: 1cm;
+    }
+
+    /* Handle page breaks */
+    .page-break {
+        page-break-before: always;
     }
 }

@@ -43,6 +43,28 @@ export function displayOrder(order, costPerHour = null) {
     const container = document.createElement('div');
     container.classList.add('order-container');
 
+    /*** Top Section: Work Order Title ***/
+    const titleSection = document.createElement('section');
+    titleSection.classList.add('title-section');
+
+    const workOrderTitle = document.createElement('h1');
+    workOrderTitle.textContent = `Work Order #${order.work_order_number || 'N/A'}`;
+    titleSection.appendChild(workOrderTitle);
+
+    container.appendChild(titleSection);
+
+    /*** Middle Section: Two Columns ***/
+    const middleSection = document.createElement('section');
+    middleSection.classList.add('middle-section');
+
+    // Left Column
+    const leftColumn = document.createElement('div');
+    leftColumn.classList.add('left-column');
+
+    // Right Column
+    const rightColumn = document.createElement('div');
+    rightColumn.classList.add('right-column');
+
     /*** General Information Section ***/
     const generalSection = document.createElement('section');
     generalSection.classList.add('order-section');
@@ -51,24 +73,16 @@ export function displayOrder(order, costPerHour = null) {
     generalHeader.textContent = 'General Information';
     generalSection.appendChild(generalHeader);
 
-    const workOrderNumber = document.createElement('p');
-    workOrderNumber.innerHTML = `<strong>Work Order #:</strong> ${order.work_order_number || 'N/A'}`;
-    generalSection.appendChild(workOrderNumber);
-
+    // Remove mechanics from generalSection
     const status = document.createElement('p');
     status.innerHTML = `<strong>Status:</strong> ${order.status || 'N/A'}`;
     generalSection.appendChild(status);
-
-    const mechanics = document.createElement('p');
-    const mechanicsList = order.expand?.mechanics?.map(m => m.name).join(', ') || 'Not assigned';
-    mechanics.innerHTML = `<strong>Mechanics:</strong> ${mechanicsList}`;
-    generalSection.appendChild(mechanics);
 
     const serviceType = document.createElement('p');
     serviceType.innerHTML = `<strong>Type of Service:</strong> ${order.type_of_service?.join(', ') || 'N/A'}`;
     generalSection.appendChild(serviceType);
 
-    container.appendChild(generalSection);
+    leftColumn.appendChild(generalSection);
 
     /*** Vehicle Information Section ***/
     const vehicleSection = document.createElement('section');
@@ -95,7 +109,22 @@ export function displayOrder(order, costPerHour = null) {
         vehicleSection.appendChild(p);
     });
 
-    container.appendChild(vehicleSection);
+    leftColumn.appendChild(vehicleSection);
+
+    /*** Mechanics Information Section ***/
+    const mechanicsSection = document.createElement('section');
+    mechanicsSection.classList.add('order-section');
+
+    const mechanicsHeader = document.createElement('h2');
+    mechanicsHeader.textContent = 'Mechanics';
+    mechanicsSection.appendChild(mechanicsHeader);
+
+    const mechanicsList = document.createElement('p');
+    const mechanicsNames = order.expand?.mechanics?.map(m => m.name).join(', ') || 'Not assigned';
+    mechanicsList.innerHTML = `<strong>Assigned Mechanics:</strong> ${mechanicsNames}`;
+    mechanicsSection.appendChild(mechanicsList);
+
+    rightColumn.appendChild(mechanicsSection);
 
     /*** Reefer Information Section ***/
     const reeferSection = document.createElement('section');
@@ -118,67 +147,95 @@ export function displayOrder(order, costPerHour = null) {
         reeferSection.appendChild(p);
     });
 
-    container.appendChild(reeferSection);
+    rightColumn.appendChild(reeferSection);
 
-    /*** Jobs Section ***/
-    const jobsSection = document.createElement('section');
-    jobsSection.classList.add('order-section');
+    // Append columns to middle section
+    middleSection.appendChild(leftColumn);
+    middleSection.appendChild(rightColumn);
 
-    const jobsHeader = document.createElement('h2');
-    jobsHeader.textContent = 'Jobs';
-    jobsSection.appendChild(jobsHeader);
+    container.appendChild(middleSection);
 
-    if (order.jobs && order.jobs.length > 0) {
-        let totalTime = 0;
+/*** Jobs Section ***/
+const jobsSection = document.createElement('section');
+jobsSection.classList.add('order-section', 'jobs-section');
 
-        order.jobs.forEach((job, index) => {
-            const jobContainer = document.createElement('div');
-            jobContainer.classList.add('job-container');
+const jobsHeader = document.createElement('h2');
+jobsHeader.textContent = 'Jobs';
+jobsSection.appendChild(jobsHeader);
 
-            const jobTitle = document.createElement('h3');
-            jobTitle.textContent = `Job ${index + 1}: ${job.description || 'No description provided'}`;
-            jobContainer.appendChild(jobTitle);
+if (order.jobs && order.jobs.length > 0) {
+    let totalTime = 0;
 
-            const jobStatus = document.createElement('p');
-            jobStatus.innerHTML = `<strong>Status:</strong> ${job.status || 'N/A'}`;
-            jobContainer.appendChild(jobStatus);
+    // Create a table for jobs
+    const jobsTable = document.createElement('table');
+    jobsTable.classList.add('jobs-table');
 
-            const jobComment = document.createElement('p');
-            jobComment.innerHTML = `<strong>Comment:</strong> ${job.comment || 'No comment provided'}`;
-            jobContainer.appendChild(jobComment);
+    // Table Header
+    const tableHeader = document.createElement('tr');
+    const headers = ['Job #', 'Description', 'Status', 'Comment', 'Parts Used', 'Time Spent'];
+    headers.forEach(headerText => {
+        const th = document.createElement('th');
+        th.textContent = headerText;
+        tableHeader.appendChild(th);
+    });
+    jobsTable.appendChild(tableHeader);
 
-            const jobPartsUsed = document.createElement('p');
-            jobPartsUsed.innerHTML = `<strong>Parts Used:</strong> ${job.partsUsed || 'No parts used'}`;
-            jobContainer.appendChild(jobPartsUsed);
+    // Table Rows
+    order.jobs.forEach((job, index) => {
+        const tr = document.createElement('tr');
 
-            const jobTime = document.createElement('p');
-            const formattedTime = formatTime(job.hours || 0);
-            jobTime.innerHTML = `<strong>Time Spent:</strong> ${formattedTime}`;
-            jobContainer.appendChild(jobTime);
+        const jobNumberCell = document.createElement('td');
+        jobNumberCell.textContent = index + 1;
+        tr.appendChild(jobNumberCell);
 
-            totalTime += job.hours || 0;
+        const descriptionCell = document.createElement('td');
+        descriptionCell.textContent = job.description || 'No description provided';
+        tr.appendChild(descriptionCell);
 
-            jobsSection.appendChild(jobContainer);
-        });
+        const statusCell = document.createElement('td');
+        statusCell.textContent = job.status || 'N/A';
+        tr.appendChild(statusCell);
 
-        // Display total time
-        const totalTimeElement = document.createElement('h3');
-        totalTimeElement.textContent = `Total Time Spent: ${formatTime(totalTime)}`;
-        jobsSection.appendChild(totalTimeElement);
+        const commentCell = document.createElement('td');
+        commentCell.textContent = job.comment || 'No comment provided';
+        tr.appendChild(commentCell);
 
-        if (costPerHour !== null && !isNaN(costPerHour) && costPerHour >= 0) {
-            const totalHours = totalTime / 3600;
-            const totalCost = totalHours * costPerHour;
-            // Conditionally display total cost
-            const totalCostElement = document.createElement('h3');
-            totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
-            jobsSection.appendChild(totalCostElement);
-        }
-    } else {
-        const noJobs = document.createElement('p');
-        noJobs.textContent = 'No jobs assigned.';
-        jobsSection.appendChild(noJobs);
+        const partsUsedCell = document.createElement('td');
+        partsUsedCell.textContent = job.partsUsed || 'No parts used';
+        tr.appendChild(partsUsedCell);
+
+        const timeSpentCell = document.createElement('td');
+        const formattedTime = formatTime(job.hours || 0);
+        timeSpentCell.textContent = formattedTime;
+        tr.appendChild(timeSpentCell);
+
+        jobsTable.appendChild(tr);
+
+        totalTime += job.hours || 0;
+    });
+
+    jobsSection.appendChild(jobsTable);
+
+    // Display total time and cost
+    const totalTimeElement = document.createElement('p');
+    totalTimeElement.classList.add('total-time');
+    totalTimeElement.textContent = `Total Time Spent: ${formatTime(totalTime)}`;
+    jobsSection.appendChild(totalTimeElement);
+
+    if (costPerHour !== null && !isNaN(costPerHour) && costPerHour >= 0) {
+        const totalHours = totalTime / 3600;
+        const totalCost = totalHours * costPerHour;
+
+        const totalCostElement = document.createElement('p');
+        totalCostElement.classList.add('total-cost');
+        totalCostElement.textContent = `Total Cost: $${totalCost.toFixed(2)}`;
+        jobsSection.appendChild(totalCostElement);
     }
+} else {
+    const noJobs = document.createElement('p');
+    noJobs.textContent = 'No jobs assigned.';
+    jobsSection.appendChild(noJobs);
+}
 
     container.appendChild(jobsSection);
 
