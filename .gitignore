@@ -26,3 +26,4 @@ pocketbase_0.22.21_*
 *.njsproj
 *.sln
 *.sw?
+./cmpt370/*.env
