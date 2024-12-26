@@ -1,6 +1,4 @@
-## Demo
 
-[Mechanic Website Demo](https://afriesen731.github.io/mechanic_website/)
 
 
 # Mechanic Website
@@ -11,16 +9,61 @@ This repository contains a web application designed to streamline the process of
 
 ## Table of Contents
 
-1. [Key Features](#key-features)  
-2. [User Roles](#user-roles)  
-3. [How to Use](#how-to-use)  
-   1. [Admin Workflow](#admin-workflow)  
-   2. [Mechanic Workflow](#mechanic-workflow)  
-   3. [Viewer Workflow](#viewer-workflow)  
-4. [PDF Export](#pdf-export)  
-5. [Additional Notes](#additional-notes)
+## Table of Contents
+
+1. [Contributions](#contributions)  
+2. [Demo](#demo)  
+3. [Key Features](#key-features)  
+4. [User Roles](#user-roles)  
+5. [How to Use](#how-to-use)  
+   - [Admin Workflow](#admin-workflow)  
+   - [Mechanic Workflow](#mechanic-workflow)  
+   - [Viewer Workflow](#viewer-workflow)  
+6. [PDF Export](#pdf-export)  
+7. [Additional Notes](#additional-notes)  
+8. [Project Setup Instructions](#project-setup-instructions)  
+   - [Prerequisites](#prerequisites)  
+   - [Setup Steps](#setup-steps)  
+9. [How to Use the Program](#how-to-use-the-program)  
+   - [Admin](#admin)  
+     - [Order Page](#order-page)  
+     - [Employee Management](#employee-management)  
+       - [Employee Page](#employee-page)  
+       - [Create Employee Page](#create-employee-page)  
+     - [Creating Work Orders](#creating-work-orders)  
+   - [Mechanic](#mechanic)  
+     - [Order Page](#order-page-1)  
+
 
 ---
+
+## Contributions
+
+### Alex Friesen
+- Built table with filters for displaying and searching for work orders
+  - filter.js, table.js, workorders.js, employee_table.js
+- Added download work order button
+  - save_order.js
+- Added user creation, modification and verification
+   - create_user.js, edit_user.js, redirect.js
+
+### David Lashko
+- Added work order creation
+- Added mechanic workorder interface
+- Added work order details display
+- Added code for switching iframes
+
+
+### Lyn Ly
+- Created all styling for the website
+   - all html and css files
+
+
+
+
+## Demo
+
+[Mechanic Website Demo](https://afriesen731.github.io/mechanic_website/)
 
 ## Key Features
 
