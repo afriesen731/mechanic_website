@@ -12,23 +12,23 @@ async function assignMechanic(workOrderId, mechanicId) {
     try {
         console.log("Assigning mechanic with workOrderId:", workOrderId, "and mechanicId:", mechanicId);
 
-        // Fetch the current work order to get the existing list of mechanics
+        // fetch the current work order to get the existing list of mechanics
         const currentWorkOrder = await pb.collection('work_orders').getOne(workOrderId);
 
-        // Check if the mechanic is already assigned
+        // check if the mechanic is already assigned
         if (currentWorkOrder.mechanics && currentWorkOrder.mechanics.includes(mechanicId)) {
             console.log("Mechanic is already assigned to this work order.");
             alert("This mechanic is already assigned to the work order.");
             return;
         }
 
-        // Append the new mechanicId to the existing mechanics array
+        // append the new mechanicId to the existing mechanics array
         const updatedMechanics = currentWorkOrder.mechanics ? [...currentWorkOrder.mechanics, mechanicId] : [mechanicId];
 
-        // Corrected payload with status set to "In Progress"
+        // corrected payload with status set to "In Progress"
         const payload = {
-            "mechanics": updatedMechanics, // Append the new mechanicId
-            "status": "In Progress"       // Update status to "In Progress"
+            "mechanics": updatedMechanics,
+            "status": "In Progress"
         };
 
         const response = await pb.collection('work_orders').update(workOrderId, payload);
@@ -47,13 +47,13 @@ async function removeMechanic(workOrderId, mechanicId) {
     try {
         console.log("Removing mechanic with workOrderId:", workOrderId, "and mechanicId:", mechanicId);
 
-        // Fetch the current work order to get the existing list of mechanics
+        // fetch the current work order to get the existing list of mechanics
         const currentWorkOrder = await pb.collection('work_orders').getOne(workOrderId);
 
-        // Filter out the mechanicId to be removed
+        // filter out the mechanicId to be removed
         const updatedMechanics = currentWorkOrder.mechanics.filter(id => id !== mechanicId);
 
-        // Update the work order with the modified mechanics list
+        // update the work order with the modified mechanics list
         const payload = {
             "mechanics": updatedMechanics
         };
@@ -425,14 +425,14 @@ document.addEventListener("DOMContentLoaded", async function() {
         verify("mechanic");
         table = new EmployeeOrderTable(tableElement, columns, users, filteredDataset);
     
-        // Set defaults specific to mechanics
+        // set defaults specific to mechanics
         defaultMechanic = [pb.authStore.model.id];
         defaultStatus = ["In Progress"];
     } else if (role === "viewer") {
         verify("viewer");
         table = new EmployeeOrderTable(tableElement, columns, users, filteredDataset);
     
-        // Set defaults specific to viewers
+        // set defaults specific to viewers
         defaultMechanic = [];
         defaultStatus = ["Completed"];
     }

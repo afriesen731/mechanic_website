@@ -1,21 +1,20 @@
 import { showIframe, updateIframes, reloadFrame, updateIframeSize } from "../js/display_iframe.js";
 import { verify } from "../js/redirect.js"
-import { pb } from "../js/import_pb.js"; // Ensure PocketBase is imported
+import { pb } from "../js/import_pb.js";
 
-// Verify the user's permissions
+// verify the user's role
 verify('mechanic');
 
-// Dynamically set the iframe source based on the user's role
 document.addEventListener('DOMContentLoaded', () => {
 
 
-    // Allow function to be accessed by other Iframes
+    // fllow function to be accessed by other Iframes
     window.showIframe = showIframe;
 
-    // Update iframes dynamically
+    // update iframes size when page changes size
     updateIframes();
 
-    // Show the initial iframe content
+    // show the initial iframe content
     reloadFrame('iframe-container-my-workorders');
 });
 

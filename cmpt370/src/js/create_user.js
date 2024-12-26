@@ -10,7 +10,6 @@ import { detectSize } from "../js/display_iframe.js"
 async function submit(username, name, password, role) {
 
     try {
-        // Authenticate user via PocketBase
             const newUser = await pb.collection('users').create({
                 username: username,
                 name: name,

@@ -15,20 +15,20 @@ export async function verify(roles) {
     }
 
     if (!user) {
-        // Redirect to login
+        // redirect to login
         window.location.href = 'index.html';
         return;
     }
 
-    // Fetch user data
+    // fetch user data
     try {
         const userData = await pb.collection('users').getOne(user.id);
 
-        // Check if the required field exists and meets your criteria
+        // check if the user has the correct role
         if (roles.includes(userData.role)) {
             return;
         } else {
-            // Redirect or show an error
+            // redirect to login
             window.location.href = 'index.html';
         }
     } catch (error) {
@@ -80,7 +80,9 @@ export function getIframeContainerId() {
     return window.frameElement.parentNode.id;
 }
 
-
+/**
+ * Reload the page and remove extentions from the url.
+ */
 export function cleanAndReload() {
     const baseUrl = window.location.origin + window.location.pathname; 
     window.history.replaceState(null, '', baseUrl); 

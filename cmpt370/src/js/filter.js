@@ -534,12 +534,9 @@ export class FilteredDataset {
             this.notifyObservers();
         } 
         catch (error) {
-            if (error.name === "AbortError" || error.message.includes("autocancelled")) {
-                console.warn("Request auto-cancelled. This is expected behavior:", error);
-            } else {
-                // Log other errors as usual
-                console.error("Error fetching work orders:", error);
-            }
+            
+            console.error("Error fetching work orders:", error);
+        
         }
 
         
@@ -548,7 +545,11 @@ export class FilteredDataset {
 
 
 
-
+    /**
+     * Retrieves all active filters and combines them into a single filter query string.
+     *
+     * @returns {string} A string representing the combined filter.
+    */
     getFilters() {
         let result = [];
 
@@ -578,7 +579,9 @@ export class FilteredDataset {
     }
 
 
-
+    /**
+     * Fills the dataset with the next page of data.
+    */
     nextPage() {
         // check if page number is too large
         if (this._page >= this.totalPages) {
@@ -588,6 +591,9 @@ export class FilteredDataset {
         
     }
 
+    /**
+     * Fills the dataset with the previous page of data.
+    */
     prevPage() {
         // check if page number is too small
         if (this._page <= 1) {
@@ -597,6 +603,12 @@ export class FilteredDataset {
         
     }
 
+
+    /**
+     * Sets the current page number.
+     * 
+     * @param {number} pageNumber - The page number to set.
+     */
     setPage(pageNumber) {
         pageNumber = Number(pageNumber)
 
@@ -608,7 +620,11 @@ export class FilteredDataset {
         
     }
 
-
+    /**
+     * Updates the total page count and total items by fetching from the server.
+     * 
+     * @returns {Promise<void>} A promise that resolves when the page count is updated.
+     */
     async updatePageCount() {
 
 

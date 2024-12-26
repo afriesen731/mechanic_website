@@ -96,8 +96,7 @@ document.addEventListener("DOMContentLoaded", async function() {
     const filteredDataset = new FilteredDataset('users', [table]);
     
     const filterElements = new FilterElements(filteredDataset);
-    // filterElements.initDateSelector(startDate, endDate, 'created');
-    // filterElements.initStatusSelector(statusSelect, 'status');
+
     
     filterElements.initSelect2Filter(
                                         employeeSelect, 'id', 

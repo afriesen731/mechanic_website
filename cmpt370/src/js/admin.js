@@ -2,7 +2,6 @@ import { verify } from "../js/redirect.js"
 import { showIframe, reloadFrame, updateIframeSize } from "./display_iframe.js";
 
 
-// Show same iframe when reloaded
 
 
 // Allow function to be accessed by other Iframes

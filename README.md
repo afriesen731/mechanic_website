@@ -1,3 +1,160 @@
+## Demo
+
+[Mechanic Website Demo](https://afriesen731.github.io/mechanic_website/)
+
+
+# Mechanic Website
+
+This repository contains a web application designed to streamline the process of creating, managing, and viewing vehicle repair work orders. The application supports three main user roles—**Admin**, **Mechanic**, and **Viewer**—each offering different permissions and capabilities. Below is an overview of the key features and a step-by-step guide to using the website.
+
+---
+
+## Table of Contents
+
+1. [Key Features](#key-features)  
+2. [User Roles](#user-roles)  
+3. [How to Use](#how-to-use)  
+   1. [Admin Workflow](#admin-workflow)  
+   2. [Mechanic Workflow](#mechanic-workflow)  
+   3. [Viewer Workflow](#viewer-workflow)  
+4. [PDF Export](#pdf-export)  
+5. [Additional Notes](#additional-notes)
+
+---
+
+## Key Features
+
+1. **Create Work Orders**  
+   - Input detailed information about the vehicle or equipment (including reefer information, if applicable)  
+   - Specify the type of service  
+   - Add job descriptions (tasks) for mechanics to complete  
+
+2. **Employee Management**  
+   - Create new employees with specific roles (Admin, Mechanic, Viewer)  
+   - Edit employee details (name, role, etc.)  
+   - Easily assign or remove employees from work orders  
+
+3. **Work Order Overview & Filtering**  
+   - View all existing work orders  
+   - Filter by status (e.g., *In Progress*), mechanic, date range, or service type  
+   - Assign or unassign mechanics to tasks in a few clicks  
+
+4. **Time Tracking & Task Completion**  
+   - Mechanics can start, pause, or stop a timer while working on a specific task  
+   - Automatically logs the duration of each task  
+
+5. **Comments & Parts Used**  
+   - Mechanics can add notes and list parts or materials used for each work order  
+   - Finalizes the tasks upon completion  
+
+6. **PDF Generation & Download**  
+   - Generate PDF files with details of the work orders  
+   - Print or save the PDFs to maintain a paper trail if required  
+
+---
+
+## User Roles
+
+1. **Admin**  
+   - Can create and manage work orders  
+   - Can create and manage employees  
+   - Has full access to all features  
+
+2. **Mechanic**  
+   - Can view work orders assigned to them  
+   - Can start, pause, and complete tasks, tracking their work hours  
+   - Can add notes and materials used  
+
+3. **Viewer**  
+   - Can view and download PDFs of work orders  
+   - Useful for office staff who only need to review or print details  
+
+---
+
+## How to Use
+
+### Admin Workflow
+
+1. **Log In as Admin**  
+   - Navigate to the login page and sign in with Admin credentials.
+
+2. **Create a Work Order**  
+   - Go to **Create Work Order**.  
+   - Enter vehicle/equipment information, reefer details if applicable, and select service type.  
+   - Add job descriptions (tasks) that need to be completed.  
+   - Click **Submit** to create the work order.
+
+3. **Create Employees**  
+   - Go to **Create Employee**.  
+   - Enter the name and select a role (Mechanic, Viewer, or Admin).  
+   - Click **Create** to finalize employee creation.
+
+4. **Manage Employees**  
+   - Go to the **Employee** tab to view a list of all employees.  
+   - **Edit** any employee’s name or role.  
+
+5. **Manage Work Orders**  
+   - Go to the **Order** tab.  
+   - Filter work orders by status (In Progress, Completed, etc.), mechanic, date range, and service type.  
+   - **Assign** mechanics to tasks or remove them as needed.  
+   - Enter cost per hour if you want to track labor costs.
+
+6. **View or Download Work Order Details**  
+   - Click **View** on any work order to see details.  
+   - Click **Download** to export the work order details as a PDF.
+
+### Mechanic Workflow
+
+1. **Log In as Mechanic**  
+   - Use the credentials created by the Admin.
+
+2. **View Assigned Work Orders**  
+   - The **Orders** page automatically filters to show tasks assigned to the logged-in mechanic.  
+   - You can also search for other work orders by service type or date range (if you need to join or leave tasks).
+
+3. **Start, Pause, and Stop Tasks**  
+   - Select a work order and click **Start** when you begin working.  
+   - **Pause** if you need to stop temporarily.  
+   - **Stop** when the task is completed. The system logs total time spent.
+
+4. **Add Comments & Parts Used**  
+   - After stopping the task, enter any relevant comments and list the parts or materials used.  
+   - Submit to finalize the work order’s task completion.
+
+### Viewer Workflow
+
+1. **Log In as Viewer**  
+   - Use the credentials created by the Admin for a Viewer role.
+
+2. **View Work Orders**  
+   - The **Orders** page shows all available work orders.  
+   - Click **View** to see details of any particular order.
+
+3. **Download Work Order Details (PDF)**  
+   - Inside the view screen, click **Download** to get a PDF version of the work order.  
+   - You can print this PDF for physical record-keeping.
+
+---
+
+## PDF Export
+
+- The site provides a quick way to generate PDFs for each work order.  
+- This is especially useful if you want to maintain both a digital and physical record of each job for billing or administrative purposes.  
+- PDFs include all relevant details: vehicle info, tasks, assigned mechanics, total time spent, and any parts used.
+
+---
+
+## Additional Notes
+
+- The system is designed to be user-friendly, with clear tabs and filtering options so you can quickly navigate between **Create Work Order**, **Create Employee**, **Orders**, and **Employees**.
+- Admins have the highest level of control to set up the environment, manage user roles, and assign tasks.  
+- Mechanics focus on completing tasks and tracking time.  
+- Viewers typically handle paperwork, printing, or simple monitoring of active and completed work orders.
+
+---
+
+
+
 # Project Setup Instructions
 
 This guide will help you set up the website on your local machine.
